@@ -1,10 +1,9 @@
-import { WxTilesLayer } from './wxtilelayer';
-
 import { Deck } from '@deck.gl/core';
 import { _GlobeView as GlobeView } from '@deck.gl/core';
 import { TextLayer } from '@deck.gl/layers';
 
 import { WxTileLibSetup, WxGetColorStyles, LibSetupObject } from './wxtools';
+import { WxTilesLayer } from './wxtilelayer';
 
 // // Create an async iterable
 // async function* getData() {
@@ -14,11 +13,6 @@ import { WxTileLibSetup, WxGetColorStyles, LibSetupObject } from './wxtools';
 // 	}
 // }
 
-// json loader helper
-// async function fetchJson(url) {
-// 	return (await fetch(url)).json();
-// }
-
 async function fetchJson(url) {
 	console.log(url);
 	const req = await fetch(url, { mode: 'cors' }); // json loader helper
@@ -26,11 +20,13 @@ async function fetchJson(url) {
 	return jso;
 }
 
-export async function getURI() {
+export async function getURI({ dataSet, variable }) {
 	const dataServer = 'https://tiles.metoceanapi.com/data/';
-	const dataSet = /* 'ww3-gfs.global/'; */ /* 'mercator.global/'; */ 'ecwmf.global/'; /* 'obs-radar.rain.nzl.national/'; */
-	const variable =
-		'air.temperature.at-2m/'; /* 'wave.height/'; */ /* 'current.speed.northward.at-sea-surface/';  */ /* 'air.humidity.at-2m/';  */ /* 'reflectivity/'; */
+	dataSet += '/';
+	variable += '/';
+	// const dataSet = /* 'ww3-gfs.global/'; */ /* 'mercator.global/'; */ 'ecwmf.global/'; /* 'obs-radar.rain.nzl.national/'; */
+	/* 'wave.height/'; */ /* 'current.speed.northward.at-sea-surface/';  */ /* 'air.humidity.at-2m/';  */ /* 'reflectivity/'; */
+	// const variable = 'air.temperature.at-2m/';
 	const instances = await fetchJson(dataServer + dataSet + 'instances.json');
 	const instance = instances.reverse()[0] + '/';
 	const meta = await fetchJson(dataServer + dataSet + instance + 'meta.json');
@@ -44,30 +40,34 @@ export async function getURI() {
 
 export async function start() {
 	const wxlibCustomSettings: LibSetupObject = {};
-	try {
-		// these URIs are for the demo purpose. set the correct URI
-		wxlibCustomSettings.colorStyles = await fetchJson('styles/styles.json'); // set the correct URI
-	} catch (e) {
-		console.log(e);
+	{
+		try {
+			// these URIs are for the demo purpose. set the correct URI
+			wxlibCustomSettings.colorStyles = await fetchJson('styles/styles.json'); // set the correct URI
+		} catch (e) {
+			console.log(e);
+		}
+		try {
+			wxlibCustomSettings.units = await fetchJson('styles/uconv.json'); // set the correct URI
+		} catch (e) {
+			console.log(e);
+		}
+		try {
+			wxlibCustomSettings.colorSchemes = await fetchJson('styles/colorschemes.json'); // set the correct URI
+		} catch (e) {
+			console.log(e);
+		}
 	}
-	try {
-		wxlibCustomSettings.units = await fetchJson('styles/uconv.json'); // set the correct URI
-	} catch (e) {
-		console.log(e);
-	}
-	try {
-		wxlibCustomSettings.colorSchemes = await fetchJson('styles/colorschemes.json'); // set the correct URI
-	} catch (e) {
-		console.log(e);
-	}
-
 	// ESSENTIAL step to get lib ready.
 	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults
 	await document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
 	const styles = WxGetColorStyles();
-	const style = styles['Sea.surface.temperature'];
+	const styleName = 'base';
+	const style = styles[styleName];
 
-	const { URI, URITime, meta } = await getURI();
+	const dataSet = 'ww3-ecmwf.global';
+	const variable = 'wave.height';
+	const { URI, URITime, meta } = await getURI({ dataSet, variable });
 	const layers = [
 		new TextLayer({
 			data: [{}],
@@ -77,10 +77,14 @@ export async function start() {
 		}),
 		new WxTilesLayer({
 			// WxTiles settings
-			style: style,
+			dataSet,
+			variable,
+			style,
+			styleName,
+			meta,
 			//DECK.gl settings
-			data: URI, // TODO: Create an async iterable
 			maxZoom: meta.maxZoom,
+			data: URI, // TODO: Create an async iterable
 			pickable: true,
 			tileSize: 256,
 			// refinementStrategy: 'best-available', // default 'best-available'
@@ -91,7 +95,11 @@ export async function start() {
 	const deckgl = new Deck({
 		initialViewState: { latitude: -41, longitude: 175, zoom: 1 },
 		controller: true,
-		views: new GlobeView({ id: 'globe', controller: true }),
+		// views: new GlobeView({ id: 'globe', controller: true }),
 		layers, // or use: deckgl.setProps({ layers });
 	});
+
+	setTimeout(() => {
+		layers[1];
+	}, 4000);
 }

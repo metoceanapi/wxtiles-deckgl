@@ -81,26 +81,19 @@ vec3 packUVsIntoRGB(vec2 uv) {
   return vec3(uv8bit, fractions) / 255.;
 }
 
-uniform float dataMin;
-uniform float dataDif;
-uniform float clutMin;
-uniform float clutDif;
 varying vec2 vTexCoordC;
-// varying vec2 vTexCoordR;
-// varying vec2 vTexCoordD;
 uniform sampler2D clutTextureUniform;
+uniform float shift; // the wize of isoline
 
 // Consts
-  // Tiles are 258x258. 1 pixel border is used to calc isolines and proper interpolation. It needs to be excluded from 'tile filling' process.
   // Modifying 'vertexPosition' in order to skip borders.
-const float tileSzExInv = 1.0 / 258.0;
-const float tileM = 256.0 / 258.0;
-const vec2 one = vec2(tileSzExInv, tileSzExInv);
-const float shift = 1.2 * tileSzExInv; // current zoom let us work out the thickness of the isolines.
+// const float tileSzExInv = 1.0 / 258.0;
+// float shift = tileSzExInv / zoom; // current zoom let us work out the thickness of the isolines.
+// const float tileM = 256.0 / 258.0;
+// const vec2 one = vec2(tileSzExInv, tileSzExInv);
 
 // Func Protos
-float GetRawData(vec2);
-float RawToPos(float);
+float GetPackedData(vec2);
 vec4 CLUT(float);
 int ISO(float);
 
@@ -114,21 +107,19 @@ void main(void) {
     uvC = getUV(commonPos);
   }
 
-  vec2 vTexCoordR = uvC + vec2(shift, 0.0);
-  vec2 vTexCoordD = uvC + vec2(0.0, shift);
+  // float shift = 1.0 / 258.0; // current zoom let us work out the thickness of the isolines.
+  vec2 uvR = uvC + vec2(shift, 0.0);
+  vec2 uvD = uvC + vec2(0.0, shift);
 
-  float rawC = GetRawData(uvC); // central
-  float posC = RawToPos(rawC);
-  vec4 colorC = CLUT(posC);
-  int isoC = ISO(posC);
+  float packedC = GetPackedData(uvC); // central
+  vec4 colorC = CLUT(packedC);
+  int isoC = ISO(packedC);
 
-  float rawR = GetRawData(vTexCoordR); // central
-  float posR = RawToPos(rawR);
-  int isoR = ISO(posR);
+  float packedR = GetPackedData(uvR); // central
+  int isoR = ISO(packedR);
 
-  float rawD = GetRawData(vTexCoordD); // central
-  float posD = RawToPos(rawD);
-  int isoD = ISO(posD);
+  float packedD = GetPackedData(uvD); // central
+  int isoD = ISO(packedD);
 
   gl_FragColor = colorC;
   if(isoC != isoD || isoC != isoR) {
@@ -145,16 +136,9 @@ void main(void) {
   }
 }
 
-float GetRawData(vec2 texCoord) {
+float GetPackedData(vec2 texCoord) {
   vec4 tex = texture2D(bitmapTexture, texCoord);
-  float texData = tex.r / 255.0 + tex.g;
-  float rawData = texData * dataDif + dataMin;
-  return rawData;
-}
-
-float RawToPos(float realData) {
-  float pos = (realData - clutMin) / clutDif;
-  return pos;
+  return tex.r / 255.0 + tex.g;
 }
 
 vec4 CLUT(float pos) {
@@ -162,5 +146,6 @@ vec4 CLUT(float pos) {
 }
 
 int ISO(float pos) {
-  return int(texture2D(clutTextureUniform, vec2(pos, 1.0)).r * 255.0);
+  float bottomPixel = texture2D(clutTextureUniform, vec2(pos, 1.0)).r;
+  return int(bottomPixel * 255.0);
 }

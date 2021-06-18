@@ -18,6 +18,9 @@ import { Model, Texture2D, Geometry } from '@luma.gl/core';
 
 import GL from '@luma.gl/constants';
 
+import { createLegend, RawCLUT } from './RawCLUT';
+import { ColorStyleStrict } from './wxtools';
+
 class WxTile extends BitmapLayer {
 	constructor(...a) {
 		super(...a);
@@ -32,12 +35,6 @@ class WxTile extends BitmapLayer {
 		super.updateState(a);
 		this.state.model.setUniforms({
 			clutTextureUniform: this.props.clutTextureUniform,
-			// zoom: this.context.viewport.zoom / 2,
-			zoom: this.props.zoom,
-			dataMin: this.props.dataMin,
-			dataDif: this.props.dataDif,
-			clutMin: this.props.clutMin,
-			clutDif: this.props.clutDif,
 		});
 	}
 
@@ -45,20 +42,18 @@ class WxTile extends BitmapLayer {
 		return { vs, fs, modules: [project32, picking] };
 	}
 
-	// draw(a) {
-	// 	// // console.log('viewport.zoom:', this.context.viewport.zoom, 'props.zoom', this.props.zoom);
-	// 	const { viewport } = this.context;
-	// 	const [west, south, east, north] = this.props.bounds;
-	// 	const [wnX, wnY] = viewport.project([west, north]);
-	// 	const [esX, esY] = viewport.project([east, south]);
-	// 	const pixdif = ((esX - wnX) ** 2 + (esY - wnY) ** 2) ** 0.5;
-
-	// 	this.state.model.setUniforms({
-	// 		zoom: pixdif / 256,
-	// 	});
-
-	// 	super.draw(a);
-	// }
+	draw(a) {
+		// // console.log('viewport.zoom:', this.context.viewport.zoom, 'props.zoom', this.props.zoom);
+		const { viewport } = this.context;
+		const [west, south, east, north] = this.props.bounds;
+		const [wnX, wnY] = viewport.project([west, north]);
+		const [esX, esY] = viewport.project([east, south]);
+		const pixdif = ((esX - wnX) ** 2 + (esY - wnY) ** 2) ** 0.5;
+		this.state.model.setUniforms({
+			shift: /* isoline Size in Pix */ 1.5 / pixdif,
+		});
+		super.draw(a);
+	}
 }
 WxTile.layerName = 'WxTile';
 
@@ -69,7 +64,7 @@ export class WxTilesLayer extends TileLayer {
 
 	initializeState() {
 		super.initializeState();
-		this.loadAssets(this.context.gl);
+		this.loadCLUT();
 	}
 	// onHover: (info, event) => console.log('Hovered:', info, event),
 	onClick(...a) {
@@ -77,26 +72,16 @@ export class WxTilesLayer extends TileLayer {
 	}
 
 	renderSubLayers(props) {
-		const tile = props.tile;
+		const { tile, meta } = props;
 		const { west, south, east, north } = tile.bbox;
 		const tileLayer = new WxTile(props, {
 			id: props.id + 'BM-layer',
 			data: null,
 			image: props.data,
 			clutTextureUniform: this.state.clutTextureUniform,
-			zoom: tile.z, // hlam
-			dataMin: 0,
-			dataDif: 1,
-			clutMin: 0,
-			clutDif: 1,
-			_imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
+			maxZoom: meta.maxZoom,
 			bounds: [west, south, east, north],
-			// textureParameters: {
-			// 	[GL.TEXTURE_MIN_FILTER]: GL.NEAREST,
-			// 	[GL.TEXTURE_MAG_FILTER]: GL.NEAREST,
-			// 	[GL.TEXTURE_WRAP_S]: GL.CLAMP_TO_EDGE,
-			// 	[GL.TEXTURE_WRAP_T]: GL.CLAMP_TO_EDGE,
-			// },
+			// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
 		});
 
 		const subLayers = [
@@ -140,26 +125,34 @@ export class WxTilesLayer extends TileLayer {
 		return subLayers;
 	}
 
-	loadAssets(gl) {
-		function loadTexture(gl, url) {
-			return loadImage(url).then(
-				(data) =>
-					new Texture2D(gl, {
-						data,
-						parameters: {
-							[GL.TEXTURE_WRAP_S]: GL.CLAMP_TO_EDGE,
-							[GL.TEXTURE_WRAP_T]: GL.CLAMP_TO_EDGE,
-							[GL.TEXTURE_MIN_FILTER]: GL.NEAREST,
-							[GL.TEXTURE_MAG_FILTER]: GL.NEAREST,
-						},
-						mipmaps: false,
-					})
-			);
+	loadCLUT() {
+		const { style, variable, meta } = this.props;
+		const varMeta = meta.variablesMeta[variable];
+		const CLUT = new RawCLUT(style, varMeta.units, [varMeta.min, varMeta.max], false);
+		const { colorsI, levelIndex } = CLUT;
+		const dataShift = 4;
+		const dataWidth = 65536 >> dataShift;
+		const data = new Uint32Array(dataWidth * 2);
+		for (let x = 0; x < dataWidth; ++x) {
+			data[x] = colorsI[x << dataShift];
+			data[dataWidth + x] = levelIndex[x << dataShift];
 		}
+		const clutTextureUniform = new Texture2D(this.context.gl, {
+			data: new Uint8Array(data.buffer),
+			width: dataWidth,
+			height: 2,
+			format: GL.RGBA,
 
-		loadTexture(gl, './clut.png').then((clutTextureUniform) => {
-			this.setState({ clutTextureUniform });
+			parameters: {
+				[GL.TEXTURE_WRAP_S]: GL.CLAMP_TO_EDGE,
+				[GL.TEXTURE_WRAP_T]: GL.CLAMP_TO_EDGE,
+				[GL.TEXTURE_MIN_FILTER]: GL.LINEAR,
+				[GL.TEXTURE_MAG_FILTER]: GL.LINEAR,
+			},
+			mipmaps: false,
 		});
+
+		this.setState({ clutTextureUniform });
 	}
 }
 

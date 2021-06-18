@@ -1,12 +1,12 @@
 const esbuild = require('esbuild');
-const sassPlugin = require('esbuild-plugin-sass');
+// const sassPlugin = require('esbuild-plugin-sass');
 
 const sharedConfig = {
 	entryPoints: ['src/index.ts'],
 	bundle: true,
-	plugins: [sassPlugin()],
+	// plugins: [sassPlugin()],
 	loader: {
-		'.woff': 'file',
+		// '.woff': 'file',
 		'.fs': 'text',
 		'.vs': 'text',
 	},

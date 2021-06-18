@@ -1,5 +1,5 @@
 const esbuild = require('esbuild');
-const sassPlugin = require('esbuild-plugin-sass');
+// const sassPlugin = require('esbuild-plugin-sass');
 const express = require('express');
 
 let watchResponse;
@@ -9,15 +9,15 @@ esbuild
 	.build({
 		entryPoints: ['src/index.ts'],
 		bundle: true,
-		plugins: [sassPlugin()],
+		// plugins: [sassPlugin()],
 		loader: {
-			'.woff': 'file',
+			// '.woff': 'file',
 			'.fs': 'text',
 			'.vs': 'text',
 		},
 		// target: 'es2017',
 		format: 'iife',
-		outfile: 'public/wxtiledeckgl/wxtiledeckgl.js',
+		outfile: 'public/wxtiles-deckgl/wxtiles-deckgl.js',
 		globalName: 'wxtiledeckgl',
 		sourcemap: true,
 		// minify: false,
@@ -36,7 +36,7 @@ esbuild
 		const app = express();
 		app.use(express.static('public'));
 
-		const PORT = 3002;
+		const PORT = 3005;
 
 		app.get('/watch', function (req, res) {
 			res.writeHead(200, {

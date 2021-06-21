@@ -1,20 +1,44 @@
 import { TileLayer } from '@deck.gl/geo-layers';
-import { WxTile } from '../wxtilelayer';
-import { ColorStyleStrict } from '../wxtools';
+import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
+import { ColorStyleStrict } from '../utils/wxtools';
 import { TextLayer } from '@deck.gl/layers';
 import { PathLayer } from '@deck.gl/layers';
-import { RawCLUT } from '../RawCLUT';
+import { RawCLUT } from '../utils/RawCLUT';
 import { Model, Texture2D, Geometry } from '@luma.gl/core';
 import GL from '@luma.gl/constants';
+import { WxTile } from './WXBitmapLayer';
 
-interface WxTilesLayerProps {
+interface RenderSubLayers {
+	id: string;
+	tile: {
+		bbox: {
+			west: number;
+			south: number;
+			east: number;
+			north: number;
+		};
+	};
+	data: any;
+	visible: boolean;
+}
+
+interface WxTilesLayerCustomProps {
 	style: ColorStyleStrict;
 	variable: string;
 	meta: any; //meta.json
-	URI: string;
+	maxZoom: number;
 }
 
-export class WxTilesLayer extends TileLayer<WxTilesLayerProps> {
+export type WxTilesLayerProps = TileLayerProps<string> & WxTilesLayerCustomProps;
+
+export class WxTilesLayer extends TileLayer<string> {
+	//@ts-ignore
+	public props: WxTilesLayerProps;
+
+	constructor(props: WxTilesLayerProps) {
+		super(props);
+	}
+
 	initializeState(params: any) {
 		super.initializeState(params);
 		this.loadCLUT();
@@ -24,16 +48,15 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerProps> {
 		console.log('WxTilesLayer onClick:', a[0].bitmap.pixel);
 	}
 
-	renderSubLayers(props) {
+	renderSubLayers(props: RenderSubLayers) {
 		const { tile } = props;
-		const { west, south, east, north } = tile.bbox as { west: number; south: number; east: number; north: number };
-		const tileLayer = new WxTile(props, {
+		const { west, south, east, north } = tile.bbox;
+		const tileLayer = new WxTile({
 			id: props.id + 'BM-layer',
-			data: null,
-			image: props.data,
 			clutTextureUniform: this.state.clutTextureUniform,
-			maxZoom: (this.props.data as WxTilesLayerProps).meta.maxZoom,
 			bounds: [west, south, east, north],
+			image: props.data,
+			//maxZoom: (this.props.data as WxTilesLayerProps).meta.maxZoom,
 			// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
 		});
 		const textLayerId = props.id + 'tile';
@@ -54,19 +77,21 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerProps> {
 				// 	depthTest: false,
 				// },
 			}),
-			new PathLayer<{ path: [number, number][] }>({
+			new PathLayer({
 				id: props.id + 'border',
 				visible: props.visible,
-				data: [{
-					path: [
-						[west, north],
-						[west, south],
-						[east, south],
-						[east, north],
-						[west, north],
-					],
-				}],
-				getPath: (d) => d.path,
+				data: [
+					{
+						path: [
+							[west, north],
+							[west, south],
+							[east, south],
+							[east, north],
+							[west, north],
+						],
+					},
+				],
+				getPath: (d: any) => d.path,
 				getColor: [255, 0, 0, 120],
 				widthMinPixels: 1,
 			}),
@@ -76,7 +101,7 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerProps> {
 	}
 
 	loadCLUT() {
-		const { style, variable, meta } = this.props.data as WxTilesLayerProps;
+		const { style, variable, meta } = this.props;
 		const varMeta = meta.variablesMeta[variable];
 		const CLUT = new RawCLUT(style, varMeta.units, [varMeta.min, varMeta.max], false);
 		const { colorsI, levelIndex } = CLUT;

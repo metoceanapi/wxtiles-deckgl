@@ -2,7 +2,7 @@ import { Deck } from '@deck.gl/core';
 import { TextLayer } from '@deck.gl/layers';
 import { WxTilesLayer } from './layers/WxTileLayer';
 
-import { WxTileLibSetup, WxGetColorStyles, LibSetupObject } from './wxtools';
+import { WxTileLibSetup, WxGetColorStyles, LibSetupObject } from './utils/wxtools';
 
 // // Create an async iterable
 // async function* getData() {
@@ -77,12 +77,10 @@ export async function start() {
 		}),
 		new WxTilesLayer({
 			// WxTiles settings
-			data: {
-				variable,
-				style,
-				meta,
-				URI,
-			},
+			variable,
+			style,
+			meta,
+			data: URI,
 			//DECK.gl settings
 			maxZoom: meta.maxZoom,
 			pickable: true,

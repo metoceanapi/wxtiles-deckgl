@@ -21,7 +21,7 @@ import GL from '@luma.gl/constants';
 import { createLegend, RawCLUT } from './RawCLUT';
 import { ColorStyleStrict } from './wxtools';
 
-class WxTile extends BitmapLayer {
+export class WxTile extends BitmapLayer {
 	constructor(...a) {
 		super(...a);
 	}

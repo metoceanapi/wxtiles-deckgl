@@ -8274,7 +8274,7 @@ var wxtiledeckgl = (() => {
 
   // node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
   function _iterableToArrayLimit(arr, i) {
-    var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
     if (_i == null)
       return;
     var _arr = [];
@@ -20609,9 +20609,9 @@ var wxtiledeckgl = (() => {
   };
   var DRAW_PARAMS = {};
   var Model = function() {
-    function Model3(gl) {
+    function Model4(gl) {
       var props = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-      _classCallCheck(this, Model3);
+      _classCallCheck(this, Model4);
       var _props$id = props.id, id = _props$id === void 0 ? uid("model") : _props$id;
       assert5(isWebGL(gl));
       this.id = id;
@@ -20621,7 +20621,7 @@ var wxtiledeckgl = (() => {
       this.animated = false;
       this.initialize(props);
     }
-    _createClass(Model3, [{
+    _createClass(Model4, [{
       key: "initialize",
       value: function initialize(props) {
         this.props = {};
@@ -21030,7 +21030,7 @@ var wxtiledeckgl = (() => {
         log.groupEnd(LOG_DRAW_PRIORITY, ">>> DRAWING MODEL ".concat(this.id))();
       }
     }]);
-    return Model3;
+    return Model4;
   }();
 
   // node_modules/@luma.gl/engine/dist/esm/transform/buffer-transform.js
@@ -22042,15 +22042,15 @@ var wxtiledeckgl = (() => {
     TRIANGLE_FAN: 6
   };
   var Geometry = function() {
-    _createClass(Geometry3, null, [{
+    _createClass(Geometry4, null, [{
       key: "DRAW_MODE",
       get: function get2() {
         return DRAW_MODE;
       }
     }]);
-    function Geometry3() {
+    function Geometry4() {
       var props = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-      _classCallCheck(this, Geometry3);
+      _classCallCheck(this, Geometry4);
       var _props$id = props.id, id = _props$id === void 0 ? uid("geometry") : _props$id, _props$drawMode = props.drawMode, drawMode = _props$drawMode === void 0 ? DRAW_MODE.TRIANGLES : _props$drawMode, _props$attributes = props.attributes, attributes = _props$attributes === void 0 ? {} : _props$attributes, _props$indices = props.indices, indices = _props$indices === void 0 ? null : _props$indices, _props$vertexCount = props.vertexCount, vertexCount = _props$vertexCount === void 0 ? null : _props$vertexCount;
       this.id = id;
       this.drawMode = drawMode | 0;
@@ -22059,7 +22059,7 @@ var wxtiledeckgl = (() => {
       this._setAttributes(attributes, indices);
       this.vertexCount = vertexCount || this._calculateVertexCount(this.attributes, this.indices);
     }
-    _createClass(Geometry3, [{
+    _createClass(Geometry4, [{
       key: "getVertexCount",
       value: function getVertexCount() {
         return this.vertexCount;
@@ -22130,7 +22130,7 @@ var wxtiledeckgl = (() => {
         return this.drawMode;
       }
     }]);
-    return Geometry3;
+    return Geometry4;
   }();
 
   // node_modules/@luma.gl/engine/dist/esm/animation/timeline.js
@@ -41212,216 +41212,6 @@ var wxtiledeckgl = (() => {
   TextLayer.layerName = "TextLayer";
   TextLayer.defaultProps = defaultProps11;
 
-  // src/wxtools.ts
-  var __units_default_preset = {
-    comment1: ["degC: ['K', 1, 273.15] -> degC = K * 1 + 273.15", 0],
-    comment2: ["hPa: ['Pa', 100]' -> hPa = Pa * 100 + 0 (0 - could be ommited)", 0],
-    K: ["K", 1],
-    F: ["K", 0.5555555555, 255.372222222],
-    C: ["K", 1, 273.15],
-    degC: ["K", 1, 273.15],
-    "kg/m^2/s": ["kg/m^2/s", 1],
-    "Kg m**-2 s**-1": ["kg/m^2/s", 1],
-    "W/m^2": ["W/m^2", 1],
-    "W m**2": ["W/m^2", 1],
-    "m/s": ["m/s", 1],
-    "m s**-1": ["m/s", 1],
-    knot: ["m/s", 0.514444],
-    knots: ["m/s", 0.514444],
-    "km/h": ["m/s", 0.27777777777],
-    s: ["s", 1],
-    sec: ["s", 1],
-    h: ["s", 3600],
-    min: ["s", 60],
-    m: ["m", 1],
-    cm: ["m", 0.01],
-    inch: ["m", 0.0254],
-    Pa: ["Pa", 1],
-    hPa: ["Pa", 100]
-  };
-  var __colorSchemes_default_preset = {
-    none: ["#00000000", "#00000000"],
-    rainbow: ["#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"],
-    rainbow2: ["#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f", "#f00"],
-    rainbowzerro: ["#ff000000", "#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"],
-    bluebird: ["#00f", "#f0f", "#0ff", "#80f", "#88f"],
-    bluebirdzerro: ["#0000ff00", "#00f", "#f0f", "#0ff", "#80f", "#88f"],
-    bw: ["#000", "#fff"],
-    wb: ["#fff", "#000"],
-    redish: ["#f0f", "#f00", "#ff0"],
-    greenish: ["#ff0", "#0f0", "#0ff"],
-    blueish: ["#f0f", "#00f", "#0ff"],
-    hspastel: ["#AC6EA4FF", "#8E92BDFF", "#ACD4DEFF", "#E9DC8EFF", "#E7A97DFF", "#E59074FF", "#BE7E68FF", "#A88F86FF"]
-  };
-  var __colorStyles_default_preset = {
-    base: {
-      parent: void 0,
-      name: "base",
-      fill: "gradient",
-      isolineColor: "inverted",
-      isolineText: true,
-      vectorType: "arrows",
-      vectorColor: "inverted",
-      streamLineColor: "#777",
-      streamLineSpeedFactor: 1,
-      streamLineStatic: false,
-      showBelowMin: true,
-      showAboveMax: true,
-      colorScheme: "rainbow",
-      colors: void 0,
-      colorMap: void 0,
-      levels: void 0,
-      blurRadius: 0,
-      addDegrees: 0,
-      units: "",
-      extraUnits: void 0
-    },
-    custom: {
-      parent: void 0,
-      name: "custom",
-      fill: "gradient",
-      isolineColor: "inverted",
-      isolineText: true,
-      vectorType: "arrows",
-      vectorColor: "inverted",
-      streamLineColor: "#777",
-      streamLineSpeedFactor: 1,
-      streamLineStatic: false,
-      showBelowMin: true,
-      showAboveMax: true,
-      colorScheme: "rainbow",
-      colors: void 0,
-      colorMap: void 0,
-      levels: void 0,
-      blurRadius: 0,
-      addDegrees: 0,
-      units: "",
-      extraUnits: void 0
-    }
-  };
-  var _units;
-  var _colorSchemes;
-  var _colorStylesUnrolled;
-  function WxTileLibSetup({colorStyles = {}, units = {}, colorSchemes = {}} = {}) {
-    if (window.wxlogging) {
-      console.log("WxTile lib setup: start");
-    }
-    _units = Object.assign({}, __units_default_preset, units);
-    _colorSchemes = Object.assign({}, colorSchemes, __colorSchemes_default_preset);
-    _colorStylesUnrolled = unrollStylesParent(colorStyles);
-    if (window.wxlogging) {
-      console.log("WxTile lib setup: styles unrolled");
-    }
-    document.fonts.load("32px barbs");
-    document.fonts.load("32px arrows");
-    if (window.wxlogging) {
-      console.log("WxTile lib setup is done" + JSON.stringify({colorStyles, units, colorSchemes}));
-    }
-  }
-  function WxGetColorStyles() {
-    return _colorStylesUnrolled;
-  }
-  function getColorSchemes() {
-    return _colorSchemes;
-  }
-  function makeConverter(from, to, customUnits) {
-    const localUnitsCopy = customUnits ? Object.assign({}, _units, customUnits) : _units;
-    if (!localUnitsCopy || !from || !to || from === to || !localUnitsCopy[from] || !localUnitsCopy[to] || localUnitsCopy[from][0] !== localUnitsCopy[to][0]) {
-      if (window.wxlogging) {
-        console.log(from === to ? "Trivial converter:" : "Inconvertible units. Default converter is used:", from, " -> ", to);
-      }
-      const c = (x) => x;
-      c.trivial = true;
-      return c;
-    }
-    if (window.wxlogging)
-      console.log("Converter: From:", from, " To:", to);
-    const a = localUnitsCopy[from][1] / localUnitsCopy[to][1];
-    const b = (localUnitsCopy[from][2] || 0) / localUnitsCopy[to][1] - (localUnitsCopy[to][2] || 0) / localUnitsCopy[to][1];
-    return b ? (x) => a * x + b : (x) => a * x;
-  }
-  function unrollStylesParent(stylesArrInc) {
-    const stylesInc = Object.assign({}, __colorStyles_default_preset);
-    for (const name in stylesArrInc) {
-      const styleA = stylesArrInc[name];
-      if (Array.isArray(styleA)) {
-        for (let i = 0; i < styleA.length; ++i) {
-          stylesInc[name + "[" + i + "]"] = Object.assign({}, styleA[i]);
-        }
-      } else {
-        stylesInc[name] = Object.assign({}, styleA);
-      }
-    }
-    const inherit = (stylesInc2, name) => {
-      if (name === "base")
-        return __colorStyles_default_preset.base;
-      const style = stylesInc2[name];
-      if (!style.parent || !(style.parent in stylesInc2))
-        style.parent = "base";
-      const parent = inherit(stylesInc2, style.parent);
-      return Object.assign(style, Object.assign({}, parent, style, {parent: "base"}));
-    };
-    const styles = {};
-    for (const name in stylesInc) {
-      styles[name] = inherit(stylesInc, name);
-    }
-    return styles;
-  }
-  function RGBtoHEX(rgb) {
-    const r = rgb >> 0 & 255;
-    const g = rgb >> 8 & 255;
-    const b = rgb >> 16 & 255;
-    let rs = r.toString(16);
-    let gs = g.toString(16);
-    let bs = b.toString(16);
-    rs = rs.length === 2 ? rs : "0" + rs;
-    gs = gs.length === 2 ? gs : "0" + gs;
-    bs = bs.length === 2 ? bs : "0" + bs;
-    return "#" + rs + gs + bs;
-  }
-  function HEXtoRGBA(c) {
-    if (c[0] === "#") {
-      if (c.length === 4)
-        return +("0xff" + c[3] + c[3] + c[2] + c[2] + c[1] + c[1]);
-      if (c.length === 7)
-        return +("0xff" + c[5] + c[6] + c[3] + c[4] + c[1] + c[2]);
-      if (c.length === 9)
-        return +("0x" + c[7] + c[8] + c[5] + c[6] + c[3] + c[4] + c[1] + c[2]);
-    }
-    if (window.wxlogging) {
-      console.log("wrong color format", c);
-    }
-    return 0;
-  }
-  function mixColor(c1, c2, t) {
-    const r1 = c1 >> 0 & 255;
-    const g1 = c1 >> 8 & 255;
-    const b1 = c1 >> 16 & 255;
-    const a1 = c1 >>> 24;
-    const r2 = c2 >> 0 & 255;
-    const g2 = c2 >> 8 & 255;
-    const b2 = c2 >> 16 & 255;
-    const a2 = c2 >>> 24;
-    const r = r1 + t * (r2 - r1);
-    const g = g1 + t * (g2 - g1);
-    const b = b1 + t * (b2 - b1);
-    const a = a1 + t * (a2 - a1);
-    return r | g << 8 | b << 16 | a << 24;
-  }
-  function createLevels(min, max, n) {
-    const levels = [];
-    for (let i = 0; i < n; ++i) {
-      levels.push(i * (max - min) / (n - 1) + min);
-    }
-    return levels;
-  }
-
-  // src/shaders/bitmap-layer-vertex.vs
-  var bitmap_layer_vertex_default2 = "#define SHADER_NAME bitmap-layer-vertex-shader\n\nattribute vec2 texCoords;\nattribute vec3 positions;\nattribute vec3 positions64Low;\n\nvarying vec2 vTexCoord;\nvarying vec2 vTexPos;\n\nuniform float coordinateConversion;\n\nconst vec3 pickingColor = vec3(1.0, 0.0, 0.0);\n\n// SERG\nvarying vec2 vTexCoordC;\n// Tiles are 258x258. 1 pixel border is used to calc isolines and proper interpolation. It needs to be excluded from 'tile filling' process.\n// Modifying 'vertexPosition' in order to skip borders.\nconst float tileSzExInv = 1.0 / 258.0;\nconst float tileM = 256.0 / 258.0;\nconst vec2 one = vec2(tileSzExInv, tileSzExInv);\n\nvoid main(void) {\n  geometry.worldPosition = positions;\n  geometry.uv = texCoords;\n  geometry.pickingColor = pickingColor;\n\n  gl_Position = project_position_to_clipspace(positions, positions64Low, vec3(0.0), geometry.position);\n  DECKGL_FILTER_GL_POSITION(gl_Position, geometry);\n\n  vTexCoord = texCoords;\n\n  if(coordinateConversion < -0.5) {\n    vTexPos = geometry.position.xy;\n  } else if(coordinateConversion > 0.5) {\n    vTexPos = geometry.worldPosition.xy;\n  }\n\n  vec4 color = vec4(0.0);\n  DECKGL_FILTER_COLOR(color, geometry);\n\n  vTexCoordC = texCoords * tileM + one;\n}";
-
-  // src/shaders/bitmap-layer-fragment.fs
-  var bitmap_layer_fragment_default2 = "/**\n * Pack the top 12 bits of two normalized floats into 3 8-bit (rgb) values\n * This enables addressing 4096x4096 individual pixels\n *\n * returns vec3 encoded RGB colors\n *  result.r - top 8 bits of u\n *  result.g - top 8 bits of v\n *  result.b - next 4 bits of u and v: (u + v * 16)\n */\n\n #define SHADER_NAME bitmap-layer-fragment-shader\n\n #ifdef GL_ES\nprecision highp float;\n #endif\n\nuniform sampler2D bitmapTexture;\n\nvarying vec2 vTexCoord;\nvarying vec2 vTexPos;\n\nuniform float desaturate;\nuniform vec4 transparentColor;\nuniform vec3 tintColor;\nuniform float opacity;\n\nuniform float coordinateConversion;\nuniform vec4 bounds;\n\n /* projection utils */\nconst float TILE_SIZE = 512.0;\nconst float PI = 3.1415926536;\nconst float WORLD_SCALE = TILE_SIZE / PI / 2.0;\n\n // from degrees to Web Mercator\nvec2 lnglat_to_mercator(vec2 lnglat) {\n  float x = lnglat.x;\n  float y = clamp(lnglat.y, -89.9, 89.9);\n  return vec2(radians(x) + PI, PI + log(tan(PI * 0.25 + radians(y) * 0.5))) * WORLD_SCALE;\n}\n\n // from Web Mercator to degrees\nvec2 mercator_to_lnglat(vec2 xy) {\n  xy /= WORLD_SCALE;\n  return degrees(vec2(xy.x - PI, atan(exp(xy.y - PI)) * 2.0 - PI * 0.5));\n}\n /* End projection utils */\n\n // apply desaturation\nvec3 color_desaturate(vec3 color) {\n  float luminance = (color.r + color.g + color.b) * 0.333333333;\n  return mix(color, vec3(luminance), desaturate);\n}\n\n // apply tint\nvec3 color_tint(vec3 color) {\n  return color * tintColor;\n}\n\n // blend with background color\nvec4 apply_opacity(vec3 color, float alpha) {\n  return mix(transparentColor, vec4(color, 1.0), alpha);\n}\n\nvec2 getUV(vec2 pos) {\n  return vec2((pos.x - bounds[0]) / (bounds[2] - bounds[0]), (pos.y - bounds[3]) / (bounds[1] - bounds[3]));\n}\n\nvec3 packUVsIntoRGB(vec2 uv) {\n  // Extract the top 8 bits. We want values to be truncated down so we can add a fraction\n  vec2 uv8bit = floor(uv * 256.);\n\n  // Calculate the normalized remainders of u and v parts that do not fit into 8 bits\n  // Scale and clamp to 0-1 range\n  vec2 uvFraction = fract(uv * 256.);\n  vec2 uvFraction4bit = floor(uvFraction * 16.);\n\n  // Remainder can be encoded in blue channel, encode as 4 bits for pixel coordinates\n  float fractions = uvFraction4bit.x + uvFraction4bit.y * 16.;\n\n  return vec3(uv8bit, fractions) / 255.;\n}\n\nvarying vec2 vTexCoordC;\nuniform sampler2D clutTextureUniform;\nuniform float shift; // the wize of isoline\n\n// Consts\n  // Modifying 'vertexPosition' in order to skip borders.\n// const float tileSzExInv = 1.0 / 258.0;\n// float shift = tileSzExInv / zoom; // current zoom let us work out the thickness of the isolines.\n// const float tileM = 256.0 / 258.0;\n// const vec2 one = vec2(tileSzExInv, tileSzExInv);\n\n// Func Protos\nfloat GetPackedData(vec2);\nvec4 CLUT(float);\nint ISO(float);\n\nvoid main(void) {\n  vec2 uvC = vTexCoordC;\n  if(coordinateConversion < -0.5) {\n    vec2 lnglat = mercator_to_lnglat(vTexPos);\n    uvC = getUV(lnglat);\n  } else if(coordinateConversion > 0.5) {\n    vec2 commonPos = lnglat_to_mercator(vTexPos);\n    uvC = getUV(commonPos);\n  }\n\n  // float shift = 1.0 / 258.0; // current zoom let us work out the thickness of the isolines.\n  vec2 uvR = uvC + vec2(shift, 0.0);\n  vec2 uvD = uvC + vec2(0.0, shift);\n\n  float packedC = GetPackedData(uvC); // central\n  vec4 colorC = CLUT(packedC);\n  int isoC = ISO(packedC);\n\n  float packedR = GetPackedData(uvR); // central\n  int isoR = ISO(packedR);\n\n  float packedD = GetPackedData(uvD); // central\n  int isoD = ISO(packedD);\n\n  gl_FragColor = colorC;\n  if(isoC != isoD || isoC != isoR) {\n    gl_FragColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);\n        // gl_FragColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);\n  }\n\n  geometry.uv = uvC;\n  DECKGL_FILTER_COLOR(gl_FragColor, geometry);\n\n  if(picking_uActive) {\n    // Since instance information is not used, we can use picking color for pixel index\n    gl_FragColor.rgb = packUVsIntoRGB(uvC);\n  }\n}\n\nfloat GetPackedData(vec2 texCoord) {\n  vec4 tex = texture2D(bitmapTexture, texCoord);\n  return tex.r / 255.0 + tex.g;\n}\n\nvec4 CLUT(float pos) {\n  return texture2D(clutTextureUniform, vec2(pos, 0.0));\n}\n\nint ISO(float pos) {\n  float bottomPixel = texture2D(clutTextureUniform, vec2(pos, 1.0)).r;\n  return int(bottomPixel * 255.0);\n}\n";
-
   // node_modules/@deck.gl/geo-layers/dist/esm/tile-layer/tile-2d-header.js
   var import_regenerator23 = __toModule(require_regenerator());
   var Tile2DHeader = function() {
@@ -43720,6 +43510,12 @@ var wxtiledeckgl = (() => {
   TileLayer.layerName = "TileLayer";
   TileLayer.defaultProps = defaultProps12;
 
+  // src/shaders/bitmap-layer-vertex.vs
+  var bitmap_layer_vertex_default2 = "#define SHADER_NAME bitmap-layer-vertex-shader\n\nattribute vec2 texCoords;\nattribute vec3 positions;\nattribute vec3 positions64Low;\n\nvarying vec2 vTexCoord;\nvarying vec2 vTexPos;\n\nuniform float coordinateConversion;\n\nconst vec3 pickingColor = vec3(1.0, 0.0, 0.0);\n\n// SERG\nvarying vec2 vTexCoordC;\n// Tiles are 258x258. 1 pixel border is used to calc isolines and proper interpolation. It needs to be excluded from 'tile filling' process.\n// Modifying 'vertexPosition' in order to skip borders.\nconst float tileSzExInv = 1.0 / 258.0;\nconst float tileM = 256.0 / 258.0;\nconst vec2 one = vec2(tileSzExInv, tileSzExInv);\n\nvoid main(void) {\n  geometry.worldPosition = positions;\n  geometry.uv = texCoords;\n  geometry.pickingColor = pickingColor;\n\n  gl_Position = project_position_to_clipspace(positions, positions64Low, vec3(0.0), geometry.position);\n  DECKGL_FILTER_GL_POSITION(gl_Position, geometry);\n\n  vTexCoord = texCoords;\n\n  if(coordinateConversion < -0.5) {\n    vTexPos = geometry.position.xy;\n  } else if(coordinateConversion > 0.5) {\n    vTexPos = geometry.worldPosition.xy;\n  }\n\n  vec4 color = vec4(0.0);\n  DECKGL_FILTER_COLOR(color, geometry);\n\n  vTexCoordC = texCoords * tileM + one;\n}";
+
+  // src/shaders/bitmap-layer-fragment.fs
+  var bitmap_layer_fragment_default2 = "/**\n * Pack the top 12 bits of two normalized floats into 3 8-bit (rgb) values\n * This enables addressing 4096x4096 individual pixels\n *\n * returns vec3 encoded RGB colors\n *  result.r - top 8 bits of u\n *  result.g - top 8 bits of v\n *  result.b - next 4 bits of u and v: (u + v * 16)\n */\n\n #define SHADER_NAME bitmap-layer-fragment-shader\n\n #ifdef GL_ES\nprecision highp float;\n #endif\n\nuniform sampler2D bitmapTexture;\n\nvarying vec2 vTexCoord;\nvarying vec2 vTexPos;\n\nuniform float desaturate;\nuniform vec4 transparentColor;\nuniform vec3 tintColor;\nuniform float opacity;\n\nuniform float coordinateConversion;\nuniform vec4 bounds;\n\n /* projection utils */\nconst float TILE_SIZE = 512.0;\nconst float PI = 3.1415926536;\nconst float WORLD_SCALE = TILE_SIZE / PI / 2.0;\n\n // from degrees to Web Mercator\nvec2 lnglat_to_mercator(vec2 lnglat) {\n  float x = lnglat.x;\n  float y = clamp(lnglat.y, -89.9, 89.9);\n  return vec2(radians(x) + PI, PI + log(tan(PI * 0.25 + radians(y) * 0.5))) * WORLD_SCALE;\n}\n\n // from Web Mercator to degrees\nvec2 mercator_to_lnglat(vec2 xy) {\n  xy /= WORLD_SCALE;\n  return degrees(vec2(xy.x - PI, atan(exp(xy.y - PI)) * 2.0 - PI * 0.5));\n}\n /* End projection utils */\n\n // apply desaturation\nvec3 color_desaturate(vec3 color) {\n  float luminance = (color.r + color.g + color.b) * 0.333333333;\n  return mix(color, vec3(luminance), desaturate);\n}\n\n // apply tint\nvec3 color_tint(vec3 color) {\n  return color * tintColor;\n}\n\n // blend with background color\nvec4 apply_opacity(vec3 color, float alpha) {\n  return mix(transparentColor, vec4(color, 1.0), alpha);\n}\n\nvec2 getUV(vec2 pos) {\n  return vec2((pos.x - bounds[0]) / (bounds[2] - bounds[0]), (pos.y - bounds[3]) / (bounds[1] - bounds[3]));\n}\n\nvec3 packUVsIntoRGB(vec2 uv) {\n  // Extract the top 8 bits. We want values to be truncated down so we can add a fraction\n  vec2 uv8bit = floor(uv * 256.);\n\n  // Calculate the normalized remainders of u and v parts that do not fit into 8 bits\n  // Scale and clamp to 0-1 range\n  vec2 uvFraction = fract(uv * 256.);\n  vec2 uvFraction4bit = floor(uvFraction * 16.);\n\n  // Remainder can be encoded in blue channel, encode as 4 bits for pixel coordinates\n  float fractions = uvFraction4bit.x + uvFraction4bit.y * 16.;\n\n  return vec3(uv8bit, fractions) / 255.;\n}\n\nvarying vec2 vTexCoordC;\nuniform sampler2D clutTextureUniform;\nuniform float shift; // the wize of isoline\n\n// Consts\n  // Modifying 'vertexPosition' in order to skip borders.\n// const float tileSzExInv = 1.0 / 258.0;\n// float shift = tileSzExInv / zoom; // current zoom let us work out the thickness of the isolines.\n// const float tileM = 256.0 / 258.0;\n// const vec2 one = vec2(tileSzExInv, tileSzExInv);\n\n// Func Protos\nfloat GetPackedData(vec2);\nvec4 CLUT(float);\nint ISO(float);\n\nvoid main(void) {\n  vec2 uvC = vTexCoordC;\n  if(coordinateConversion < -0.5) {\n    vec2 lnglat = mercator_to_lnglat(vTexPos);\n    uvC = getUV(lnglat);\n  } else if(coordinateConversion > 0.5) {\n    vec2 commonPos = lnglat_to_mercator(vTexPos);\n    uvC = getUV(commonPos);\n  }\n\n  // float shift = 1.0 / 258.0; // current zoom let us work out the thickness of the isolines.\n  vec2 uvR = uvC + vec2(shift, 0.0);\n  vec2 uvD = uvC + vec2(0.0, shift);\n\n  float packedC = GetPackedData(uvC); // central\n  vec4 colorC = CLUT(packedC);\n  int isoC = ISO(packedC);\n\n  float packedR = GetPackedData(uvR); // central\n  int isoR = ISO(packedR);\n\n  float packedD = GetPackedData(uvD); // central\n  int isoD = ISO(packedD);\n\n  gl_FragColor = colorC;\n  if(isoC != isoD || isoC != isoR) {\n    gl_FragColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);\n        // gl_FragColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);\n  }\n\n  geometry.uv = uvC;\n  DECKGL_FILTER_COLOR(gl_FragColor, geometry);\n\n  if(picking_uActive) {\n    // Since instance information is not used, we can use picking color for pixel index\n    gl_FragColor.rgb = packUVsIntoRGB(uvC);\n  }\n}\n\nfloat GetPackedData(vec2 texCoord) {\n  vec4 tex = texture2D(bitmapTexture, texCoord);\n  return tex.r / 255.0 + tex.g;\n}\n\nvec4 CLUT(float pos) {\n  return texture2D(clutTextureUniform, vec2(pos, 0.0));\n}\n\nint ISO(float pos) {\n  float bottomPixel = texture2D(clutTextureUniform, vec2(pos, 1.0)).r;\n  return int(bottomPixel * 255.0);\n}\n";
+
   // node_modules/@luma.gl/constants/dist/esm/index.js
   var esm_default2 = {
     DEPTH_BUFFER_BIT: 256,
@@ -44338,6 +44134,210 @@ var wxtiledeckgl = (() => {
     GPU_DISJOINT_EXT: 36795
   };
 
+  // src/wxtools.ts
+  var __units_default_preset = {
+    comment1: ["degC: ['K', 1, 273.15] -> degC = K * 1 + 273.15", 0],
+    comment2: ["hPa: ['Pa', 100]' -> hPa = Pa * 100 + 0 (0 - could be ommited)", 0],
+    K: ["K", 1],
+    F: ["K", 0.5555555555, 255.372222222],
+    C: ["K", 1, 273.15],
+    degC: ["K", 1, 273.15],
+    "kg/m^2/s": ["kg/m^2/s", 1],
+    "Kg m**-2 s**-1": ["kg/m^2/s", 1],
+    "W/m^2": ["W/m^2", 1],
+    "W m**2": ["W/m^2", 1],
+    "m/s": ["m/s", 1],
+    "m s**-1": ["m/s", 1],
+    knot: ["m/s", 0.514444],
+    knots: ["m/s", 0.514444],
+    "km/h": ["m/s", 0.27777777777],
+    s: ["s", 1],
+    sec: ["s", 1],
+    h: ["s", 3600],
+    min: ["s", 60],
+    m: ["m", 1],
+    cm: ["m", 0.01],
+    inch: ["m", 0.0254],
+    Pa: ["Pa", 1],
+    hPa: ["Pa", 100]
+  };
+  var __colorSchemes_default_preset = {
+    none: ["#00000000", "#00000000"],
+    rainbow: ["#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"],
+    rainbow2: ["#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f", "#f00"],
+    rainbowzerro: ["#ff000000", "#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"],
+    bluebird: ["#00f", "#f0f", "#0ff", "#80f", "#88f"],
+    bluebirdzerro: ["#0000ff00", "#00f", "#f0f", "#0ff", "#80f", "#88f"],
+    bw: ["#000", "#fff"],
+    wb: ["#fff", "#000"],
+    redish: ["#f0f", "#f00", "#ff0"],
+    greenish: ["#ff0", "#0f0", "#0ff"],
+    blueish: ["#f0f", "#00f", "#0ff"],
+    hspastel: ["#AC6EA4FF", "#8E92BDFF", "#ACD4DEFF", "#E9DC8EFF", "#E7A97DFF", "#E59074FF", "#BE7E68FF", "#A88F86FF"]
+  };
+  var __colorStyles_default_preset = {
+    base: {
+      parent: void 0,
+      name: "base",
+      fill: "gradient",
+      isolineColor: "inverted",
+      isolineText: true,
+      vectorType: "arrows",
+      vectorColor: "inverted",
+      streamLineColor: "#777",
+      streamLineSpeedFactor: 1,
+      streamLineStatic: false,
+      showBelowMin: true,
+      showAboveMax: true,
+      colorScheme: "rainbow",
+      colors: void 0,
+      colorMap: void 0,
+      levels: void 0,
+      blurRadius: 0,
+      addDegrees: 0,
+      units: "",
+      extraUnits: void 0
+    },
+    custom: {
+      parent: void 0,
+      name: "custom",
+      fill: "gradient",
+      isolineColor: "inverted",
+      isolineText: true,
+      vectorType: "arrows",
+      vectorColor: "inverted",
+      streamLineColor: "#777",
+      streamLineSpeedFactor: 1,
+      streamLineStatic: false,
+      showBelowMin: true,
+      showAboveMax: true,
+      colorScheme: "rainbow",
+      colors: void 0,
+      colorMap: void 0,
+      levels: void 0,
+      blurRadius: 0,
+      addDegrees: 0,
+      units: "",
+      extraUnits: void 0
+    }
+  };
+  var _units;
+  var _colorSchemes;
+  var _colorStylesUnrolled;
+  function WxTileLibSetup({colorStyles = {}, units = {}, colorSchemes = {}} = {}) {
+    if (window.wxlogging) {
+      console.log("WxTile lib setup: start");
+    }
+    _units = Object.assign({}, __units_default_preset, units);
+    _colorSchemes = Object.assign({}, colorSchemes, __colorSchemes_default_preset);
+    _colorStylesUnrolled = unrollStylesParent(colorStyles);
+    if (window.wxlogging) {
+      console.log("WxTile lib setup: styles unrolled");
+    }
+    document.fonts.load("32px barbs");
+    document.fonts.load("32px arrows");
+    if (window.wxlogging) {
+      console.log("WxTile lib setup is done" + JSON.stringify({colorStyles, units, colorSchemes}));
+    }
+  }
+  function WxGetColorStyles() {
+    return _colorStylesUnrolled;
+  }
+  function getColorSchemes() {
+    return _colorSchemes;
+  }
+  function makeConverter(from, to, customUnits) {
+    const localUnitsCopy = customUnits ? Object.assign({}, _units, customUnits) : _units;
+    if (!localUnitsCopy || !from || !to || from === to || !localUnitsCopy[from] || !localUnitsCopy[to] || localUnitsCopy[from][0] !== localUnitsCopy[to][0]) {
+      if (window.wxlogging) {
+        console.log(from === to ? "Trivial converter:" : "Inconvertible units. Default converter is used:", from, " -> ", to);
+      }
+      const c = (x) => x;
+      c.trivial = true;
+      return c;
+    }
+    if (window.wxlogging)
+      console.log("Converter: From:", from, " To:", to);
+    const a = localUnitsCopy[from][1] / localUnitsCopy[to][1];
+    const b = (localUnitsCopy[from][2] || 0) / localUnitsCopy[to][1] - (localUnitsCopy[to][2] || 0) / localUnitsCopy[to][1];
+    return b ? (x) => a * x + b : (x) => a * x;
+  }
+  function unrollStylesParent(stylesArrInc) {
+    const stylesInc = Object.assign({}, __colorStyles_default_preset);
+    for (const name in stylesArrInc) {
+      const styleA = stylesArrInc[name];
+      if (Array.isArray(styleA)) {
+        for (let i = 0; i < styleA.length; ++i) {
+          stylesInc[name + "[" + i + "]"] = Object.assign({}, styleA[i]);
+        }
+      } else {
+        stylesInc[name] = Object.assign({}, styleA);
+      }
+    }
+    const inherit = (stylesInc2, name) => {
+      if (name === "base")
+        return __colorStyles_default_preset.base;
+      const style = stylesInc2[name];
+      if (!style.parent || !(style.parent in stylesInc2))
+        style.parent = "base";
+      const parent = inherit(stylesInc2, style.parent);
+      return Object.assign(style, Object.assign({}, parent, style, {parent: "base"}));
+    };
+    const styles = {};
+    for (const name in stylesInc) {
+      styles[name] = inherit(stylesInc, name);
+    }
+    return styles;
+  }
+  function RGBtoHEX(rgb) {
+    const r = rgb >> 0 & 255;
+    const g = rgb >> 8 & 255;
+    const b = rgb >> 16 & 255;
+    let rs = r.toString(16);
+    let gs = g.toString(16);
+    let bs = b.toString(16);
+    rs = rs.length === 2 ? rs : "0" + rs;
+    gs = gs.length === 2 ? gs : "0" + gs;
+    bs = bs.length === 2 ? bs : "0" + bs;
+    return "#" + rs + gs + bs;
+  }
+  function HEXtoRGBA(c) {
+    if (c[0] === "#") {
+      if (c.length === 4)
+        return +("0xff" + c[3] + c[3] + c[2] + c[2] + c[1] + c[1]);
+      if (c.length === 7)
+        return +("0xff" + c[5] + c[6] + c[3] + c[4] + c[1] + c[2]);
+      if (c.length === 9)
+        return +("0x" + c[7] + c[8] + c[5] + c[6] + c[3] + c[4] + c[1] + c[2]);
+    }
+    if (window.wxlogging) {
+      console.log("wrong color format", c);
+    }
+    return 0;
+  }
+  function mixColor(c1, c2, t) {
+    const r1 = c1 >> 0 & 255;
+    const g1 = c1 >> 8 & 255;
+    const b1 = c1 >> 16 & 255;
+    const a1 = c1 >>> 24;
+    const r2 = c2 >> 0 & 255;
+    const g2 = c2 >> 8 & 255;
+    const b2 = c2 >> 16 & 255;
+    const a2 = c2 >>> 24;
+    const r = r1 + t * (r2 - r1);
+    const g = g1 + t * (g2 - g1);
+    const b = b1 + t * (b2 - b1);
+    const a = a1 + t * (a2 - a1);
+    return r | g << 8 | b << 16 | a << 24;
+  }
+  function createLevels(min, max, n) {
+    const levels = [];
+    for (let i = 0; i < n; ++i) {
+      levels.push(i * (max - min) / (n - 1) + min);
+    }
+    return levels;
+  }
+
   // src/RawCLUT.ts
   function clamp2(val, min, max) {
     return val > max ? max : val < min ? min : val;
@@ -44584,6 +44584,87 @@ var wxtiledeckgl = (() => {
   };
   WxTilesLayer.layerName = "WxTilesLayer";
 
+  // src/layers/WxTileLayer.ts
+  var WxTilesLayer2 = class extends TileLayer {
+    initializeState(params) {
+      super.initializeState(params);
+      this.loadCLUT();
+    }
+    onClick(...a) {
+      console.log("WxTilesLayer onClick:", a[0].bitmap.pixel);
+    }
+    renderSubLayers(props) {
+      const {tile} = props;
+      const {west, south, east, north} = tile.bbox;
+      const tileLayer = new WxTile(props, {
+        id: props.id + "BM-layer",
+        data: null,
+        image: props.data,
+        clutTextureUniform: this.state.clutTextureUniform,
+        maxZoom: this.props.data.meta.maxZoom,
+        bounds: [west, south, east, north]
+      });
+      const textLayerId = props.id + "tile";
+      const subLayers = [
+        tileLayer,
+        new TextLayer({
+          id: textLayerId,
+          data: [{west, south, east, north, id: textLayerId}],
+          getPosition: (d) => [d.west + 2, d.north - 2],
+          getText: (d) => d.id,
+          getColor: (d) => [0, 0, 255],
+          billboard: false,
+          getSize: 10,
+          getTextAnchor: "start"
+        }),
+        new PathLayer({
+          id: props.id + "border",
+          visible: props.visible,
+          data: [{
+            path: [
+              [west, north],
+              [west, south],
+              [east, south],
+              [east, north],
+              [west, north]
+            ]
+          }],
+          getPath: (d) => d.path,
+          getColor: [255, 0, 0, 120],
+          widthMinPixels: 1
+        })
+      ];
+      return subLayers;
+    }
+    loadCLUT() {
+      const {style, variable, meta} = this.props.data;
+      const varMeta = meta.variablesMeta[variable];
+      const CLUT = new RawCLUT(style, varMeta.units, [varMeta.min, varMeta.max], false);
+      const {colorsI, levelIndex} = CLUT;
+      const dataShift = 4;
+      const dataWidth = 65536 >> dataShift;
+      const data = new Uint32Array(dataWidth * 2);
+      for (let x = 0; x < dataWidth; ++x) {
+        data[x] = colorsI[x << dataShift];
+        data[dataWidth + x] = levelIndex[x << dataShift];
+      }
+      const clutTextureUniform = new Texture2D(this.context.gl, {
+        data: new Uint8Array(data.buffer),
+        width: dataWidth,
+        height: 2,
+        format: esm_default2.RGBA,
+        parameters: {
+          [esm_default2.TEXTURE_WRAP_S]: esm_default2.CLAMP_TO_EDGE,
+          [esm_default2.TEXTURE_WRAP_T]: esm_default2.CLAMP_TO_EDGE,
+          [esm_default2.TEXTURE_MIN_FILTER]: esm_default2.LINEAR,
+          [esm_default2.TEXTURE_MAG_FILTER]: esm_default2.LINEAR
+        },
+        mipmaps: false
+      });
+      this.setState({clutTextureUniform});
+    }
+  };
+
   // src/index.ts
   async function fetchJson(url) {
     console.log(url);
@@ -44631,6 +44712,7 @@ var wxtiledeckgl = (() => {
     const dataSet = "ww3-ecmwf.global";
     const variable = "wave.height";
     const {URI, URITime, meta} = await getURI({dataSet, variable});
+    console.log(meta);
     const layers = [
       new TextLayer({
         data: [{}],
@@ -44638,14 +44720,14 @@ var wxtiledeckgl = (() => {
         getPosition: () => [0, 0],
         getColor: () => [0, 0, 255]
       }),
-      new WxTilesLayer({
-        dataSet,
-        variable,
-        style,
-        styleName,
-        meta,
+      new WxTilesLayer2({
+        data: {
+          variable,
+          style,
+          meta,
+          URI
+        },
         maxZoom: meta.maxZoom,
-        data: URI,
         pickable: true,
         tileSize: 256
       })

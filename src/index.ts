@@ -66,7 +66,7 @@ export async function start() {
 	const styles = WxGetColorStyles();
 	const style = styles[styleName];
 
-	const GLOBUS = true;
+	const GLOBUS = true; 
 
 	const wxTilesProps = {
 		id: 'wxtiles' + dataSet + '/' + variable,

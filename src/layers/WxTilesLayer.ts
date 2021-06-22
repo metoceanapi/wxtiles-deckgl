@@ -58,19 +58,17 @@ export class WxTilesLayer extends TileLayer<any> {
 
 		const { x, y, z } = tile;
 
-		tile.url = new Array<string>();
-		const res: any[] = [];
-		for (const uri of data) {
-			const url = uri
-				.replace('{x}', x)
-				.replace('{y}', y)
-				.replace('{z}', z)
-				.replace('{-y}', Math.pow(2, z) - y - 1 + '');
-			res.push(await fetch(url, { layer: this, signal }));
-			tile.url.push(url);
-		}
-
-		return res.length > 0 ? res : null;
+		const fetchResponses = await Promise.all(
+			data.map(async (uri) => {
+				const url = uri
+					.replace('{x}', x)
+					.replace('{y}', y)
+					.replace('{z}', z)
+					.replace('{-y}', Math.pow(2, z) - y - 1 + '');
+				return await fetch(url, { layer: this, signal });
+			})
+		);
+		return fetchResponses.length > 0 ? fetchResponses : null;
 	}
 	loadCLUT() {
 		const { style, variable, meta } = (<WxTilesLayerProps>this.props).wxprops;

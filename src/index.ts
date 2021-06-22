@@ -35,26 +35,14 @@ export async function getURI({ dataSet, variable }) {
 	return { URI, URITime, meta };
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function start() {
-	const wxlibCustomSettings: LibSetupObject = {};
-	{
-		try {
-			// these URIs are for the demo purpose. set the correct URI
-			wxlibCustomSettings.colorStyles = await fetchJson('styles/styles.json'); // set the correct URI
-		} catch (e) {
-			console.log(e);
-		}
-		try {
-			wxlibCustomSettings.units = await fetchJson('styles/uconv.json'); // set the correct URI
-		} catch (e) {
-			console.log(e);
-		}
-		try {
-			wxlibCustomSettings.colorSchemes = await fetchJson('styles/colorschemes.json'); // set the correct URI
-		} catch (e) {
-			console.log(e);
-		}
-	}
+	const wxlibCustomSettings: LibSetupObject = {
+		colorStyles: await fetchJson('styles/styles.json'),
+		units: await fetchJson('styles/uconv.json'),
+		colorSchemes: await fetchJson('styles/colorschemes.json'),
+	};
 	// ESSENTIAL step to get lib ready.
 	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults
 	await document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
@@ -68,8 +56,9 @@ export async function start() {
 
 	const GLOBUS = true; 
 
+	const wxTilesId = 'wxtiles' + dataSet + '/' + variable;
 	const wxTilesProps = {
-		id: 'wxtiles' + dataSet + '/' + variable,
+		id: wxTilesId,
 		// WxTiles settings
 		wxprops: {
 			meta,
@@ -87,17 +76,16 @@ export async function start() {
 		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
 	};
 
-	const layers = [
-		new WxTilesLayer(wxTilesProps),
-		new DebugTilesLayer({
-			id: 'debugtiles',
-			data: undefined,
-			maxZoom: 24,
-			minZoom: 0,
-			pickable: false,
-			tileSize: 256,
-		}),
-	];
+	const debugLayer = new DebugTilesLayer({
+		id: 'debugtiles',
+		data: undefined,
+		maxZoom: 24,
+		minZoom: 0,
+		pickable: false,
+		tileSize: 256,
+	});
+
+	const layers = [new WxTilesLayer(wxTilesProps), debugLayer];
 
 	const deckgl = new Deck({
 		initialViewState: { latitude: -41, longitude: 175, zoom: 0 },
@@ -106,16 +94,57 @@ export async function start() {
 		// views: new GlobeView({ id: 'globe', controller: true }),
 	});
 
-	let i = 0;
-	var timestep = () => {
-		i = ++i % meta.times.length;
-		wxTilesProps.data = [URITime.replace('{time}', meta.times[i])];
-		wxTilesProps.onViewportLoad = () => {
-			setTimeout(timestep, 1000);
-		};
-		layers[0] = new WxTilesLayer(wxTilesProps);
-		deckgl.setProps({ layers });
+	const addOrRemoveLayers = (newLayers: any[]) => {
+		const layerIds = deckgl.props.layers.map(({ id }) => id);
+		const newLayerIds = newLayers.map(({ id }) => id);
+
+		if (layerIds.length === newLayerIds.length && layerIds.every((layerId) => newLayerIds.includes(layerId))) {
+			//layers didn't change;
+			return;
+		}
+		deckgl.setProps({ layers: newLayers });
 	};
 
-	// setTimeout(timestep, 1000);
+	let isRunning = false;
+	let i = 0;
+	const loop = async () => {
+		if (!isRunning) return;
+		i = ++i % meta.times.length;
+		await new Promise<void>((resolve) => {
+			const newLayer = new WxTilesLayer({
+				...wxTilesProps,
+				id: wxTilesId + i,
+				data: [URITime.replace('{time}', meta.times[i])],
+				onViewportLoad: async () => {
+					await sleep(0);
+					addOrRemoveLayers([newLayer, debugLayer]);
+					resolve();
+				},
+			});
+			addOrRemoveLayers([newLayer, ...deckgl.props.layers]);
+		});
+		loop();
+	};
+	const startLoop = () => {
+		isRunning = true;
+		button.innerHTML = 'STOP';
+		loop();
+	};
+	const stopLoop = () => {
+		isRunning = false;
+		button.innerHTML = 'START';
+	};
+	const button = document.createElement('button');
+	button.style.zIndex = '1000000';
+	button.style.position = 'absolute';
+	button.innerHTML = 'START';
+	document.body.appendChild(button);
+	button.addEventListener('click', () => {
+		console.log('click');
+		if (isRunning) {
+			stopLoop();
+		} else {
+			startLoop();
+		}
+	});
 }

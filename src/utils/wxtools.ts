@@ -1,3 +1,17 @@
+export interface VariableMeta {
+	[name: string]: {
+		units: string;
+		min: number;
+		max: number;
+	};
+}
+export interface Meta {
+	variables: string[];
+	variablesMeta: VariableMeta[];
+	maxZoom: number;
+	times: string[];
+}
+
 export type UnitTuple = [string, number, number?];
 
 export interface Units {

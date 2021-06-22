@@ -95,7 +95,7 @@ uniform float shift; // the wize of isoline
 // Func Protos
 float GetPackedData(vec2);
 vec4 CLUT(float);
-int ISO(float);
+int isolineIndex(float);
 
 void main(void) {
   vec2 uvC = vTexCoordC;
@@ -112,16 +112,18 @@ void main(void) {
   vec2 uvD = uvC + vec2(0.0, shift);
 
   float packedC = GetPackedData(uvC); // central
+  if(packedC < 0.00001)
+    discard;
   vec4 colorC = CLUT(packedC);
-  int isoC = ISO(packedC);
+  gl_FragColor = colorC;
+  int isoC = isolineIndex(packedC);
 
   float packedR = GetPackedData(uvR); // central
-  int isoR = ISO(packedR);
+  int isoR = isolineIndex(packedR);
 
   float packedD = GetPackedData(uvD); // central
-  int isoD = ISO(packedD);
+  int isoD = isolineIndex(packedD);
 
-  gl_FragColor = colorC;
   if(isoC != isoD || isoC != isoR) {
     gl_FragColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);
         // gl_FragColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);
@@ -142,10 +144,12 @@ float GetPackedData(vec2 texCoord) {
 }
 
 vec4 CLUT(float pos) {
+  // upper pixel is a CLUT component
   return texture2D(clutTextureUniform, vec2(pos, 0.0));
 }
 
-int ISO(float pos) {
+int isolineIndex(float pos) {
+  // bottom pixel is an Isoline index, so if central index != neighbore index then the pixel is on isoline
   float bottomPixel = texture2D(clutTextureUniform, vec2(pos, 1.0)).r;
   return int(bottomPixel * 255.0);
 }

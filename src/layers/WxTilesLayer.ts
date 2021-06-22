@@ -1,0 +1,112 @@
+import { TileLayer } from '@deck.gl/geo-layers';
+import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
+import GL from '@luma.gl/constants';
+import { Texture2D } from '@luma.gl/core';
+
+import { WxTile } from './WxTile';
+import { ColorStyleStrict, Meta } from '../utils/wxtools';
+import { RawCLUT } from '../utils/RawCLUT';
+
+export interface WxTilesLayerProps extends TileLayerProps<any> {
+	wxprops: {
+		meta: Meta;
+		variable: string;
+		style: ColorStyleStrict;
+	};
+	data: string[];
+	tile?: {
+		x: number;
+		y: number;
+		z: number;
+		bbox: { west: number; south: number; east: number; north: number };
+	};
+	_imageCoordinateSystem?: any;
+	onViewportLoad?: any;
+}
+export class WxTilesLayer extends TileLayer<any> {
+	constructor(...props: WxTilesLayerProps[]) {
+		super(...props);
+	}
+
+	initializeState(params: any) {
+		super.initializeState(params);
+		this.loadCLUT();
+	}
+
+	// onHover: (info, event) => console.log('Hovered:', info, event),
+
+	onClick(info: any, pickingEvent: any) {
+		console.log('WxTilesLayer onClick:', { info, pickingEvent });
+	}
+
+	renderSubLayers(props: any) {
+		const { tile } = props;
+		const { west, south, east, north } = tile.bbox;
+		const { data } = tile;
+
+		return new WxTile({
+			id: props.id + 'wxtile',
+			// tile,
+			data: {
+				image: data[0],
+				image2: data[1], // if 'undefined' - it's ok!
+				clutTextureUniform: this.state.clutTextureUniform,
+				bounds: [west, south, east, north],
+			},
+		});
+	}
+	async getTileData(tile) {
+		const { data } = <WxTilesLayerProps>this.props;
+		const { getTileData, fetch } = this.getCurrentLayer().props;
+		const { signal } = tile;
+
+		const { x, y, z } = tile;
+
+		tile.url = new Array<string>();
+		const res: any[] = [];
+		for (const uri of data) {
+			const url = uri
+				.replace('{x}', x)
+				.replace('{y}', y)
+				.replace('{z}', z)
+				.replace('{-y}', Math.pow(2, z) - y - 1 + '');
+			res.push(await fetch(url, { layer: this, signal }));
+			tile.url.push(url);
+		}
+
+		return res.length > 0 ? res : null;
+	}
+	loadCLUT() {
+		const { style, variable, meta } = (<WxTilesLayerProps>this.props).wxprops;
+		const varMeta = meta.variablesMeta[variable];
+		const CLUT = new RawCLUT(style, varMeta.units, [varMeta.min, varMeta.max], false);
+		const { colorsI, levelIndex } = CLUT;
+		const dataShift = 4;
+		const dataWidth = 65536 >> dataShift;
+		const data = new Uint32Array(dataWidth * 2);
+		for (let x = 0; x < dataWidth; ++x) {
+			data[x] = colorsI[x << dataShift];
+			data[dataWidth + x] = levelIndex[x << dataShift];
+		}
+		const clutTextureUniform = new Texture2D(this.context.gl, {
+			data: new Uint8Array(data.buffer),
+			width: dataWidth,
+			height: 2,
+			format: GL.RGBA,
+
+			parameters: {
+				[GL.TEXTURE_WRAP_S]: GL.CLAMP_TO_EDGE,
+				[GL.TEXTURE_WRAP_T]: GL.CLAMP_TO_EDGE,
+				[GL.TEXTURE_MIN_FILTER]: GL.LINEAR,
+				[GL.TEXTURE_MAG_FILTER]: GL.LINEAR,
+			},
+			mipmaps: false,
+		});
+
+		this.setState({ clutTextureUniform });
+	}
+}
+WxTilesLayer.layerName = 'WxTilesLayer';
+// WxTilesLayer.defaultProps = {
+// 	minZoom: { type: 'number', value: 0 },
+// };

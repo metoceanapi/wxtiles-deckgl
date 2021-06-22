@@ -1,9 +1,8 @@
 import { Deck } from '@deck.gl/core';
-import { _GlobeView as GlobeView } from '@deck.gl/core';
 import { TextLayer } from '@deck.gl/layers';
+import { WxTilesLayer } from './layers/WxTileLayer';
 
-import { WxTileLibSetup, WxGetColorStyles, LibSetupObject } from './wxtools';
-import { WxTilesLayer } from './wxtilelayer';
+import { WxTileLibSetup, WxGetColorStyles, LibSetupObject } from './utils/wxtools';
 
 // // Create an async iterable
 // async function* getData() {
@@ -68,6 +67,7 @@ export async function start() {
 	const dataSet = 'ww3-ecmwf.global';
 	const variable = 'wave.height';
 	const { URI, URITime, meta } = await getURI({ dataSet, variable });
+	console.log(meta);
 	const layers = [
 		new TextLayer({
 			data: [{}],
@@ -77,14 +77,12 @@ export async function start() {
 		}),
 		new WxTilesLayer({
 			// WxTiles settings
-			dataSet,
 			variable,
 			style,
-			styleName,
 			meta,
+			data: URI,
 			//DECK.gl settings
 			maxZoom: meta.maxZoom,
-			data: URI, // TODO: Create an async iterable
 			pickable: true,
 			tileSize: 256,
 			// refinementStrategy: 'best-available', // default 'best-available'

@@ -46,7 +46,7 @@ esbuild
 			});
 		});
 
-		const url = `http://localhost:${PORT}`;
+		const url = `http://0.0.0.0:${PORT}`;
 		app.listen(PORT, () => {
 			console.log(`Dev is running at ${url}`);
 		});

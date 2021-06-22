@@ -1,8 +1,9 @@
 import { Deck } from '@deck.gl/core';
-import { TextLayer } from '@deck.gl/layers';
-import { WxTilesLayer } from './layers/WxTileLayer';
 
-import { WxTileLibSetup, WxGetColorStyles, LibSetupObject } from './utils/wxtools';
+import { WxTilesLayer } from './layers/WxTilesLayer';
+import { DebugTilesLayer } from './layers/DebugTilesLayer';
+
+import { WxTileLibSetup, WxGetColorStyles, LibSetupObject, Meta } from './utils/wxtools';
 
 // // Create an async iterable
 // async function* getData() {
@@ -23,12 +24,9 @@ export async function getURI({ dataSet, variable }) {
 	const dataServer = 'https://tiles.metoceanapi.com/data/';
 	dataSet += '/';
 	variable += '/';
-	// const dataSet = /* 'ww3-gfs.global/'; */ /* 'mercator.global/'; */ 'ecwmf.global/'; /* 'obs-radar.rain.nzl.national/'; */
-	/* 'wave.height/'; */ /* 'current.speed.northward.at-sea-surface/';  */ /* 'air.humidity.at-2m/';  */ /* 'reflectivity/'; */
-	// const variable = 'air.temperature.at-2m/';
 	const instances = await fetchJson(dataServer + dataSet + 'instances.json');
 	const instance = instances.reverse()[0] + '/';
-	const meta = await fetchJson(dataServer + dataSet + instance + 'meta.json');
+	const meta: Meta = await fetchJson(dataServer + dataSet + instance + 'meta.json');
 	const { times } = meta;
 	const time = times.find((t) => new Date(t).getTime() >= Date.now()) || times[times.length - 1];
 	// URI could be hardcoded, but tiles-DB is alive!
@@ -60,44 +58,64 @@ export async function start() {
 	// ESSENTIAL step to get lib ready.
 	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults
 	await document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
+
+	// const [dataSet, variable, styleName] = ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
+	const [dataSet, variable, styleName] = ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
+	// const [dataSet, variable, styleName] = ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+	const { URI, URITime, meta } = await getURI({ dataSet, variable });
 	const styles = WxGetColorStyles();
-	const styleName = 'base';
 	const style = styles[styleName];
 
-	const dataSet = 'ww3-ecmwf.global';
-	const variable = 'wave.height';
-	const { URI, URITime, meta } = await getURI({ dataSet, variable });
-	console.log(meta);
-	const layers = [
-		new TextLayer({
-			data: [{}],
-			getText: () => 'Text',
-			getPosition: () => [0, 0],
-			getColor: () => [0, 0, 255],
-		}),
-		new WxTilesLayer({
-			// WxTiles settings
+	const GLOBUS = true;
+
+	const wxTilesProps = {
+		id: 'wxtiles' + dataSet + '/' + variable,
+		// WxTiles settings
+		wxprops: {
+			meta,
 			variable,
 			style,
-			meta,
-			data: URI,
-			//DECK.gl settings
-			maxZoom: meta.maxZoom,
-			pickable: true,
+		},
+		// DATA
+		data: [URI], // [eastward, northward] - for vector data
+		// DECK.gl settings
+		minZoom: 0,
+		maxZoom: meta.maxZoom,
+		pickable: true,
+		tileSize: 256,
+		onViewportLoad: () => {},
+		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
+	};
+
+	const layers = [
+		new WxTilesLayer(wxTilesProps),
+		new DebugTilesLayer({
+			id: 'debugtiles',
+			data: undefined,
+			maxZoom: 24,
+			minZoom: 0,
+			pickable: false,
 			tileSize: 256,
-			// refinementStrategy: 'best-available', // default 'best-available'
-			// onViewportLoad: (data, b) => console.log(data, b),
 		}),
 	];
 
 	const deckgl = new Deck({
-		initialViewState: { latitude: -41, longitude: 175, zoom: 1 },
+		initialViewState: { latitude: -41, longitude: 175, zoom: 0 },
 		controller: true,
-		// views: new GlobeView({ id: 'globe', controller: true }),
 		layers, // or use: deckgl.setProps({ layers });
+		// views: new GlobeView({ id: 'globe', controller: true }),
 	});
 
-	setTimeout(() => {
-		layers[1];
-	}, 4000);
+	let i = 0;
+	var timestep = () => {
+		i = ++i % meta.times.length;
+		wxTilesProps.data = [URITime.replace('{time}', meta.times[i])];
+		wxTilesProps.onViewportLoad = () => {
+			setTimeout(timestep, 1000);
+		};
+		layers[0] = new WxTilesLayer(wxTilesProps);
+		deckgl.setProps({ layers });
+	};
+
+	// setTimeout(timestep, 1000);
 }

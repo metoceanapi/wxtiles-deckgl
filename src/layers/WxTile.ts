@@ -1,19 +1,30 @@
 import { CompositeLayer } from '@deck.gl/core';
 import { Texture2D } from '@luma.gl/core';
+import { CompositeLayerProps } from '@deck.gl/core/lib/composite-layer';
 
 import { WxTileFill } from './WxTileFill';
 import { WxTileIsolineText } from './WxTileIsolineText';
 
 export interface WxTileData {
-	image: any;
-	image2?: any;
+	image: ImageBitmap;
+	image2?: ImageBitmap;
 	clutTextureUniform: Texture2D;
 	bounds: [number, number, number, number];
 }
+export interface WxTileProps extends CompositeLayerProps<WxTileData> {
+	data: WxTileData;
+}
 export class WxTile extends CompositeLayer<WxTileData> {
+	//@ts-ignore this statement makes sure that this.props are always properly typed
+	public props: WxTileProps;
+
+	constructor(props: WxTileProps) {
+		super(props);
+	}
+
 	renderLayers() {
 		const { props } = this;
-		const data = <WxTileData>this.props.data;
+		const data = this.props.data;
 		return [
 			new WxTileFill({
 				id: props.id + '-fill',

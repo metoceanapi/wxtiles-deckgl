@@ -13,6 +13,7 @@ export interface WxTilesLayerProps extends TileLayerProps<any> {
 		meta: Meta;
 		variable: string;
 		style: ColorStyleStrict;
+		URITime: string;
 	};
 	data: string[];
 }

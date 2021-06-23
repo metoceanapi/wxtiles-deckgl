@@ -4,6 +4,7 @@ import { WxTilesLayer } from './layers/WxTilesLayer';
 import { DebugTilesLayer } from './layers/DebugTilesLayer';
 
 import { WxTileLibSetup, WxGetColorStyles, LibSetupObject, Meta } from './utils/wxtools';
+import { createWxTilesLib } from './interfaces/wxTilesLib';
 
 // // Create an async iterable
 // async function* getData() {
@@ -35,8 +36,6 @@ export async function getURI({ dataSet, variable }) {
 	return { URI, URITime, meta };
 }
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export async function start() {
 	const wxlibCustomSettings: LibSetupObject = {
 		colorStyles: await fetchJson('styles/styles.json'),
@@ -57,94 +56,45 @@ export async function start() {
 	const GLOBUS = true; 
 
 	const wxTilesId = 'wxtiles' + dataSet + '/' + variable;
-	const wxTilesProps = {
-		id: wxTilesId,
-		// WxTiles settings
-		wxprops: {
-			meta,
-			variable,
-			style,
-		},
-		// DATA
-		data: [URI], // [eastward, northward] - for vector data
-		// DECK.gl settings
-		minZoom: 0,
-		maxZoom: meta.maxZoom,
-		pickable: true,
-		tileSize: 256,
-		onViewportLoad: () => {},
-		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
-	};
-
-	const debugLayer = new DebugTilesLayer({
-		id: 'debugtiles',
-		data: undefined,
-		maxZoom: 24,
-		minZoom: 0,
-		pickable: false,
-		tileSize: 256,
-	});
-
-	const layers = [new WxTilesLayer(wxTilesProps), debugLayer];
 
 	const deckgl = new Deck({
 		initialViewState: { latitude: -41, longitude: 175, zoom: 0 },
 		controller: true,
-		layers, // or use: deckgl.setProps({ layers });
+		//layers, // or use: deckgl.setProps({ layers });
 		// views: new GlobeView({ id: 'globe', controller: true }),
 	});
 
-	const addOrRemoveLayers = (newLayers: any[]) => {
-		const layerIds = deckgl.props.layers.map(({ id }) => id);
-		const newLayerIds = newLayers.map(({ id }) => id);
+	const wxTilesLayer = createWxTilesLib({debug: true}).createLayer(
+		{
+			id: wxTilesId,
+			// WxTiles settings
+			wxprops: {
+				meta,
+				variable,
+				style,
+				URITime,
+			},
+			// DATA
+			data: [URI], // [eastward, northward] - for vector data
+			// DECK.gl settings
+			minZoom: 0,
+			maxZoom: meta.maxZoom,
+			pickable: true,
+			tileSize: 256,
+			onViewportLoad: () => {},
+			// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
+		},
+		deckgl
+	);
 
-		if (layerIds.length === newLayerIds.length && layerIds.every((layerId) => newLayerIds.includes(layerId))) {
-			//layers didn't change;
-			return;
-		}
-		deckgl.setProps({ layers: newLayers });
-	};
+	await wxTilesLayer.nextTimestep();
 
-	let isRunning = false;
-	let i = 0;
-	const loop = async () => {
-		if (!isRunning) return;
-		i = ++i % meta.times.length;
-		await new Promise<void>((resolve) => {
-			const newLayer = new WxTilesLayer({
-				...wxTilesProps,
-				id: wxTilesId + i,
-				data: [URITime.replace('{time}', meta.times[i])],
-				onViewportLoad: async () => {
-					await sleep(0);
-					addOrRemoveLayers([newLayer, debugLayer]);
-					resolve();
-				},
-			});
-			addOrRemoveLayers([newLayer, ...deckgl.props.layers]);
-		});
-		loop();
-	};
-	const startLoop = () => {
-		isRunning = true;
-		button.innerHTML = 'STOP';
-		loop();
-	};
-	const stopLoop = () => {
-		isRunning = false;
-		button.innerHTML = 'START';
-	};
 	const button = document.createElement('button');
 	button.style.zIndex = '1000000';
 	button.style.position = 'absolute';
-	button.innerHTML = 'START';
+	button.innerHTML = 'NEXT';
 	document.body.appendChild(button);
 	button.addEventListener('click', () => {
-		console.log('click');
-		if (isRunning) {
-			stopLoop();
-		} else {
-			startLoop();
-		}
+		wxTilesLayer.nextTimestep();
 	});
 }

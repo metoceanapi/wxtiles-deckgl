@@ -6,8 +6,8 @@ import { WxTileFill } from './WxTileFill';
 import { WxTileIsolineText } from './WxTileIsolineText';
 
 export interface WxTileData {
-	image: any;
-	image2?: any;
+	image: ImageBitmap;
+	image2?: ImageBitmap;
 	clutTextureUniform: Texture2D;
 	bounds: [number, number, number, number];
 }

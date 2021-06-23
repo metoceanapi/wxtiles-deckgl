@@ -1,4 +1,4 @@
-export interface RenderSubLayers {
+export interface RenderSubLayers<Data = any> {
 	id: string;
 	tile: {
 		x: number;
@@ -10,7 +10,7 @@ export interface RenderSubLayers {
 			east: number;
 			north: number;
 		};
-		data: any;
+		data: Data;
 	};
 	visible: boolean;
 }

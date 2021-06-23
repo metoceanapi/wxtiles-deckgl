@@ -35,7 +35,7 @@ export class WxTilesLayer extends TileLayer<any> {
 		console.log('WxTilesLayer onClick:', { info, pickingEvent });
 	}
 
-	renderSubLayers(args: RenderSubLayers) {
+	renderSubLayers(args: RenderSubLayers<[ImageBitmap, ImageBitmap]>) {
 		const { tile } = args;
 		const { west, south, east, north } = tile.bbox;
 		const { data } = tile;

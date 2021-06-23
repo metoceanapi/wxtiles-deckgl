@@ -6,6 +6,7 @@ import { Texture2D } from '@luma.gl/core';
 import { WxTile } from './WxTile';
 import { ColorStyleStrict, Meta } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
+import { RenderSubLayers } from './IRenderSubLayers';
 
 export interface WxTilesLayerProps extends TileLayerProps<any> {
 	wxprops: {
@@ -14,18 +15,13 @@ export interface WxTilesLayerProps extends TileLayerProps<any> {
 		style: ColorStyleStrict;
 	};
 	data: string[];
-	tile?: {
-		x: number;
-		y: number;
-		z: number;
-		bbox: { west: number; south: number; east: number; north: number };
-	};
-	_imageCoordinateSystem?: any;
-	onViewportLoad?: any;
 }
 export class WxTilesLayer extends TileLayer<any> {
-	constructor(...props: WxTilesLayerProps[]) {
-		super(...props);
+	//@ts-ignore this statement makes sure that this.props are always properly typed
+	public props: WxTilesLayerProps;
+
+	constructor(props: WxTilesLayerProps) {
+		super(props);
 	}
 
 	initializeState(params: any) {
@@ -39,13 +35,13 @@ export class WxTilesLayer extends TileLayer<any> {
 		console.log('WxTilesLayer onClick:', { info, pickingEvent });
 	}
 
-	renderSubLayers(props: any) {
-		const { tile } = props;
+	renderSubLayers(args: RenderSubLayers) {
+		const { tile } = args;
 		const { west, south, east, north } = tile.bbox;
 		const { data } = tile;
 
 		return new WxTile({
-			id: props.id + 'wxtile',
+			id: args.id + 'wxtile',
 			// tile,
 			data: {
 				image: data[0],
@@ -56,7 +52,7 @@ export class WxTilesLayer extends TileLayer<any> {
 		});
 	}
 	async getTileData(tile) {
-		const { data } = <WxTilesLayerProps>this.props;
+		const { data } = this.props;
 		const { getTileData, fetch } = this.getCurrentLayer().props;
 		const { signal } = tile;
 

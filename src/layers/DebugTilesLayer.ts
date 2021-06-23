@@ -3,26 +3,30 @@ import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 import { TextLayer } from '@deck.gl/layers';
 import { PathLayer } from '@deck.gl/layers';
 import { Position } from 'deck.gl';
+import { RenderSubLayers } from './IRenderSubLayers';
 
 export interface DebugTilesLayerProps extends TileLayerProps<any> {
 	// debg: string;
 }
 
 export class DebugTilesLayer extends TileLayer<any> {
-	constructor(...props: DebugTilesLayerProps[]) {
-		super(...props);
+	//@ts-ignore this statement makes sure that this.props are always properly typed
+	public props: DebugTilesLayerProps;
+
+	constructor(props: DebugTilesLayerProps) {
+		super(props);
 	}
 
-	renderSubLayers(props) {
+	renderSubLayers(args: RenderSubLayers) {
 		const {
 			x,
 			y,
 			z,
 			bbox: { west, south, east, north },
-		} = props.tile;
+		} = args.tile;
 		const subLayers = [
 			new TextLayer({
-				id: props.id + '-c',
+				id: args.id + '-c',
 				data: [{}],
 				getPosition: () => [west + (east - west) * 0.05, north + (south - north) * 0.05], // if not ON TILE - visual issues occure
 				getText: () => x + '-' + y + '-' + z,
@@ -32,8 +36,8 @@ export class DebugTilesLayer extends TileLayer<any> {
 				getTextAnchor: 'start',
 			}),
 			new PathLayer({
-				id: props.id + '-b',
-				visible: props.visible,
+				id: args.id + '-b',
+				visible: args.visible,
 				data: [
 					[
 						[west, north],

@@ -10,14 +10,17 @@ export interface WxTileFillProps extends BitmapLayerProps<undefined> {
 }
 
 export class WxTileFill extends BitmapLayer<undefined> {
-	constructor(props: WxTileFillProps, ...props2: WxTileFillProps[]) {
-		super(props, ...props2);
+	//@ts-ignore this statement makes sure that this.props are always properly typed
+	public props: WxTileFillProps;
+
+	constructor(props: WxTileFillProps) {
+		super(props);
 	}
 
 	updateState(a) {
 		super.updateState(a);
 		const data = this.props.data;
-		const { clutTextureUniform } = <WxTileFillProps>this.props;
+		const { clutTextureUniform } = this.props;
 		this.state.model.setUniforms({ clutTextureUniform });
 	}
 
@@ -34,7 +37,7 @@ export class WxTileFill extends BitmapLayer<undefined> {
 		const [esX, esY] = viewport.project([east, south]);
 		const pixdif = ((esX - wnX) ** 2 + (esY - wnY) ** 2) ** 0.5;
 		const { model } = state;
-		const { image2 } = <WxTileFillProps>props;
+		const { image2 } = props;
 		model.setUniforms({
 			shift: 1.5 / pixdif /* 1.5 = isoline Width in Pixels */,
 			bitmapTexture2: image2,

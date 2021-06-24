@@ -562,5 +562,3 @@ export function createLevels(min: number, max: number, n: number): number[] {
 	}
 	return levels;
 }
-
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

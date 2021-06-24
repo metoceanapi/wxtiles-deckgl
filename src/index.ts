@@ -61,16 +61,19 @@ export async function start() {
 		// views: new GlobeView({ id: 'globe', controller: true }),
 	});
 
-	const wxTileLayerManager = createWxTilesManager(deckgl, { debug: true });
+	const wxTileLayerManager = createWxTilesManager(deckgl, {
+		debug: true,
+	});
 
 	const wxTilesLayer = wxTileLayerManager.createLayer(WxTilesLayer, {
 		id: wxTilesId,
+		maxRequests: 25,
 		// WxTiles settings
 		wxprops: {
-			meta,
 			variable,
 			style,
 			URITime,
+			meta,
 		},
 		// DATA
 		data: [URI], // [eastward, northward] - for vector data
@@ -83,7 +86,7 @@ export async function start() {
 		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
 	});
 
-	await wxTilesLayer.nextTimestep();
+	await wxTileLayerManager.nextTimestep();
 
 	const button = document.createElement('button');
 	button.style.zIndex = '1000000';
@@ -91,6 +94,6 @@ export async function start() {
 	button.innerHTML = 'NEXT';
 	document.body.appendChild(button);
 	button.addEventListener('click', () => {
-		wxTilesLayer.nextTimestep();
+		wxTileLayerManager.nextTimestep();
 	});
 }

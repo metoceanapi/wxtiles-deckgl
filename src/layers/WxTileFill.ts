@@ -4,14 +4,16 @@ import { Texture2D } from '@luma.gl/core';
 import vs from '../shaders/bitmap-layer-vertex.vs';
 import fs from '../shaders/bitmap-layer-fragment.fs';
 
-export interface WxTileFillProps extends BitmapLayerProps<undefined> {
+type WxTileFillData = undefined;
+
+export interface WxTileFillProps extends BitmapLayerProps<WxTileFillData> {
 	clutTextureUniform: Texture2D;
 	image2?: any;
 }
 
-export class WxTileFill extends BitmapLayer<undefined> {
-	//@ts-ignore this statement makes sure that this.props are always properly typed
-	public props: WxTileFillProps;
+export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
+	// //@ts-ignore this statement makes sure that this.props are always properly typed
+	// public props: WxTileFillProps;
 
 	constructor(props: WxTileFillProps) {
 		super(props);
@@ -19,7 +21,6 @@ export class WxTileFill extends BitmapLayer<undefined> {
 
 	updateState(a) {
 		super.updateState(a);
-		const data = this.props.data;
 		const { clutTextureUniform } = this.props;
 		this.state.model.setUniforms({ clutTextureUniform });
 	}

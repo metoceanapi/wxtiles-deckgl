@@ -14,9 +14,9 @@ export interface WxTileData {
 export interface WxTileProps extends CompositeLayerProps<WxTileData> {
 	data: WxTileData;
 }
-export class WxTile extends CompositeLayer<WxTileData> {
-	//@ts-ignore this statement makes sure that this.props are always properly typed
-	public props: WxTileProps;
+export class WxTile extends CompositeLayer<WxTileData, WxTileProps> {
+	// //@ts-ignore this statement makes sure that this.props are always properly typed
+	// public props: WxTileProps;
 
 	constructor(props: WxTileProps) {
 		super(props);

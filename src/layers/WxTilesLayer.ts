@@ -8,15 +8,17 @@ import { ColorStyleStrict, Meta } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { RenderSubLayers } from './IRenderSubLayers';
 
-export interface WxTilesLayerProps extends TileLayerProps<any> {
+export type WxTilesLayerData = string;
+
+export interface WxTilesLayerProps extends TileLayerProps<WxTilesLayerData> {
 	wxprops: {
 		meta: Meta;
-		variable: string;
+		variables: string[];
 		style: ColorStyleStrict;
 	};
-	data: string[];
+	data: WxTilesLayerData;
 }
-export class WxTilesLayer extends TileLayer<any> {
+export class WxTilesLayer extends TileLayer<WxTilesLayerData> {
 	//@ts-ignore this statement makes sure that this.props are always properly typed
 	public props: WxTilesLayerProps;
 
@@ -73,7 +75,7 @@ export class WxTilesLayer extends TileLayer<any> {
 		return res.length > 0 ? res : null;
 	}
 	loadCLUT() {
-		const { style, variable, meta } = (<WxTilesLayerProps>this.props).wxprops;
+		const { style, variables, meta } = this.props.wxprops;
 		const varMeta = meta.variablesMeta[variable];
 		const CLUT = new RawCLUT(style, varMeta.units, [varMeta.min, varMeta.max], false);
 		const { colorsI, levelIndex } = CLUT;

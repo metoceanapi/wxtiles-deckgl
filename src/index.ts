@@ -63,37 +63,43 @@ export async function start() {
 	const [dataSet, variable, styleName] = ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
 	// const [dataSet, variable, styleName] = ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
 	const { URI, URITime, meta } = await getURI({ dataSet, variable });
-	const styles = WxGetColorStyles();
-	const style = styles[styleName];
+	// const styles = WxGetColorStyles();
+	// const style = styles[styleName];
 
-	const GLOBUS = true; 
-
-	const wxTilesProps = {
-		id: 'wxtiles' + dataSet + '/' + variable,
-		// WxTiles settings
-		wxprops: {
-			meta,
-			variable,
-			style,
-		},
-		// DATA
-		data: [URI], // [eastward, northward] - for vector data
-		// DECK.gl settings
-		minZoom: 0,
-		maxZoom: meta.maxZoom,
-		pickable: true,
-		tileSize: 256,
-		onViewportLoad: () => {},
-		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
-	};
+	// const wxTilesProps = {
+	// 	id: 'wxtiles' + dataSet + '/' + variable,
+	// 	// WxTiles settings
+	// 	wxprops: {
+	// 		meta,
+	// 		variables, // TODO
+	// 		style,
+	// 	},
+	// 	// DATA
+	// 	data: URI, // [eastward, northward] - for vector data
+	// 	// DECK.gl settings
+	// 	minZoom: 0,
+	// 	maxZoom: meta.maxZoom,
+	// 	pickable: true,
+	// 	tileSize: 256,
+	// 	onViewportLoad: () => {},
+	// 	// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
+	// };
 
 	const layers = [
-		new WxTilesLayer(wxTilesProps),
+		// new WxTilesLayer(wxTilesProps),
 		new DebugTilesLayer({
-			id: 'debugtiles',
-			data: undefined,
-			maxZoom: 24,
+			id: 'debugtilesR',
+			data: { color: [255, 0, 0, 255] },
+			maxZoom: meta.maxZoom,
 			minZoom: 0,
+			pickable: false,
+			tileSize: 256,
+		}),
+		new DebugTilesLayer({
+			id: 'debugtilesRB',
+			data: { color: [255, 0, 255, 128] },
+			maxZoom: 24,
+			minZoom: meta.maxZoom + 1,
 			pickable: false,
 			tileSize: 256,
 		}),
@@ -106,16 +112,16 @@ export async function start() {
 		// views: new GlobeView({ id: 'globe', controller: true }),
 	});
 
-	let i = 0;
-	var timestep = () => {
-		i = ++i % meta.times.length;
-		wxTilesProps.data = [URITime.replace('{time}', meta.times[i])];
-		wxTilesProps.onViewportLoad = () => {
-			setTimeout(timestep, 1000);
-		};
-		layers[0] = new WxTilesLayer(wxTilesProps);
-		deckgl.setProps({ layers });
-	};
+	// let i = 0;
+	// var timestep = () => {
+	// 	i = ++i % meta.times.length;
+	// 	wxTilesProps.data = URITime.replace('{time}', meta.times[i]);
+	// 	wxTilesProps.onViewportLoad = () => {
+	// 		setTimeout(timestep, 1000);
+	// 	};
+	// 	layers[0] = new WxTilesLayer(wxTilesProps);
+	// 	deckgl.setProps({ layers });
+	// };
 
-	// setTimeout(timestep, 1000);
+	// // setTimeout(timestep, 1000);
 }

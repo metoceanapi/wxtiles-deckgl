@@ -71,7 +71,7 @@ const layersManager = (deckgl: Deck, otherLayers: Layer<any>[]): WxTilesLib => {
 				let onViewportLoadedBefore = false;
 				const newLayer = new LayerClass({
 					...layerProps,
-					id: layerProps.id! + 'kurvo' + currentTimestepIndex,
+					id: layerProps.id! + currentTimestepIndex,
 					data: [URI],
 					onViewportLoad: (data) => {
 						layerProps?.onViewportLoad?.call(layerInstance, data);

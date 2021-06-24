@@ -1,27 +1,14 @@
 import { TileLayer } from '@deck.gl/geo-layers';
-import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 import GL from '@luma.gl/constants';
 import { Texture2D } from '@luma.gl/core';
-
 import { WxTile } from './WxTile';
-import { ColorStyleStrict, Meta } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { RenderSubLayers } from './IRenderSubLayers';
+import { IWxTilesLayerData, IWxTilesLayerProps } from './IWxTileLayer';
 
-export interface WxTilesLayerProps extends TileLayerProps<any> {
-	wxprops: {
-		meta: Meta;
-		variable: string;
-		style: ColorStyleStrict;
-		URITime: string;
-	};
-	data: string[];
-}
-export class WxTilesLayer extends TileLayer<any> {
+export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProps> {
 	//@ts-ignore this statement makes sure that this.props are always properly typed
-	public props: WxTilesLayerProps;
-
-	constructor(props: WxTilesLayerProps) {
+	constructor(props: IWxTilesLayerProps) {
 		super(props);
 	}
 
@@ -59,7 +46,7 @@ export class WxTilesLayer extends TileLayer<any> {
 
 		const { x, y, z } = tile;
 
-		const fetchResponses = await Promise.all(
+		const tiles = await Promise.all(
 			data.map(async (uri) => {
 				const url = uri
 					.replace('{x}', x)
@@ -69,10 +56,10 @@ export class WxTilesLayer extends TileLayer<any> {
 				return await fetch(url, { layer: this, signal });
 			})
 		);
-		return fetchResponses.length > 0 ? fetchResponses : null;
+		return tiles.length > 0 ? tiles : null;
 	}
 	loadCLUT() {
-		const { style, variable, meta } = (<WxTilesLayerProps>this.props).wxprops;
+		const { style, variable, meta } = this.props.wxprops;
 		const varMeta = meta.variablesMeta[variable];
 		const CLUT = new RawCLUT(style, varMeta.units, [varMeta.min, varMeta.max], false);
 		const { colorsI, levelIndex } = CLUT;

@@ -1,10 +1,7 @@
 import { Deck } from '@deck.gl/core';
-
 import { WxTilesLayer } from './layers/WxTilesLayer';
-import { DebugTilesLayer } from './layers/DebugTilesLayer';
-
 import { WxTileLibSetup, WxGetColorStyles, LibSetupObject, Meta } from './utils/wxtools';
-import { createWxTilesLib } from './interfaces/wxTilesLib';
+import { createWxTilesManager } from './libs/wxTilesLib';
 
 // // Create an async iterable
 // async function* getData() {
@@ -53,7 +50,7 @@ export async function start() {
 	const styles = WxGetColorStyles();
 	const style = styles[styleName];
 
-	const GLOBUS = true; 
+	const GLOBUS = true;
 
 	const wxTilesId = 'wxtiles' + dataSet + '/' + variable;
 
@@ -64,28 +61,27 @@ export async function start() {
 		// views: new GlobeView({ id: 'globe', controller: true }),
 	});
 
-	const wxTilesLayer = createWxTilesLib({debug: true}).createLayer(
-		{
-			id: wxTilesId,
-			// WxTiles settings
-			wxprops: {
-				meta,
-				variable,
-				style,
-				URITime,
-			},
-			// DATA
-			data: [URI], // [eastward, northward] - for vector data
-			// DECK.gl settings
-			minZoom: 0,
-			maxZoom: meta.maxZoom,
-			pickable: true,
-			tileSize: 256,
-			onViewportLoad: () => {},
-			// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
+	const wxTileLayerManager = createWxTilesManager(deckgl, { debug: true });
+
+	const wxTilesLayer = wxTileLayerManager.createLayer(WxTilesLayer, {
+		id: wxTilesId,
+		// WxTiles settings
+		wxprops: {
+			meta,
+			variable,
+			style,
+			URITime,
 		},
-		deckgl
-	);
+		// DATA
+		data: [URI], // [eastward, northward] - for vector data
+		// DECK.gl settings
+		minZoom: 0,
+		maxZoom: meta.maxZoom,
+		pickable: true,
+		tileSize: 256,
+		onViewportLoad: () => {},
+		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
+	});
 
 	await wxTilesLayer.nextTimestep();
 

@@ -5,7 +5,12 @@ export interface WxTileIsolineTextData {
 	text: string;
 	color: [number, number, number];
 }
-export class WxTileIsolineText extends TextLayer<any> {}
+
+export interface WxTileIsolineTextProp extends TextLayer<WxTileIsolineTextData> {
+	data: WxTileIsolineTextData;
+}
+
+export class WxTileIsolineText extends TextLayer<WxTileIsolineTextData> {}
 WxTileIsolineText.layerName = 'WxTileIsolineText';
 WxTileIsolineText.defaultProps = {
 	billboard: false,

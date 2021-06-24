@@ -14,9 +14,6 @@ export interface DebugTilesLayerProps extends TileLayerProps<DebugTilesLayerData
 }
 
 export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLayerProps> {
-	// //@ts-ignore this statement makes sure that this.props are always properly typed
-	// public props: DebugTilesLayerProps;
-
 	constructor(props: DebugTilesLayerProps) {
 		super(props);
 	}

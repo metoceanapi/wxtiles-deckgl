@@ -178,5 +178,10 @@
 		"units": "knots",
 		"vectorColor": "#777",
 		"vectorType": "barbs"
+	},
+	"temper2m": {
+		"fill": "solid",
+		"name": "Sea Surface Temperature solid",
+		"parent": "Sea Surface Temperature"
 	}
 }

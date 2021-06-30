@@ -28,7 +28,7 @@ uniform float coordinateConversion;
 uniform vec4 bounds;
 
  /* projection utils */
-const float TILE_SIZE = 512.0;
+const float TILE_SIZE = 256.0;
 const float PI = 3.1415926536;
 const float WORLD_SCALE = TILE_SIZE / PI / 2.0;
 
@@ -99,12 +99,27 @@ int isolineIndex(float);
 
 void main(void) {
   vec2 uvC = vTexCoordC;
-  if(coordinateConversion < -0.5) {
-    vec2 lnglat = mercator_to_lnglat(vTexPos);
-    uvC = getUV(lnglat);
-  } else if(coordinateConversion > 0.5) {
-    vec2 commonPos = lnglat_to_mercator(vTexPos);
-    uvC = getUV(commonPos);
+  // if(coordinateConversion < -0.5) {
+  //   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+  //   return;
+  //   vec2 lnglat = mercator_to_lnglat(vTexPos);
+  //   uvC = getUV(lnglat);
+  // } else if(coordinateConversion > 0.5) {
+  //   gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+  //   return;
+  //   vec2 commonPos = lnglat_to_mercator(vTexPos);
+  //   uvC = getUV(commonPos);
+  // }
+
+  if(picking_uActive) {
+    // Since instance information is not used, we can use picking color for pixel index
+    // gl_FragColor.rgb = packUVsIntoRGB(uvC);
+    gl_FragColor = texture2D(bitmapTexture, uvC);
+    gl_FragColor.a = 1.0;
+    float packedC = GetPackedData(uvC); // central
+    int isoC = isolineIndex(packedC);
+    gl_FragColor.b = float(isoC) / 256.0;
+    return;
   }
 
   // float shift = 1.0 / 258.0; // current zoom let us work out the thickness of the isolines.
@@ -114,8 +129,11 @@ void main(void) {
   float packedC = GetPackedData(uvC); // central
   if(packedC < 0.00001)
     discard;
+
   vec4 colorC = CLUT(packedC);
   gl_FragColor = colorC;
+  // return;
+
   int isoC = isolineIndex(packedC);
 
   float packedR = GetPackedData(uvR); // central
@@ -129,18 +147,14 @@ void main(void) {
         // gl_FragColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);
   }
 
-  geometry.uv = uvC;
-  DECKGL_FILTER_COLOR(gl_FragColor, geometry);
+  // geometry.uv = uvC;
+  // DECKGL_FILTER_COLOR(gl_FragColor, geometry);
 
-  if(picking_uActive) {
-    // Since instance information is not used, we can use picking color for pixel index
-    gl_FragColor.rgb = packUVsIntoRGB(uvC);
-  }
 }
 
 float GetPackedData(vec2 texCoord) {
   vec4 tex = texture2D(bitmapTexture, texCoord);
-  return tex.r / 255.0 + tex.g;
+  return (tex.r + tex.g * 256.0) / 256.0;
 }
 
 vec4 CLUT(float pos) {

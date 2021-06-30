@@ -4,10 +4,16 @@ import { CompositeLayerProps } from '@deck.gl/core/lib/composite-layer';
 
 import { WxTileFill, WxTileFillData } from './WxTileFill';
 import { WxTileIsolineText, WxTileIsolineTextData } from './WxTileIsolineText';
+import { ColorStyleStrict, Meta } from '../utils/wxtools';
 
-export interface WxTileData {
-	image: ImageBitmap;
-	image2?: ImageBitmap;
+export interface WxTileDataPrep {
+	image: ImageData;
+	imageU?: ImageData;
+	imageV?: ImageData;
+	isoData: WxTileIsolineTextData[];
+}
+export interface WxTileData extends WxTileDataPrep {
+	style: ColorStyleStrict;
 	clutTextureUniform: Texture2D;
 	bounds: [number, number, number, number];
 }
@@ -18,17 +24,14 @@ export class WxTile extends CompositeLayer<WxTileData, WxTileProps> {
 	constructor(props: WxTileProps) {
 		super(props);
 	}
+	onClick(info: any, pickingEvent: any) {
+		console.log('WxTile onClick:', { info, pickingEvent });
+	}
 
 	renderLayers() {
 		const { props } = this;
 		const data = props.data;
-		const isoData: WxTileIsolineTextData[] = [
-			{
-				pos: [data.bounds[0], data.bounds[1]],
-				text: '12341234',
-				color: [255, 255, 0],
-			},
-		];
+
 		return [
 			new WxTileFill({
 				id: props.id + '-fill',
@@ -37,17 +40,14 @@ export class WxTile extends CompositeLayer<WxTileData, WxTileProps> {
 				},
 				bounds: data.bounds,
 				image: data.image,
+				pickable: true,
 			}),
 			new WxTileIsolineText({
 				id: props.id + '-isotext',
-				data: isoData,
-				getPosition: (d) => d.pos,
-				getText: (d) => d.text,
-				getColor: (d) => d.color,
-				// billboard: false,
-				// getSize: 10,
-				// getTextAnchor: 'start',
+				data: data.isoData,
 			}),
+			// new WxVectorText(),
+			// new WxVectorAnimation(),
 		];
 	}
 }

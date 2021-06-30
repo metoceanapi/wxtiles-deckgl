@@ -1,18 +1,29 @@
-import { TextLayer } from '@deck.gl/layers';
+import { DataSet } from '@deck.gl/core/lib/layer';
+import { RGBAColor } from '@deck.gl/core/utils/color';
+import { TextLayer, TextLayerProps } from '@deck.gl/layers';
 
 export interface WxTileIsolineTextData {
 	pos: [number, number];
 	text: string;
-	color: [number, number, number];
+	angle: number;
+	color: RGBAColor;
 }
 
-export interface WxTileIsolineTextProp extends TextLayer<WxTileIsolineTextData> {
-	data: WxTileIsolineTextData;
+export interface WxTileIsolineTextProp extends TextLayerProps<WxTileIsolineTextData> {
+	data: DataSet<WxTileIsolineTextData>;
 }
 
-export class WxTileIsolineText extends TextLayer<WxTileIsolineTextData> {}
+export class WxTileIsolineText extends TextLayer<WxTileIsolineTextData, WxTileIsolineTextProp> {
+	constructor(props: WxTileIsolineTextProp) {
+		super(props);
+	}
+}
 WxTileIsolineText.layerName = 'WxTileIsolineText';
 WxTileIsolineText.defaultProps = {
 	billboard: false,
 	getSize: 10,
+	getText: (d: WxTileIsolineTextData) => d.text,
+	getPosition: (d: WxTileIsolineTextData) => d.pos,
+	getColor: (d: WxTileIsolineTextData) => d.color,
+	getAngle: (d: WxTileIsolineTextData) => d.angle,
 };

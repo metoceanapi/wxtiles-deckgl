@@ -7,7 +7,7 @@ export interface VariableMeta {
 }
 export interface Meta {
 	variables: string[];
-	variablesMeta: VariableMeta[];
+	variablesMeta: VariableMeta;
 	maxZoom: number;
 	times: string[];
 }

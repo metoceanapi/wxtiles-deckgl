@@ -25,6 +25,10 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		return { vs, fs, modules: [project32, picking] };
 	}
 
+	onClick(info: any, pickingEvent: any) {
+		console.log('WxTileFill onClick:', { info, pickingEvent });
+	}
+
 	draw(opts: any) {
 		const { props, context } = this;
 		const { viewport } = context;
@@ -34,6 +38,7 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		const pixdif = ((esX - wnX) ** 2 + (esY - wnY) ** 2) ** 0.5;
 		this.state.model.setUniforms({
 			shift: 1.5 / pixdif /* 1.5 = isoline Width in Pixels */,
+			// shift: 1/255,
 		});
 		super.draw(opts);
 	}

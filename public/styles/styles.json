@@ -183,5 +183,11 @@
 		"fill": "solid",
 		"name": "Sea Surface Temperature solid",
 		"parent": "Sea Surface Temperature"
+	},
+	"Wind Speed2": {
+		"fill": "none",
+		"isolineColor": "inverted",
+		"name": "Wind Speed2",
+		"parent": "Wind Speed"
 	}
 }

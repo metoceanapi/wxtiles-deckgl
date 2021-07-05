@@ -8,6 +8,7 @@ import { ColorStyleStrict, Meta } from '../utils/wxtools';
 
 export interface WxTileDataPrep {
 	image: ImageData;
+	imageTextureUniform: Texture2D;
 	imageU?: ImageData;
 	imageV?: ImageData;
 	isoData: WxTileIsolineTextData[];
@@ -37,14 +38,17 @@ export class WxTile extends CompositeLayer<WxTileData, WxTileProps> {
 				id: props.id + '-fill',
 				data: {
 					clutTextureUniform: data.clutTextureUniform,
+					imageTextureUniform: data.imageTextureUniform,
+					style: data.style,
 				},
 				bounds: data.bounds,
-				image: data.image,
+				image: null,
 				pickable: true,
 			}),
 			new WxTileIsolineText({
 				id: props.id + '-isotext',
 				data: data.isoData,
+				pickable: false,
 			}),
 			// new WxVectorText(),
 			// new WxVectorAnimation(),

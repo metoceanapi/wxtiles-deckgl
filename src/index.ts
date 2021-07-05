@@ -1,3 +1,4 @@
+import './index.css';
 import { Deck } from '@deck.gl/core';
 import { TileLayer } from '@deck.gl/geo-layers';
 
@@ -53,17 +54,17 @@ export async function start() {
 	await document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
 	const styles = WxGetColorStyles();
 
-	const [dataSet, variables, styleName] = ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
+	// const [dataSet, variables, styleName] = ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
 	// const [dataSet, variables, styleName] = ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 	// const [dataSet, variables, styleName] = ['ecwmf.global', 'air.humidity.at-2m', 'base'];
 	// const [dataSet, variables, styleName] = ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
 	// const [dataSet, variables, styleName] = ['obs-radar.rain.nzl.national', ['reflectivity'], 'rain.EWIS'];
-	// const [dataSet, variables, styleName] = ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed'];
+	const [dataSet, variables, styleName] = ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
 	const { URI, meta } = await getURI(dataSet);
 	const time = getTime(meta.times);
 
 	const wxTilesProps = {
-		id: 'wxtiles' + dataSet + '/' + variables,
+		id: 'wxtiles/' + dataSet + '/' + variables,
 		// WxTiles settings
 		wxprops: {
 			meta,
@@ -71,36 +72,53 @@ export async function start() {
 			style: styles[styleName],
 		},
 		// DATA
-		data: URI.replace('{time}', time).replace('{variable}', variables),
+		data: URI.replace('{time}', time),
 		// DECK.gl settings
 		minZoom: 0,
 		maxZoom: meta.maxZoom,
 		pickable: true,
 		tileSize: 256,
 		onViewportLoad: () => {},
-		// refinementStrategy: 'no-overlap', //'never', // default 'best-available'
+		maxCacheSize: 1,
+		refinementStrategy: 'no-overlap' as 'no-overlap', //'never', // default 'best-available'
 		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
 	};
 
-	const layers = [
-		// new TileLayer({
-		// 	// https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
-		// 	data: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-		// 	minZoom: 0,
-		// 	maxZoom: 19,
-		// 	tileSize: 256,
-		// 	renderSubLayers: (props) => {
-		// 		const {
-		// 			bbox: { west, south, east, north },
-		// 		} = props.tile;
-		// 		return new BitmapLayer(props, {
-		// 			data: null,
-		// 			image: props.data,
-		// 			bounds: [west, south, east, north],
-		// 		});
-		// 	},
-		// }),
-		new WxTilesLayer(wxTilesProps),
+	const layers = [baseLayer(), new WxTilesLayer(wxTilesProps), ...debugLayers(meta)];
+
+	const deckgl = new Deck({
+		// initialViewState: { latitude: 0, longitude: 0, zoom: -1 },
+		initialViewState: { latitude: -40, longitude: 175, zoom: 5 },
+		controller: true,
+		layers, // or use: deckgl.setProps({ layers });
+		// views: new GlobeView({ id: 'globe', controller: true }),
+	});
+}
+
+function baseLayer() {
+	return new TileLayer({
+		// https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
+		data: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+		minZoom: 0,
+		maxZoom: 19,
+
+		renderSubLayers: (props) => {
+			const {
+				bbox: { west, south, east, north },
+			} = props.tile;
+
+			return new BitmapLayer(props, {
+				data: null,
+				image: props.data,
+				bounds: [west, south, east, north],
+			});
+		},
+	});
+}
+
+function debugLayers(meta: Meta) {
+	return [
 		new DebugTilesLayer({
 			id: 'debugtilesR',
 			data: { color: [255, 0, 0, 255] },
@@ -118,12 +136,4 @@ export async function start() {
 			tileSize: 256,
 		}),
 	];
-
-	const deckgl = new Deck({
-		// initialViewState: { latitude: 0, longitude: 0, zoom: -1 },
-		initialViewState: { latitude: -40, longitude: 175, zoom: 5 },
-		controller: true,
-		layers, // or use: deckgl.setProps({ layers });
-		// views: new GlobeView({ id: 'globe', controller: true }),
-	});
 }

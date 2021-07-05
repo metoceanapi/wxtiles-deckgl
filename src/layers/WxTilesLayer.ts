@@ -4,7 +4,7 @@ import GL from '@luma.gl/constants';
 import { Texture2D } from '@luma.gl/core';
 
 import { WxTile, WxTileDataPrep } from './WxTile';
-import { ColorStyleStrict, Meta } from '../utils/wxtools';
+import { ColorStyleStrict, Meta, UItoColor } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { RenderSubLayers } from './IRenderSubLayers';
 import { WxTileIsolineTextData } from './WxTileIsolineText';
@@ -44,7 +44,7 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 		super.initializeState(params);
 		const { wxprops, id } = this.props;
 
-		this.loadCLUT();
+		this._loadCLUT();
 	}
 
 	onHover(info: any, pickingEvent: any) {
@@ -56,11 +56,11 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 
 	onClick(info: any, pickingEvent: any) {
 		// console.log('WxTilesLayer onClick:', info, pickingEvent);
-		const { sourceLayer, bitmap, coordinate, color } = info;
-		const [x, y] = bitmap.pixel;
-		const { props } = sourceLayer;
-		const { image } = props.data;
-		const { data } = image;
+		const { /* sourceLayer, bitmap,  */ coordinate, color } = info;
+		// const [x, y] = bitmap.pixel;
+		// const { props } = sourceLayer;
+		// const { image } = props.data;
+		// const { data } = image;
 		const CLUT: RawCLUT = this.state.CLUT;
 
 		// const minmaxbuf = new Uint8Array(8);
@@ -114,7 +114,6 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 		const { data: URL, wxprops } = this.props;
 		const { fetch } = this.getCurrentLayer().props;
 		const { x, y, z, bbox, signal } = tile;
-		// if (!(x === 0 && y === 0 && z === 1)) return null;
 
 		const makeURL = (v: string) =>
 			URL.replace('{variable}', v)
@@ -123,21 +122,39 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 				.replace('{z}', z + '')
 				.replace('{-y}', Math.pow(2, z) - y - 1 + '');
 
+		const texParams = {
+			width: 258,
+			height: 258,
+			format: GL.RGBA,
+			type: GL.UNSIGNED_BYTE,
+			dataFormat: GL.RGBA,
+			parameters: {
+				[GL.TEXTURE_WRAP_S]: GL.CLAMP_TO_EDGE,
+				[GL.TEXTURE_WRAP_T]: GL.CLAMP_TO_EDGE,
+				[GL.TEXTURE_MIN_FILTER]: GL.LINEAR,
+				[GL.TEXTURE_MAG_FILTER]: GL.LINEAR,
+			},
+			mipmaps: false,
+		};
+
 		if (wxprops.variables instanceof Array) {
 			const [imageU, imageV] = await Promise.all(wxprops.variables.map((v): Promise<ImageData> => fetch(makeURL(v), { layer: this, signal })));
 			const image = this._createVelocities(imageU, imageV);
 			const isoData = this._createIsolines(image, { x, y, z }, bbox);
-			return { image, imageU, imageV, isoData };
+			const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
+
+			return { image, imageU, imageV, isoData, imageTextureUniform };
 		}
 
 		const mu = makeURL(wxprops.variables);
-		const image = await fetch(mu, { layer: this, signal });
+		const image: ImageData = await fetch(mu, { layer: this, signal });
+		const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
 
 		const isoData = this._createIsolines(image, { x, y, z }, bbox);
-		return { image, isoData };
+		return { image, isoData, imageTextureUniform };
 	}
 
-	loadCLUT() {
+	_loadCLUT() {
 		const { style, variables, meta } = this.props.wxprops;
 		let { min, max, units } = meta.variablesMeta[variables instanceof Array ? variables[0] : variables];
 		if (variables instanceof Array) {
@@ -148,7 +165,7 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 
 		const CLUT = new RawCLUT(style, units, [min, max], false);
 		const { colorsI, levelIndex } = CLUT;
-		const dataShift = 8;
+		const dataShift = 1;
 		const dataWidth = 65536 >> dataShift;
 		const data = new Uint32Array(dataWidth * 2);
 		let si = 0;
@@ -162,13 +179,6 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 			width: dataWidth,
 			height: 2,
 			format: GL.RGBA,
-
-			// parameters: {
-			// 	[GL.TEXTURE_WRAP_S]: GL.CLAMP_TO_EDGE,
-			// 	[GL.TEXTURE_WRAP_T]: GL.CLAMP_TO_EDGE,
-			// 	[GL.TEXTURE_MIN_FILTER]: GL.LINEAR,
-			// 	[GL.TEXTURE_MAG_FILTER]: GL.LINEAR,
-			// },
 			parameters: {
 				[GL.TEXTURE_WRAP_S]: GL.CLAMP_TO_EDGE,
 				[GL.TEXTURE_WRAP_T]: GL.CLAMP_TO_EDGE,
@@ -181,26 +191,18 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 		this.setState({ clutTextureUniform, min, max, CLUT });
 	}
 
-	// TODO
 	_createIsolines(image: ImageData, { x, y, z }, bbox: { west: number; north: number; east: number; south: number }): WxTileIsolineTextData[] {
+		const { style } = this.props.wxprops;
+		if (!style.isolineText || style.isolineColor === 'none') return [];
 		const { state } = this;
 		const CLUT: RawCLUT = state.CLUT;
 		const { levelIndex, colorsI } = CLUT;
 		const raw = new Uint16Array(image.data.buffer);
 		const res: WxTileIsolineTextData[] = [];
-		const ULpixel1 = LatLonToPixels(-bbox.north, bbox.west, z);
 		const ULpixel = coordToPixel(x, y, z);
 
-		// const BR2 = viewport.project([bbox.east, bbox.south]);
-		// const uUL2 = viewport.unproject([ULpixel[0] + 256, ULpixel[1]]);
-		// const UL = viewport.project(viewport.projectPosition([bbox.west, bbox.north]));
-		// const BR = viewport.project(viewport.projectPosition([bbox.east, bbox.south]));
-
-		const dLon = (bbox.east - bbox.west) / 250;
-		const dLat = (bbox.north - bbox.south) / 258;
-
-		for (let y = 0, t = 0; y < 256; y += 1) {
-			for (let x = 0; x < 256; x += 1) {
+		for (let y = 0, t = 0; y < 256; y += 2) {
+			for (let x = 0; x < 256; x += 2) {
 				const i = ((y + 1) * 258 + (x + 1)) * 2;
 				const d = raw[i]; // central data
 				const dr = raw[i + 2]; // right
@@ -210,41 +212,57 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 				const lir = levelIndex[dr]; // check level index aroud the current pixel
 				const lib = levelIndex[db]; // check level index aroud the current pixel
 				if (lic !== lir || lic !== lib) {
-					if (!(++t % 20) && x > 20 && x < 235 && y > 20 && y < 235) {
+					if (/* !(++t % 2 ) &&*/ x > 20 && x < 235 && y > 20 && y < 235) {
 						// if (!(++t % 1) && x > 20 && x < 235 && y > 20 && y < 235) {
 						const mli = Math.max(lic, lir, lib); // max level index out of three possible
 						const uPr = PixelsToLatLon(ULpixel[0] + x + 0.5, ULpixel[1] + y + 0.5, z);
 						const pos: [number, number] = [uPr[1], -uPr[0]]; //[bbox.west + dLon * x, bbox.north - dLat * y];
 						const text = CLUT.ticks[mli].dataString;
 						let angle: number = Math.atan2(d - dr, d - db);
-						angle = angle < -1.57 || angle > 1.57 ? angle + 3.14 : angle;
+						angle = angle < -1.57 || angle > 1.57 ? angle + 3.14159 : angle;
 						angle = (angle * 180) / Math.PI; // rotate angle: we can use RAW d, dd, and dr for atan2!
-						const color: RGBAColor = [255, 255, 255];
+						let ccolor = style.isolineColor === 'inverted' ? ~CLUT.colorsI[d] : CLUT.colorsI[d];
+						const color: RGBAColor = UItoColor(ccolor);
 						res.push({ pos, text, angle, color });
 					}
 				}
 			} // for x
 		} // for y
 		return res;
-		// return [
-		// 	{
-		// 		pos: [bbox.west, bbox.north],
-		// 		angle: 0,
-		// 		text: '12341234',
-		// 		color: [255, 255, 0],
-		// 	},
-		// ];
 	}
 
-	// TODO
 	_createVelocities(imageU: ImageData, imageV: ImageData): ImageData {
-		return imageU;
+		const { meta, variables } = this.props.wxprops;
+		const image = new ImageData(258, 258);
+		if (!(variables instanceof Array)) return image;
+		const { min, max }: { min: number; max: number } = this.state;
+		const [uMeta, vMeta] = variables.map((v) => meta.variablesMeta[v]);
+		const ldmul = (max - min) / 65535;
+		const vdmul = (vMeta.max - vMeta.min) / 65535;
+		const udmul = (uMeta.max - uMeta.min) / 65535;
+		const l = new Uint16Array(image.data.buffer);
+		const u = new Uint16Array(imageU.data.buffer);
+		const v = new Uint16Array(imageV.data.buffer);
+		for (let i = 0; i < 258 * 258 * 2; i += 2) {
+			l[i + 1] = 65280; // it sets alfa to 255, othervise picture is interpreted as empty
+			if (!u[i] || !v[i]) {
+				l[i] = 0;
+				continue;
+			} // NODATA
+			const _u = uMeta.min + udmul * u[i]; // unpack U data
+			const _v = vMeta.min + vdmul * v[i]; // unpack V data
+			l[i] = Math.sqrt(_v * _v + _u * _u) / ldmul; // pack data back to use the original rendering approach
+		}
+		return image;
 	}
 }
 WxTilesLayer.layerName = 'WxTilesLayer';
 WxTilesLayer.defaultProps = {
 	// minZoom: { type: 'number', value: 0 },
 	loadOptions: { image: { type: 'data', decode: true } },
+	onTileLoad: (tile) => {
+		console.log(tile);
+	},
 };
 
 // interface PicData {

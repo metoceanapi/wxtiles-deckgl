@@ -1,3 +1,4 @@
+// #version 300 es
 /**
  * Pack the top 12 bits of two normalized floats into 3 8-bit (rgb) values
  * This enables addressing 4096x4096 individual pixels
@@ -10,9 +11,7 @@
 
  #define SHADER_NAME bitmap-layer-fragment-shader
 
- #ifdef GL_ES
 precision highp float;
- #endif
 
 uniform sampler2D bitmapTexture;
 
@@ -84,6 +83,9 @@ vec3 packUVsIntoRGB(vec2 uv) {
 varying vec2 vTexCoordC;
 uniform sampler2D clutTextureUniform;
 uniform float shift; // the wize of isoline
+uniform int isoline;
+uniform vec3 isolineColor;
+uniform bool fill;
 
 // Consts
   // Modifying 'vertexPosition' in order to skip borders.
@@ -99,26 +101,17 @@ int isolineIndex(float);
 
 void main(void) {
   vec2 uvC = vTexCoordC;
-  // if(coordinateConversion < -0.5) {
-  //   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  //   return;
-  //   vec2 lnglat = mercator_to_lnglat(vTexPos);
-  //   uvC = getUV(lnglat);
-  // } else if(coordinateConversion > 0.5) {
-  //   gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-  //   return;
-  //   vec2 commonPos = lnglat_to_mercator(vTexPos);
-  //   uvC = getUV(commonPos);
-  // }
 
   if(picking_uActive) {
     // Since instance information is not used, we can use picking color for pixel index
     // gl_FragColor.rgb = packUVsIntoRGB(uvC);
+    // gl_FragColor = texture2D(clutTextureUniform, uvC);
     gl_FragColor = texture2D(bitmapTexture, uvC);
-    gl_FragColor.a = 1.0;
-    float packedC = GetPackedData(uvC); // central
-    int isoC = isolineIndex(packedC);
-    gl_FragColor.b = float(isoC) / 256.0;
+    // gl_FragColor = texelFetch(bitmapTexture, uvC);
+    // float packedC = GetPackedData(uvC); // central
+    // int isoC = isolineIndex(packedC);
+    // gl_FragColor.b = float(isoC) / 256.0;
+    // gl_FragColor.a = 1.0;
     return;
   }
 
@@ -131,22 +124,28 @@ void main(void) {
     discard;
 
   vec4 colorC = CLUT(packedC);
-  gl_FragColor = colorC;
-  // return;
-
-  int isoC = isolineIndex(packedC);
-
-  float packedR = GetPackedData(uvR); // central
-  int isoR = isolineIndex(packedR);
-
-  float packedD = GetPackedData(uvD); // central
-  int isoD = isolineIndex(packedD);
-
-  if(isoC != isoD || isoC != isoR) {
-    gl_FragColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);
-        // gl_FragColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);
+  if(fill) {
+    gl_FragColor = colorC;
   }
+  // return;
+  if(isoline != 0) {
+    int isoC = isolineIndex(packedC);
 
+    float packedR = GetPackedData(uvR); // central
+    int isoR = isolineIndex(packedR);
+
+    float packedD = GetPackedData(uvD); // central
+    int isoD = isolineIndex(packedD);
+
+    if(isoC != isoD || isoC != isoR) {
+      gl_FragColor = vec4(isolineColor, 1.0); // isoline != 1 or 2
+
+      if(isoline == 1)
+        gl_FragColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);
+      if(isoline == 2)
+        gl_FragColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);
+    }
+  }
   // geometry.uv = uvC;
   // DECKGL_FILTER_COLOR(gl_FragColor, geometry);
 
@@ -154,7 +153,7 @@ void main(void) {
 
 float GetPackedData(vec2 texCoord) {
   vec4 tex = texture2D(bitmapTexture, texCoord);
-  return (tex.r + tex.g * 256.0) / 256.0;
+  return (tex.r * 255.0 + tex.g * 255.0 * 256.0) / 65535.0;
 }
 
 vec4 CLUT(float pos) {

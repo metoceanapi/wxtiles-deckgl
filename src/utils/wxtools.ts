@@ -562,3 +562,11 @@ export function createLevels(min: number, max: number, n: number): number[] {
 	}
 	return levels;
 }
+
+export function UItoColor(c: number): [number, number, number] {
+	const r = (c >> 0) & 255;
+	const g = (c >> 8) & 255;
+	const b = (c >> 16) & 255;
+
+	return [r, g, b];
+}

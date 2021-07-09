@@ -70,7 +70,7 @@ export async function start() {
 		// WxTiles settings
 		wxprops: {
 			meta,
-			variables, // [eastward, northward] - for vector data
+			variables, // 'temp2m' or ['eastward', 'northward'] for vector data
 			style,
 		},
 		// DATA

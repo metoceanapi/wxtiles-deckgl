@@ -3,12 +3,12 @@ import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 import GL from '@luma.gl/constants';
 import { Texture2D } from '@luma.gl/core';
 
-import { ColorStyleStrict, HEXtoRGBA, Meta, UIntToColor } from '../utils/wxtools';
+import { ColorStyleStrict, HEXtoRGBA, LibSetupObject, Meta, UIntToColor, WxGetColorStyles, WxTileLibSetup } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { RenderSubLayers } from './IRenderSubLayers';
 import { WxTileIsolineTextData } from './WxTileIsolineText';
-import { PixelsToLonLat, PixelsToLatLon, coordToPixel } from '../utils/mercator';
-import { WxTileFill, WxTileFillData } from './WxTileFill';
+import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
+import { WxTileFill } from './WxTileFill';
 import { WxTileIsolineText } from './WxTileIsolineText';
 import { WxTileVector, WxTileVectorData } from './WxTileVector';
 
@@ -36,7 +36,7 @@ interface Tile {
 	};
 }
 
-interface WxTileDataPrep {
+interface WxTileData {
 	image: ImageData;
 	imageTextureUniform: Texture2D;
 	isoData: WxTileIsolineTextData[];
@@ -49,9 +49,11 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 		super(props);
 	}
 
-	initializeState(params: any) {
-		super.initializeState(params);
-		this._prepareStateAndCLUT();
+	updateState({ props, oldProps, context, changeFlags }) {
+		super.updateState({ props, oldProps, context, changeFlags });
+		if (changeFlags.propsChanged) {
+			this._prepareStateAndCLUT();
+		}
 	}
 
 	onHover(info: any, pickingEvent: any) {
@@ -90,7 +92,7 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 		infoPanel.innerHTML = text;
 	}
 
-	renderSubLayers(args: RenderSubLayers<WxTileDataPrep>) {
+	renderSubLayers(args: RenderSubLayers<WxTileData>) {
 		const { tile, id, data } = args;
 		if (!data) return null;
 		const { west, south, east, north } = tile.bbox;
@@ -128,7 +130,7 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 		];
 	}
 
-	async getTileData(tile: Tile): Promise<WxTileDataPrep | null> {
+	async getTileData(tile: Tile): Promise<WxTileData | null> {
 		const { data: URL, wxprops } = this.props;
 		const { fetch } = this.getCurrentLayer().props;
 		const { x, y, z, signal } = tile;
@@ -358,5 +360,85 @@ WxTilesLayer.layerName = 'WxTilesLayer';
 WxTilesLayer.defaultProps = {
 	minZoom: 0,
 	tileSize: 256,
+	pickable: true,
 	loadOptions: { image: { type: 'data', decode: true } },
 };
+
+async function fetchJson(url) {
+	console.log(url);
+	const req = await fetch(url, { mode: 'cors' }); // json loader helper
+	const jso = await req.json();
+	return jso;
+}
+
+async function getURIfromDatasetName(dataServer: string, dataSet: string) {
+	// URI could be hardcoded, but tiles-DB is alive!
+	if (dataSet[dataSet.length - 1] != '/') dataSet += '/';
+	const instance = (await fetchJson(dataServer + dataSet + 'instances.json')).reverse()[0] + '/';
+	const meta: Meta = await fetchJson(dataServer + dataSet + instance + 'meta.json');
+	const URI = dataServer + dataSet + instance + '{variable}/{time}/{z}/{x}/{y}.png';
+	return { URI, meta };
+}
+
+function getTimeClosestTo(times: string[], time: string) {
+	const dtime = new Date(time).getTime();
+	return times.find((t) => new Date(t).getTime() >= dtime) || times[times.length - 1];
+}
+export type WxServerVarsTimeType = [string, string | [string, string], string];
+
+export async function createWxTilesLayer(server: string, params: WxServerVarsTimeType, time: string) {
+	const [dataSet, variables, styleName] = params;
+
+	const { URI, meta } = await getURIfromDatasetName(server, dataSet);
+	const styles = WxGetColorStyles();
+	const style = styles[styleName];
+	const wxprops = {
+		meta,
+		variables, // 'temp2m' or ['eastward', 'northward'] for vector data
+		style,
+	};
+
+	let resolve = (value: any) => {};
+	const onViewportLoadPromise = new Promise<any>((resolve_) => {
+		resolve = resolve_;
+	});
+
+	const wxTilesProps = {
+		id: `wxtiles/${dataSet}/${variables}`,
+		// WxTiles settings
+		wxprops,
+		// DATA
+		data: URI.replace('{time}', getTimeClosestTo(meta.times, time)),
+		// DECK.gl settings
+		maxZoom: meta.maxZoom,
+		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
+		onViewportLoad: resolve,
+	};
+
+	return { onViewportLoadPromise, wxLayer: new WxTilesLayer(wxTilesProps) };
+}
+
+export async function WxTileLibSetupPromice(stylesURI: string, uconvURI: string, colorschemesURI: string) {
+	const wxlibCustomSettings: LibSetupObject = {};
+	{
+		try {
+			// these URIs are for the demo purpose. set the correct URI
+			wxlibCustomSettings.colorStyles = await fetchJson(stylesURI); // set the correct URI
+		} catch (e) {
+			console.log(e);
+		}
+		try {
+			wxlibCustomSettings.units = await fetchJson(uconvURI); // set the correct URI
+		} catch (e) {
+			console.log(e);
+		}
+		try {
+			wxlibCustomSettings.colorSchemes = await fetchJson(colorschemesURI); // set the correct URI
+		} catch (e) {
+			console.log(e);
+		}
+	}
+	// ESSENTIAL step to get lib ready.
+	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults
+	return document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
+}

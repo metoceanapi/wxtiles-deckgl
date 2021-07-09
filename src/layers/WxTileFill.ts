@@ -1,9 +1,10 @@
 import { BitmapLayer, BitmapLayerProps } from '@deck.gl/layers';
 import { picking, project32 } from '@deck.gl/core';
 import { Texture2D } from '@luma.gl/core';
-import { ColorStyleStrict, HEXtoRGBA, UItoColor } from '../utils/wxtools';
+import { ColorStyleStrict, HEXtoRGBA, UIntToColor } from '../utils/wxtools';
 import vs from '../shaders/bitmap-layer-vertex.vs';
 import fs from '../shaders/bitmap-layer-fragment.fs';
+import { UpdateStateInfo } from '@deck.gl/core/lib/layer';
 
 export interface WxTileFillData {
 	clutTextureUniform: Texture2D;
@@ -19,7 +20,7 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		super(props);
 	}
 
-	updateState(a) {
+	updateState(a: UpdateStateInfo<WxTileFillProps>) {
 		super.updateState(a);
 		const { style } = this.props.data;
 		const fill = style.fill !== 'none';
@@ -41,16 +42,12 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 			bitmapTexture: this.props.data.imageTextureUniform,
 			fill,
 			isoline,
-			isolineColor: UItoColor(isolineColorUI),
+			isolineColor: UIntToColor(isolineColorUI),
 		});
 	}
 
 	getShaders() {
 		return { vs, fs, modules: [project32, picking] };
-	}
-
-	onClick(info: any, pickingEvent: any) {
-		console.log('WxTileFill onClick:', { info, pickingEvent });
 	}
 
 	draw(opts: any) {
@@ -60,12 +57,12 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		const [wnX, wnY] = viewport.project([west, north]);
 		const [esX, esY] = viewport.project([east, south]);
 		const pixdif = ((esX - wnX) ** 2 + (esY - wnY) ** 2) ** 0.5;
-		this.state.model
-			.setUniforms({
-				shift: 1.5 / pixdif /* 1.5 = isoline Width in Pixels */,
-				// shift: 1/255,
-			})
-			.draw(opts);
+		this.state.model.setUniforms({
+			// bitmapTexture: this.props.data.imageTextureUniform,
+			shift: 1.5 / pixdif /* 1.5 = isoline Width in Pixels */,
+			// shift: 1/255,
+		});
+		this.state.model.draw(opts);
 		// super.draw(opts);
 	}
 }

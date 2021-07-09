@@ -15,13 +15,12 @@ async function fetchJson(url) {
 	return jso;
 }
 
-export function getTime(times: string[]) {
+export function getTimeClosestToNow(times: string[]) {
 	return times.find((t) => new Date(t).getTime() >= Date.now()) || times[times.length - 1];
 }
 
-export async function getURI(dataSet: string) {
+export async function getURIfromDatasetName(dataServer: string, dataSet: string) {
 	// URI could be hardcoded, but tiles-DB is alive!
-	const dataServer = 'https://tiles.metoceanapi.com/data/';
 	if (dataSet[dataSet.length - 1] != '/') dataSet += '/';
 	const instance = (await fetchJson(dataServer + dataSet + 'instances.json')).reverse()[0] + '/';
 	const meta: Meta = await fetchJson(dataServer + dataSet + instance + 'meta.json');
@@ -52,16 +51,19 @@ export async function start() {
 	// ESSENTIAL step to get lib ready.
 	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults
 	await document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
-	const styles = WxGetColorStyles();
 
 	// const [dataSet, variables, styleName] = ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
 	// const [dataSet, variables, styleName] = ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 	// const [dataSet, variables, styleName] = ['ecwmf.global', 'air.humidity.at-2m', 'base'];
 	// const [dataSet, variables, styleName] = ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
+	// const [dataSet, variables, styleName] = ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
 	// const [dataSet, variables, styleName] = ['obs-radar.rain.nzl.national', ['reflectivity'], 'rain.EWIS'];
 	const [dataSet, variables, styleName] = ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
-	const { URI, meta } = await getURI(dataSet);
-	const time = getTime(meta.times);
+
+	const { URI, meta } = await getURIfromDatasetName('https://tiles.metoceanapi.com/data/', dataSet);
+	const time = getTimeClosestToNow(meta.times);
+	const styles = WxGetColorStyles();
+	const style = styles[styleName];
 
 	const wxTilesProps = {
 		id: 'wxtiles/' + dataSet + '/' + variables,
@@ -69,18 +71,14 @@ export async function start() {
 		wxprops: {
 			meta,
 			variables, // [eastward, northward] - for vector data
-			style: styles[styleName],
+			style,
 		},
 		// DATA
 		data: URI.replace('{time}', time),
 		// DECK.gl settings
-		minZoom: 0,
 		maxZoom: meta.maxZoom,
 		pickable: true,
-		tileSize: 256,
 		onViewportLoad: () => {},
-		maxCacheSize: 1,
-		refinementStrategy: 'no-overlap' as 'no-overlap', //'never', // default 'best-available'
 		// _imageCoordinateSystem: COORDINATE_SYSTEM.CARTESIAN, // only for GlobeView
 	};
 
@@ -88,7 +86,7 @@ export async function start() {
 
 	const deckgl = new Deck({
 		// initialViewState: { latitude: 0, longitude: 0, zoom: -1 },
-		initialViewState: { latitude: -40, longitude: 175, zoom: 5 },
+		initialViewState: { latitude: -0, longitude: 0, zoom: 2 },
 		controller: true,
 		layers, // or use: deckgl.setProps({ layers });
 		// views: new GlobeView({ id: 'globe', controller: true }),
@@ -124,16 +122,12 @@ function debugLayers(meta: Meta) {
 			data: { color: [255, 0, 0, 255] },
 			maxZoom: meta.maxZoom,
 			minZoom: 0,
-			pickable: false,
-			tileSize: 256,
 		}),
 		new DebugTilesLayer({
 			id: 'debugtilesRB',
 			data: { color: [255, 0, 255, 128] },
 			maxZoom: 24,
 			minZoom: meta.maxZoom + 1,
-			pickable: false,
-			tileSize: 256,
 		}),
 	];
 }

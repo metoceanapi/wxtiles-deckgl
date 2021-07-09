@@ -20,14 +20,19 @@ export class WxTileIsolineText extends TextLayer<WxTileIsolineTextData, WxTileIs
 }
 WxTileIsolineText.layerName = 'WxTileIsolineText';
 WxTileIsolineText.defaultProps = {
+	pickable: false,
 	billboard: false,
-	getSize: 5,
+	parameters: {
+		depthTest: false,
+	},
+	fontFamily: 'Sans-serif',
+	getSize: 12,
+	outlineWidth: 5, // to appear in ver 8.5 // TODO
+	outlineColor: [255, 255, 255], // to appear in ver 8.5
 	getTextAnchor: 'middle',
 	getAlignmentBaseline: 'center',
-	fontFamily: 'Monaco, monospace', // TODO
 	getText: (d: WxTileIsolineTextData) => d.text,
 	getPosition: (d: WxTileIsolineTextData) => d.pos,
 	getColor: (d: WxTileIsolineTextData) => d.color,
 	getAngle: (d: WxTileIsolineTextData) => d.angle,
-	// backgroundColor: (d: WxTileIsolineTextData) => {return d.bcolor},
 };

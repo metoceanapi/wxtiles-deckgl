@@ -1,3 +1,4 @@
+import { CompositeLayer } from '@deck.gl/core';
 import { TileLayer } from '@deck.gl/geo-layers';
 import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 import { TextLayer } from '@deck.gl/layers';
@@ -39,7 +40,6 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 			}),
 			new PathLayer({
 				id: args.id + '-b',
-				visible: args.visible,
 				data: [
 					[
 						[west, north], // two (left and bottom) lines are enough to compose a square mesh
@@ -55,7 +55,26 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 			}),
 		];
 
+		// return new WxTileD({
+		// 	id: args.id + '-dd',
+		// 	visible: args.visible,
+		// 	data: subLayers,
+		// });
 		return subLayers;
 	}
 }
 DebugTilesLayer.layerName = 'DebugTilesLayer';
+DebugTilesLayer.defaultProps = {
+	tileSize: 256,
+	pickable: false,
+	data: { color: [255, 0, 0, 255] },
+	maxZoom: 24,
+	minZoom: 0,
+};
+
+class WxTileD extends CompositeLayer<any> {
+	renderLayers() {
+		return this.props.data;
+	}
+}
+WxTileD.layerName = 'WxTileD';

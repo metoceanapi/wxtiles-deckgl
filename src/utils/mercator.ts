@@ -51,6 +51,12 @@ export function PixelsToLatLon(px: number, py: number, zoom: number): [number, n
 	return MetersToLatLon(x, y);
 }
 
-export function coordToPixel(x: number, y: number, z: number) {
+// PixelsToLonLat converts Pixel coordinates in given zoom level to lat/lon in WGS84 Datum
+export function PixelsToLonLat(px: number, py: number, zoom: number): [number, number] {
+	const [lat, lon] = MetersToLatLon(...PixelsToMeters(px, py, zoom));
+	return [lon, -lat];
+}
+
+export function coordToPixel(x: number, y: number) {
 	return [x * tileSize, y * tileSize];
 }

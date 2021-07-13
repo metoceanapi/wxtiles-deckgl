@@ -12,5 +12,6 @@ export interface RenderSubLayers<Data = any> {
 		};
 		data: Data;
 	};
+	data: Data;
 	visible: boolean;
 }

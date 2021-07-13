@@ -6,7 +6,8 @@ const sharedConfig = {
 	bundle: true,
 	// plugins: [sassPlugin()],
 	loader: {
-		// '.woff': 'file',
+		'.ttf': 'base64',
+		'.woff': 'base64',
 		'.fs': 'text',
 		'.vs': 'text',
 	},

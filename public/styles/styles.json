@@ -178,5 +178,37 @@
 		"units": "knots",
 		"vectorColor": "#777",
 		"vectorType": "barbs"
+	},
+	"temper2m": {
+		"fill": "solid",
+		"name": "Sea Surface Temperature solid",
+		"parent": "Sea Surface Temperature"
+	},
+	"Wind Speed2": {
+		"fill": "gradient",
+		"isolineColor": "inverted",
+		"isolineText": false,
+		"name": "Wind Speed2",
+		"parent": "Wind Speed",
+		"vectorColor": "inverted",
+		"vectorType": "arrows"
+	},
+	"direction": {
+		"addDegrees": 0,
+		"blurRadius": 0,
+		"colorScheme": "rainbow",
+		"fill": "gradient",
+		"isolineColor": "inverted",
+		"isolineText": true,
+		"name": "base",
+		"parent": "base",
+		"showAboveMax": true,
+		"showBelowMin": true,
+		"streamLineColor": "#777",
+		"streamLineSpeedFactor": 1,
+		"streamLineStatic": false,
+		"units": "",
+		"vectorColor": "inverted",
+		"vectorType": "arrows"
 	}
 }

@@ -7,7 +7,7 @@ export interface VariableMeta {
 }
 export interface Meta {
 	variables: string[];
-	variablesMeta: VariableMeta[];
+	variablesMeta: VariableMeta;
 	maxZoom: number;
 	times: string[];
 }
@@ -561,4 +561,12 @@ export function createLevels(min: number, max: number, n: number): number[] {
 		levels.push((i * (max - min)) / (n - 1) + min);
 	}
 	return levels;
+}
+
+export function UIntToColor(c: number): [number, number, number] {
+	const r = (c >> 0) & 255;
+	const g = (c >> 8) & 255;
+	const b = (c >> 16) & 255;
+
+	return [r, g, b];
 }

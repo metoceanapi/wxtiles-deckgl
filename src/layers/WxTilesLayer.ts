@@ -1,21 +1,23 @@
 import { TileLayer } from '@deck.gl/geo-layers';
 import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
+import { UpdateStateInfo } from '@deck.gl/core/lib/layer';
 import GL from '@luma.gl/constants';
 import { Texture2D } from '@luma.gl/core';
 
+import { RenderSubLayers } from './IRenderSubLayers';
+import { WxTileIsolineTextData, WxTileIsolineText } from './WxTileIsolineText';
+import { WxTileFill } from './WxTileFill';
+import { WxTileVector, WxTileVectorData } from './WxTileVector';
+
 import { ColorStyleStrict, HEXtoRGBA, LibSetupObject, Meta, UIntToColor, WxGetColorStyles, WxTileLibSetup } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
-import { RenderSubLayers } from './IRenderSubLayers';
-import { WxTileIsolineTextData } from './WxTileIsolineText';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
-import { WxTileFill } from './WxTileFill';
-import { WxTileIsolineText } from './WxTileIsolineText';
-import { WxTileVector, WxTileVectorData } from './WxTileVector';
-import { UpdateStateInfo } from '@deck.gl/core/lib/layer';
+import { fetchJson } from '../utils/fetch';
+import { cacheIt } from '../utils/cache';
 
-export type WxTilesLayerData = string;
+type WxTilesLayerData = string;
 
-export interface WxTilesLayerProps extends TileLayerProps<WxTilesLayerData> {
+interface WxTilesLayerProps extends TileLayerProps<WxTilesLayerData> {
 	wxprops: {
 		meta: Meta;
 		variables: string | string[];
@@ -366,12 +368,6 @@ WxTilesLayer.defaultProps = {
 	loadOptions: { image: { type: 'data', decode: true } },
 };
 
-async function fetchJson(url: RequestInfo) {
-	console.log(url);
-	const req = await fetch(url, { mode: 'cors' }); // json loader helper
-	return req.json();
-}
-
 async function getURIfromDatasetName(dataServer: string, dataSet: string) {
 	// URI could be hardcoded, but tiles-DB is alive!
 	if (dataSet[dataSet.length - 1] != '/') dataSet += '/';
@@ -381,16 +377,19 @@ async function getURIfromDatasetName(dataServer: string, dataSet: string) {
 	return { URI, meta };
 }
 
+const getURIfromDatasetNameCached = cacheIt(getURIfromDatasetName);
+
 function getTimeClosestTo(times: string[], time: string) {
 	const dtime = new Date(time).getTime();
 	return times.find((t) => new Date(t).getTime() >= dtime) || times[times.length - 1];
 }
+
 export type WxServerVarsTimeType = [string, string | [string, string], string];
 
 export async function createWxTilesLayer(server: string, params: WxServerVarsTimeType, time: string) {
 	const [dataSet, variables, styleName] = params;
 
-	const { URI, meta } = await getURIfromDatasetName(server, dataSet);
+	const { URI, meta } = await getURIfromDatasetNameCached(server, dataSet);
 	const styles = WxGetColorStyles();
 	const style = styles[styleName];
 	const wxprops = {
@@ -405,7 +404,7 @@ export async function createWxTilesLayer(server: string, params: WxServerVarsTim
 	});
 
 	const wxTilesProps = {
-		id: `wxtiles/${dataSet}/${variables}`,
+		id: `wxtiles/${dataSet}/${variables}/${time}`,
 		// WxTiles settings
 		wxprops,
 		// DATA
@@ -419,7 +418,7 @@ export async function createWxTilesLayer(server: string, params: WxServerVarsTim
 	return { meta, onViewportLoadPromise, wxLayer: new WxTilesLayer(wxTilesProps) };
 }
 
-export async function WxTileLibSetupPromice(stylesURI: string, uconvURI: string, colorschemesURI: string) {
+export async function wxTileLibSetupPromice(stylesURI: string, uconvURI: string, colorschemesURI: string) {
 	const wxlibCustomSettings: LibSetupObject = {};
 	{
 		try {

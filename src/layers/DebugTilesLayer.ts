@@ -30,6 +30,7 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 		const subLayers = [
 			new TextLayer({
 				id: args.id + '-c',
+				visible: args.visible,
 				data: [{}],
 				getPosition: () => [west + (east - west) * 0.05, north + (south - north) * 0.05], // if not ON TILE - visual issues occure
 				getText: () => x + '-' + y + '-' + z,
@@ -40,6 +41,7 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 			}),
 			new PathLayer({
 				id: args.id + '-b',
+				visible: args.visible,
 				data: [
 					[
 						[west, north], // two (left and bottom) lines are enough to compose a square mesh

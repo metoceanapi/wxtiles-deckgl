@@ -11,6 +11,7 @@ import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
 import { WxTileFill } from './WxTileFill';
 import { WxTileIsolineText } from './WxTileIsolineText';
 import { WxTileVector, WxTileVectorData } from './WxTileVector';
+import { UpdateStateInfo } from '@deck.gl/core/lib/layer';
 
 export type WxTilesLayerData = string;
 
@@ -49,9 +50,9 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 		super(props);
 	}
 
-	updateState({ props, oldProps, context, changeFlags }) {
-		super.updateState({ props, oldProps, context, changeFlags });
-		if (changeFlags.propsChanged) {
+	updateState(st: UpdateStateInfo<WxTilesLayerProps>) {
+		super.updateState(st);
+		if (st.changeFlags.propsChanged) {
 			this._prepareStateAndCLUT();
 		}
 	}
@@ -114,6 +115,7 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 				id: id + '-isotextBack',
 				data: data.isoData,
 				fontWeight: 'bold',
+				getSize: 13,
 				getColor: [255, 255, 255],
 			}),
 			new WxTileIsolineText({
@@ -184,7 +186,7 @@ export class WxTilesLayer extends TileLayer<WxTilesLayerData, WxTilesLayerProps>
 
 		const CLUT = new RawCLUT(style, units, [min, max], variables instanceof Array);
 		const { colorsI, levelIndex } = CLUT;
-		const dataShift = 1;
+		const dataShift = 5;
 		const dataWidth = 65536 >> dataShift;
 		const data = new Uint32Array(dataWidth * 2);
 		for (let x = 0; x < dataWidth; ++x) {
@@ -364,11 +366,10 @@ WxTilesLayer.defaultProps = {
 	loadOptions: { image: { type: 'data', decode: true } },
 };
 
-async function fetchJson(url) {
+async function fetchJson(url: RequestInfo) {
 	console.log(url);
 	const req = await fetch(url, { mode: 'cors' }); // json loader helper
-	const jso = await req.json();
-	return jso;
+	return req.json();
 }
 
 async function getURIfromDatasetName(dataServer: string, dataSet: string) {
@@ -415,7 +416,7 @@ export async function createWxTilesLayer(server: string, params: WxServerVarsTim
 		onViewportLoad: resolve,
 	};
 
-	return { onViewportLoadPromise, wxLayer: new WxTilesLayer(wxTilesProps) };
+	return { meta, onViewportLoadPromise, wxLayer: new WxTilesLayer(wxTilesProps) };
 }
 
 export async function WxTileLibSetupPromice(stylesURI: string, uconvURI: string, colorschemesURI: string) {

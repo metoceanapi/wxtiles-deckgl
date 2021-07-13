@@ -8,13 +8,6 @@ import { DebugTilesLayer } from './layers/DebugTilesLayer';
 import { Meta } from './utils/wxtools';
 import { BitmapLayer } from '@deck.gl/layers';
 
-async function fetchJson(url) {
-	console.log(url);
-	const req = await fetch(url, { mode: 'cors' }); // json loader helper
-	const jso = await req.json();
-	return jso;
-}
-
 export async function start() {
 	// ESSENTIAL step to get lib ready.
 	await WxTileLibSetupPromice('styles/styles.json', 'styles/uconv.json', 'styles/colorschemes.json'); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
@@ -29,19 +22,23 @@ export async function start() {
 	// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
 	// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
 
-	const { onViewportLoadPromise, wxLayer } = await createWxTilesLayer('https://tiles.metoceanapi.com/data/', params, new Date().toString());
-
-	const layers = [baseLayer(), wxLayer, ...debugLayers(wxLayer.props.wxprops.meta)];
-
 	const deckgl = new Deck({
 		initialViewState: { latitude: -38, longitude: 176, zoom: 4 },
 		controller: true,
-		layers, // or use: deckgl.setProps({ layers });
+		// layers, // or use: deckgl.setProps({ layers });
 		// views: new GlobeView({ id: 'globe', controller: true }),
 	});
-
-	await onViewportLoadPromise;
-	console.log('done!');
+	let i = 0;
+	let time = new Date().toString();
+	while (1) {
+		const { meta, onViewportLoadPromise, wxLayer } = await createWxTilesLayer('https://tiles.metoceanapi.com/data/', params, time);
+		const layers = [baseLayer(), wxLayer, ...debugLayers(wxLayer.props.wxprops.meta)];
+		deckgl.setProps({ layers }); // flickering :((
+		await onViewportLoadPromise;
+		console.log('done!');
+		i = ++i % meta.times.length;
+		time = meta.times[i];
+	}
 }
 
 function baseLayer() {

@@ -1,7 +1,11 @@
 import { Deck, Layer } from '@deck.gl/core';
 import { DebugTilesLayer } from '../layers/DebugTilesLayer';
 import { IWxTilesLayer } from '../layers/IWxTileLayer';
-import { fetchJson, LibSetupObject, WxTileLibSetup } from '../utils/wxtools';
+import { LibSetupObject, WxTileLibSetup } from '../utils/wxtools';
+import styles from '../styles/styles.json';
+import uconv from '../styles/uconv.json';
+import colorschemes from '../styles/colorschemes.json';
+
 
 const createTimestepIndexManager = () => {
 	let currentTimestepIndex = -1;
@@ -135,11 +139,12 @@ export const createWxTilesManager: CreateWxTilesManager = (deckgl, { debug } = {
 	return layersManager(deckgl, debugLayer ? [debugLayer] : []);
 };
 
-export async function setupWxTilesLib(stylesURI: string, uconvURI: string, colorschemesURI: string) {
+export async function setupWxTilesLib(setupObject: LibSetupObject = {}) {
 	const wxlibCustomSettings: LibSetupObject = {
-		colorStyles: await fetchJson(stylesURI), // set the correct URI
-		units: await fetchJson(uconvURI), // set the correct URI
-		colorSchemes: await fetchJson(colorschemesURI), // set the correct URI
+		colorStyles: styles as any,
+		units: uconv as any,
+		colorSchemes: colorschemes,
+		...setupObject,
 	};
 	// ESSENTIAL step to get lib ready.
 	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults

@@ -21,7 +21,7 @@ export async function start() {
 		['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
 
 	// ESSENTIAL step to get lib ready.
-	await setupWxTilesLib('styles/styles.json', 'styles/uconv.json', 'styles/colorschemes.json'); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
+	setupWxTilesLib(); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
 	const wxManager = createWxTilesManager(deckgl, { debug: true });
 	const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params);
 	wxManager.createLayer(WxTilesLayer, wxProps);
@@ -33,4 +33,12 @@ export async function start() {
 	button.innerHTML = 'Start|Stop';
 	document.body.appendChild(button);
 	button.addEventListener('click', wxManager.nextTimestep.bind(wxManager));
+}
+
+export {
+	createWxTilesManager,
+	createWxTilesLayerProps,
+	WxTilesLayer,
+	WxServerVarsTimeType,
+	setupWxTilesLib,
 }

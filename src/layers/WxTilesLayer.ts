@@ -12,7 +12,7 @@ import { IWxTilesLayerData, IWxTilesLayerProps } from './IWxTileLayer';
 import { HEXtoRGBA, UIntToColor, WxGetColorStyles } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
-import { getURIfromDatasetName } from '../libs/libTools';
+import { getURIfromDatasetName as getURIFromDatasetName } from '../libs/libTools';
 
 // type WxTilesLayerData = string;
 
@@ -371,7 +371,7 @@ export type WxServerVarsTimeType = [string, string | [string, string], string];
 
 export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType) {
 	const [dataSet, variables, styleName] = params;
-	const { URITime, meta } = await getURIfromDatasetName(server, dataSet);
+	const { URITime, meta } = await getURIFromDatasetName(server, dataSet);
 	const wxTilesProps = {
 		id: `wxtiles/${dataSet}/${variables}/`,
 		// WxTiles settings

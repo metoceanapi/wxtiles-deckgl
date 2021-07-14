@@ -8,6 +8,7 @@ export async function start() {
 	const deckgl = new Deck({
 		initialViewState: { latitude: -38, longitude: 176, zoom: 4 },
 		controller: true,
+		_animate: true,
 	});
 
 	const params: WxServerVarsTimeType =

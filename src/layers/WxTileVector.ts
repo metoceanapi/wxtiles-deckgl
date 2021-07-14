@@ -34,6 +34,24 @@ WxTileVector.defaultProps = {
 	getAlignmentBaseline: 'center',
 	getText: (d: WxTileVectorData) => d.text,
 	getPosition: (d: WxTileVectorData) => d.pos,
-	getColor: (d: WxTileVectorData) => d.color,
-	getAngle: (d: WxTileVectorData) => d.angle,
+	getColor: (d: WxTileVectorData) => {
+		return d.color;
+	},
+	_animations: {
+		'*': { speed: 5 },
+	},
+	// getAngle: (d: WxTileVectorData) => d.angle,
+	getAngle: {
+		type: 'function',
+		value: (d) => {
+			return d.angle;
+		},
+		compare: false,
+	},
+	animated: true,
+	_animate: true,
 };
+
+// Animation
+// https://github.com/visgl/deck.gl/blob/master/docs/developer-guide/animations-and-transitions.md
+// https://github.com/visgl/deck.gl/blob/master/dev-docs/RFCs/v7.2/property-animation-rfc.md

@@ -1,6 +1,7 @@
 import { Deck, Layer } from '@deck.gl/core';
 import { DebugTilesLayer } from '../layers/DebugTilesLayer';
-import { IWxTileLayer } from '../layers/IWxTileLayer';
+import { IWxTilesLayer } from '../layers/IWxTileLayer';
+import { fetchJson, LibSetupObject, WxTileLibSetup } from '../utils/wxtools';
 
 const createTimestepIndexManager = () => {
 	let currentTimestepIndex = -1;
@@ -26,7 +27,7 @@ const createTimestepIndexManager = () => {
 };
 
 export interface WxTilesLib {
-	createLayer<L extends IWxTileLayer>(LayerClass: new (props: L['props']) => L, props: L['props']): { remove(): void };
+	createLayer<L extends IWxTilesLayer>(LayerClass: new (props: L['props']) => L, props: L['props']): { remove(): void };
 	nextTimestep(): Promise<void>;
 	prevTimestep(): Promise<void>;
 	jumpToTimestep(timesIndex: number): Promise<void>;
@@ -34,9 +35,9 @@ export interface WxTilesLib {
 export type CreateWxTilesManager = (deckgl: Deck, options?: { debug: boolean }) => WxTilesLib;
 
 interface LayerStoreItem {
-	layerInstance: IWxTileLayer;
-	LayerClass: new (props: IWxTileLayer['props']) => IWxTileLayer;
-	layerProps: IWxTileLayer['props'];
+	layerInstance: IWxTilesLayer;
+	LayerClass: new (props: IWxTilesLayer['props']) => IWxTilesLayer;
+	layerProps: IWxTilesLayer['props'];
 }
 
 const layersManager = (deckgl: Deck, otherLayers: Layer<any>[]): WxTilesLib => {
@@ -71,8 +72,8 @@ const layersManager = (deckgl: Deck, otherLayers: Layer<any>[]): WxTilesLib => {
 				let onViewportLoadedBefore = false;
 				const newLayer = new LayerClass({
 					...layerProps,
-					id: layerProps.id! + currentTimestepIndex,
-					data: [URI],
+					id: layerProps.id + currentTimestepIndex,
+					data: URI,
 					onViewportLoad: (data) => {
 						layerProps?.onViewportLoad?.call(layerInstance, data);
 						if (onViewportLoadedBefore) return;
@@ -124,7 +125,7 @@ export const createWxTilesManager: CreateWxTilesManager = (deckgl, { debug } = {
 	const debugLayer = debug
 		? new DebugTilesLayer({
 				id: 'debugtiles',
-				data: undefined,
+				data: { color: [255, 0, 0] },
 				maxZoom: 24,
 				minZoom: 0,
 				pickable: false,
@@ -133,3 +134,14 @@ export const createWxTilesManager: CreateWxTilesManager = (deckgl, { debug } = {
 		: undefined;
 	return layersManager(deckgl, debugLayer ? [debugLayer] : []);
 };
+
+export async function setupWxTilesLib(stylesURI: string, uconvURI: string, colorschemesURI: string) {
+	const wxlibCustomSettings: LibSetupObject = {
+		colorStyles: await fetchJson(stylesURI), // set the correct URI
+		units: await fetchJson(uconvURI), // set the correct URI
+		colorSchemes: await fetchJson(colorschemesURI), // set the correct URI
+	};
+	// ESSENTIAL step to get lib ready.
+	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults
+	return document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
+}

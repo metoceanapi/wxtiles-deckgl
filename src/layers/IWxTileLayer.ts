@@ -2,16 +2,17 @@ import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 import { ColorStyleStrict, Meta } from '../utils/wxtools';
 import { TileLayer } from '@deck.gl/geo-layers';
 
-export type IWxTilesLayerData = string[];
+export type IWxTilesLayerData = string;
 
 export interface IWxTilesLayerProps extends TileLayerProps<IWxTilesLayerData> {
+	id: string;
 	wxprops: {
 		meta: Meta;
-		variable: string;
+		variables: string | string[];
 		style: ColorStyleStrict;
 		URITime: string;
 	};
 	data: IWxTilesLayerData;
 }
 
-export type IWxTileLayer = TileLayer<IWxTilesLayerData, IWxTilesLayerProps>;
+export type IWxTilesLayer = TileLayer<IWxTilesLayerData, IWxTilesLayerProps>;

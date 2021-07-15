@@ -28,5 +28,8 @@
 	},
 	"dependencies": {
 		"deck.gl": "^8.4.20"
+	},
+	"peerDependencies": {
+		"deck.gl": "^8.4.20"
 	}
 }

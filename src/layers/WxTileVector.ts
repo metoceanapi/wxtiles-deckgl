@@ -3,7 +3,7 @@ import { RGBAColor } from '@deck.gl/core/utils/color';
 import { TextLayer, TextLayerProps } from '@deck.gl/layers';
 
 export interface WxTileVectorData {
-	pos: [number, number];
+	position: [number, number];
 	text: string;
 	angle: number;
 	color: RGBAColor;
@@ -30,10 +30,10 @@ WxTileVector.defaultProps = {
 	getSize: 30,
 	outlineWidth: 5, // to appear in ver 8.5 // TODO
 	outlineColor: [255, 255, 255], // to appear in ver 8.5
-	getTextAnchor: 'middle',
-	getAlignmentBaseline: 'center',
-	getText: (d: WxTileVectorData) => d.text,
-	getPosition: (d: WxTileVectorData) => d.pos,
+	// getTextAnchor: 'middle', // default
+	// getAlignmentBaseline: 'center', // default
+	// getText: (d: WxTileVectorData) => d.text, // default
+	// getPosition: (d: WxTileVectorData) => d.position, // default
 	getColor: (d: WxTileVectorData) => {
 		return d.color;
 	},

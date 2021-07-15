@@ -103,17 +103,15 @@ void main(void) {
   vec2 uvC = vTexCoordC;
 
   if(picking_uActive) {
-    // Since instance information is not used, we can use picking color for pixel index
-    // gl_FragColor.rgb = packUVsIntoRGB(uvC);
-    // gl_FragColor = texture2D(clutTextureUniform, uvC);
     gl_FragColor = texture2D(bitmapTexture, uvC);
-    // gl_FragColor = texelFetch(bitmapTexture, uvC);
-    // float packedC = GetPackedData(uvC); // central
-    // int isoC = isolineIndex(packedC);
-    // gl_FragColor.b = float(isoC) / 256.0;
-    // gl_FragColor.a = 1.0;
     return;
   }
+
+  vec2 ucCfloor = floor(uvC * 258.0) / 258.0;
+  vec4 dataCheck1 = texture2D(bitmapTexture, ucCfloor);
+  vec4 dataCheck2 = texture2D(bitmapTexture, ucCfloor + vec2(1.0, 1.0) / 258.0);
+  if((dataCheck1.r == 0.0 && dataCheck1.g == 0.0) || (dataCheck2.r == 0.0 && dataCheck2.g == 0.0))
+    discard;
 
   // float shift = 1.0 / 258.0; // current zoom let us work out the thickness of the isolines.
   vec2 uvR = uvC + vec2(shift, 0.0);

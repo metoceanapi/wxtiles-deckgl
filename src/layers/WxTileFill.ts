@@ -1,5 +1,5 @@
 import { BitmapLayer, BitmapLayerProps } from '@deck.gl/layers';
-import { picking, project32 } from '@deck.gl/core';
+import { picking, project32, Viewport } from '@deck.gl/core';
 import { Texture2D } from '@luma.gl/core';
 import { ColorStyleStrict, HEXtoRGBA, UIntToColor } from '../utils/wxtools';
 import vs from '../shaders/bitmap-layer-vertex.vs';
@@ -51,20 +51,20 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 	}
 
 	draw(opts: any) {
-		// const { props, context } = this;
-		// const { viewport } = context;
+		const { props, context } = this;
+		const viewport = context.viewport as Viewport & { center: number[] };
 		// const [west, south, east, north] = props.bounds;
 		// const [wnX, wnY] = viewport.project([west, north]);
 		// const [esX, esY] = viewport.project([east, south]);
 		// const pixdif = ((esX - wnX) ** 2 + (esY - wnY) ** 2) ** 0.5;
-		const camPos = this.context.viewport.getCameraPosition();
-		const camCent = this.context.viewport.center;
+		const camPos = viewport.getCameraPosition();
+		const camCent = viewport.center;
 		const sub = Math.sqrt((camPos[0] - camCent[0]) ** 2 + (camPos[1] - camCent[1]) ** 2 + (camPos[2] - camCent[2]) ** 2);
 		this.state.model.setUniforms({
 			// shift: camPos[2] / 100000,
 			shift: sub / 100000,
 			// shift: 1.5 / pixdif /* 1.5 = isoline Width in Pixels */,
-			// shift: 1/255,
+			// shift: 1 / 255,
 		});
 		this.state.model.draw(opts);
 	}

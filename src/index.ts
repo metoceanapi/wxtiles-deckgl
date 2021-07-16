@@ -1,5 +1,5 @@
 import './index.css';
-import { Deck, _GlobeView } from '@deck.gl/core';
+import { Deck } from '@deck.gl/core';
 
 import { createWxTilesLayerProps, WxServerVarsTimeType, WxTilesLayer } from './layers/WxTilesLayer';
 import { setupWxTilesLib, createWxTilesManager } from './libs/wxTilesLib';

@@ -128,10 +128,6 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 					id: id + '-vector',
 					data: data.vectorData,
 					fontFamily: style.vectorType,
-					animated: true,
-					_animate: true,
-					animate: true,
-					_animated: true,
 					getColor: (d: WxTileVectorData) => {
 						return d.color;
 					},

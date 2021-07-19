@@ -3,6 +3,7 @@ import { Deck } from '@deck.gl/core';
 
 import { createWxTilesLayerProps, WxServerVarsTimeType, WxTilesLayer } from './layers/WxTilesLayer';
 import { setupWxTilesLib, createWxTilesManager } from './libs/wxTilesLib';
+export * as DeckGlMapbox from '@deck.gl/mapbox';
 
 export async function start() {
 	const deckgl = new Deck({
@@ -35,10 +36,4 @@ export async function start() {
 	button.addEventListener('click', wxManager.nextTimestep.bind(wxManager));
 }
 
-export {
-	createWxTilesManager,
-	createWxTilesLayerProps,
-	WxTilesLayer,
-	WxServerVarsTimeType,
-	setupWxTilesLib,
-}
+export { createWxTilesManager, createWxTilesLayerProps, WxTilesLayer, WxServerVarsTimeType, setupWxTilesLib };

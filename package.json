@@ -7,7 +7,7 @@
 	"scripts": {
 		"build": "rm -rf dist/ && node build.js && tsc",
 		"start": "DISABLE_HOT_RELOAD=true node watch-public.js",
-		"preversion": "npm run build && bump-changelog-version $npm_package_version && git add CHANGELOG.md"
+		"preversion": "npm run build"
 	},
 	"repository": {
 		"type": "git",

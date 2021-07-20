@@ -442,6 +442,30 @@
 				}
 			}
 		},
+		"@mapbox/geojson-rewind": {
+			"version": "0.5.1",
+			"resolved": "https://registry.npmjs.org/@mapbox/geojson-rewind/-/geojson-rewind-0.5.1.tgz",
+			"integrity": "sha512-eL7fMmfTBKjrb+VFHXCGv9Ot0zc3C0U+CwXo1IrP+EPwDczLoXv34Tgq3y+2mPSFNVUXgU42ILWJTC7145KPTA==",
+			"requires": {
+				"get-stream": "^6.0.1",
+				"minimist": "^1.2.5"
+			}
+		},
+		"@mapbox/geojson-types": {
+			"version": "1.0.2",
+			"resolved": "https://registry.npmjs.org/@mapbox/geojson-types/-/geojson-types-1.0.2.tgz",
+			"integrity": "sha512-e9EBqHHv3EORHrSfbR9DqecPNn+AmuAoQxV6aL8Xu30bJMJR1o8PZLZzpk1Wq7/NfCbuhmakHTPYRhoqLsXRnw=="
+		},
+		"@mapbox/jsonlint-lines-primitives": {
+			"version": "2.0.2",
+			"resolved": "https://registry.npmjs.org/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.2.tgz",
+			"integrity": "sha1-zlblOfg1UrWNENZy6k1vya3HsjQ="
+		},
+		"@mapbox/mapbox-gl-supported": {
+			"version": "2.0.0",
+			"resolved": "https://registry.npmjs.org/@mapbox/mapbox-gl-supported/-/mapbox-gl-supported-2.0.0.tgz",
+			"integrity": "sha512-zu4udqYiBrKMQKwpKJ4hhPON7tz0QR/JZ3iGpHnNWFmH3Sv/ysxlICATUtGCFpsyJf2v1WpFhlzaZ3GhhKmPMA=="
+		},
 		"@mapbox/martini": {
 			"version": "0.2.0",
 			"resolved": "https://registry.npmjs.org/@mapbox/martini/-/martini-0.2.0.tgz",
@@ -457,6 +481,11 @@
 			"resolved": "https://registry.npmjs.org/@mapbox/tiny-sdf/-/tiny-sdf-1.2.5.tgz",
 			"integrity": "sha512-cD8A/zJlm6fdJOk6DqPUV8mcpyJkRz2x2R+/fYcWDYG3oWbG7/L7Yl/WqQ1VZCjnL9OTIMAn6c+BC5Eru4sQEw=="
 		},
+		"@mapbox/unitbezier": {
+			"version": "0.0.0",
+			"resolved": "https://registry.npmjs.org/@mapbox/unitbezier/-/unitbezier-0.0.0.tgz",
+			"integrity": "sha1-FWUb1VOme4WB+zmIEMmK2Go0Uk4="
+		},
 		"@mapbox/vector-tile": {
 			"version": "1.3.1",
 			"resolved": "https://registry.npmjs.org/@mapbox/vector-tile/-/vector-tile-1.3.1.tgz",
@@ -464,6 +493,11 @@
 			"requires": {
 				"@mapbox/point-geometry": "~0.1.0"
 			}
+		},
+		"@mapbox/whoots-js": {
+			"version": "3.1.0",
+			"resolved": "https://registry.npmjs.org/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz",
+			"integrity": "sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q=="
 		},
 		"@math.gl/core": {
 			"version": "3.4.3",
@@ -519,11 +553,26 @@
 				"@babel/runtime": "^7.0.0"
 			}
 		},
+		"@types/geojson": {
+			"version": "7946.0.8",
+			"resolved": "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.8.tgz",
+			"integrity": "sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==",
+			"dev": true
+		},
 		"@types/hammerjs": {
 			"version": "2.0.39",
 			"resolved": "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.39.tgz",
 			"integrity": "sha512-lYR2Y/tV2ujpk/WyUc7S0VLI0a9hrtVIN9EwnrNo5oSEJI2cK2/XrgwOQmXLL3eTulOESvh9qP6si9+DWM9cOA==",
 			"dev": true
+		},
+		"@types/mapbox-gl": {
+			"version": "2.3.3",
+			"resolved": "https://registry.npmjs.org/@types/mapbox-gl/-/mapbox-gl-2.3.3.tgz",
+			"integrity": "sha512-PN7ejo+l3YSdKDTjvtvPifGX9C86NeyRTSvZEGhWb9qkc0e3/CF7gkDmTWhNmZiou7GdKsCKstSvcaZDs2NXUw==",
+			"dev": true,
+			"requires": {
+				"@types/geojson": "*"
+			}
 		},
 		"@types/prop-types": {
 			"version": "15.7.3",
@@ -711,6 +760,11 @@
 				"mdn-data": "2.0.14",
 				"source-map": "^0.6.1"
 			}
+		},
+		"csscolorparser": {
+			"version": "1.0.3",
+			"resolved": "https://registry.npmjs.org/csscolorparser/-/csscolorparser-1.0.3.tgz",
+			"integrity": "sha1-s085HupNqPPpgjHizNjfnAQfFxs="
 		},
 		"csstype": {
 			"version": "3.0.8",
@@ -985,6 +1039,16 @@
 			"dev": true,
 			"optional": true
 		},
+		"geojson-vt": {
+			"version": "3.2.1",
+			"resolved": "https://registry.npmjs.org/geojson-vt/-/geojson-vt-3.2.1.tgz",
+			"integrity": "sha512-EvGQQi/zPrDA6zr6BnJD/YhwAkBP8nnJ9emh3EnHQKVMfg/MRVtPbMYdgVy/IaEmn4UfagD2a6fafPDL5hbtwg=="
+		},
+		"get-stream": {
+			"version": "6.0.1",
+			"resolved": "https://registry.npmjs.org/get-stream/-/get-stream-6.0.1.tgz",
+			"integrity": "sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg=="
+		},
 		"gl-matrix": {
 			"version": "3.3.0",
 			"resolved": "https://registry.npmjs.org/gl-matrix/-/gl-matrix-3.3.0.tgz",
@@ -1018,6 +1082,11 @@
 			"resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.6.tgz",
 			"integrity": "sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==",
 			"dev": true
+		},
+		"grid-index": {
+			"version": "1.1.0",
+			"resolved": "https://registry.npmjs.org/grid-index/-/grid-index-1.1.0.tgz",
+			"integrity": "sha512-HZRwumpOGUrHyxO5bqKZL0B0GlUpwtCAzZ42sgxUPniu33R1LSFH5yrIcBCHjkctCAh3mtWKcKd9J4vDDdeVHA=="
 		},
 		"h3-js": {
 			"version": "3.7.2",
@@ -1170,6 +1239,11 @@
 				"universalify": "^2.0.0"
 			}
 		},
+		"kdbush": {
+			"version": "3.0.0",
+			"resolved": "https://registry.npmjs.org/kdbush/-/kdbush-3.0.0.tgz",
+			"integrity": "sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew=="
+		},
 		"long": {
 			"version": "3.2.0",
 			"resolved": "https://registry.npmjs.org/long/-/long-3.2.0.tgz",
@@ -1181,6 +1255,36 @@
 			"integrity": "sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==",
 			"requires": {
 				"js-tokens": "^3.0.0 || ^4.0.0"
+			}
+		},
+		"mapbox-gl": {
+			"version": "2.3.1",
+			"resolved": "https://registry.npmjs.org/mapbox-gl/-/mapbox-gl-2.3.1.tgz",
+			"integrity": "sha512-xGohzbxxdN3UhHMHy0aweaueYwSoOspSg90gi1T7DIl8Ev0YLjl+ApV6VYtNnR1B9lmwDn8jITfG6Y2JiSEuwg==",
+			"requires": {
+				"@mapbox/geojson-rewind": "^0.5.0",
+				"@mapbox/geojson-types": "^1.0.2",
+				"@mapbox/jsonlint-lines-primitives": "^2.0.2",
+				"@mapbox/mapbox-gl-supported": "^2.0.0",
+				"@mapbox/point-geometry": "^0.1.0",
+				"@mapbox/tiny-sdf": "^1.2.5",
+				"@mapbox/unitbezier": "^0.0.0",
+				"@mapbox/vector-tile": "^1.3.1",
+				"@mapbox/whoots-js": "^3.1.0",
+				"csscolorparser": "~1.0.3",
+				"earcut": "^2.2.2",
+				"geojson-vt": "^3.2.1",
+				"gl-matrix": "^3.3.0",
+				"grid-index": "^1.1.0",
+				"minimist": "^1.2.5",
+				"murmurhash-js": "^1.0.0",
+				"pbf": "^3.2.1",
+				"potpack": "^1.0.1",
+				"quickselect": "^2.0.0",
+				"rw": "^1.3.3",
+				"supercluster": "^7.1.3",
+				"tinyqueue": "^2.0.3",
+				"vt-pbf": "^3.1.1"
 			}
 		},
 		"math.gl": {
@@ -1248,8 +1352,7 @@
 		"minimist": {
 			"version": "1.2.5",
 			"resolved": "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz",
-			"integrity": "sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==",
-			"dev": true
+			"integrity": "sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw=="
 		},
 		"mjolnir.js": {
 			"version": "2.6.0",
@@ -1265,6 +1368,11 @@
 			"resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz",
 			"integrity": "sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=",
 			"dev": true
+		},
+		"murmurhash-js": {
+			"version": "1.0.0",
+			"resolved": "https://registry.npmjs.org/murmurhash-js/-/murmurhash-js-1.0.0.tgz",
+			"integrity": "sha1-sGJ44h/Gw3+lMTcysEEry2rhX1E="
 		},
 		"negotiator": {
 			"version": "0.6.2",
@@ -1334,6 +1442,11 @@
 			"integrity": "sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==",
 			"dev": true
 		},
+		"potpack": {
+			"version": "1.0.1",
+			"resolved": "https://registry.npmjs.org/potpack/-/potpack-1.0.1.tgz",
+			"integrity": "sha512-15vItUAbViaYrmaB/Pbw7z6qX2xENbFSTA7Ii4tgbPtasxm5v6ryKhKtL91tpWovDJzTiZqdwzhcFBCwiMVdVw=="
+		},
 		"probe.gl": {
 			"version": "3.3.1",
 			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.3.1.tgz",
@@ -1373,6 +1486,11 @@
 			"resolved": "https://registry.npmjs.org/qs/-/qs-6.7.0.tgz",
 			"integrity": "sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==",
 			"dev": true
+		},
+		"quickselect": {
+			"version": "2.0.0",
+			"resolved": "https://registry.npmjs.org/quickselect/-/quickselect-2.0.0.tgz",
+			"integrity": "sha512-RKJ22hX8mHe3Y6wH/N3wCM6BWtjaxIyyUIkpHOvfFnxdI4yD4tBXEBKSbriGujF6jnSVkJrffuo6vxACiSSxIw=="
 		},
 		"range-parser": {
 			"version": "1.2.1",
@@ -1512,6 +1630,19 @@
 			"integrity": "sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=",
 			"dev": true
 		},
+		"supercluster": {
+			"version": "7.1.3",
+			"resolved": "https://registry.npmjs.org/supercluster/-/supercluster-7.1.3.tgz",
+			"integrity": "sha512-7+bR4FbF5SYsmkHfDp61QiwCKtwNDyPsddk9TzfsDA5DQr5Goii5CVD2SXjglweFCxjrzVZf945ahqYfUIk8UA==",
+			"requires": {
+				"kdbush": "^3.0.0"
+			}
+		},
+		"tinyqueue": {
+			"version": "2.0.3",
+			"resolved": "https://registry.npmjs.org/tinyqueue/-/tinyqueue-2.0.3.tgz",
+			"integrity": "sha512-ppJZNDuKGgxzkHihX8v9v9G5f+18gzaTfrukGrq6ueg0lmH4nqVnA2IPG0AEH3jKEk2GRJCUhDoqpoiw3PHLBA=="
+		},
 		"tmp": {
 			"version": "0.2.1",
 			"resolved": "https://registry.npmjs.org/tmp/-/tmp-0.2.1.tgz",
@@ -1575,6 +1706,16 @@
 			"resolved": "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz",
 			"integrity": "sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=",
 			"dev": true
+		},
+		"vt-pbf": {
+			"version": "3.1.3",
+			"resolved": "https://registry.npmjs.org/vt-pbf/-/vt-pbf-3.1.3.tgz",
+			"integrity": "sha512-2LzDFzt0mZKZ9IpVF2r69G9bXaP2Q2sArJCmcCgvfTdCCZzSyz4aCLoQyUilu37Ll56tCblIZrXFIjNUpGIlmA==",
+			"requires": {
+				"@mapbox/point-geometry": "0.1.0",
+				"@mapbox/vector-tile": "^1.3.1",
+				"pbf": "^3.2.1"
+			}
 		},
 		"wrappy": {
 			"version": "1.0.2",

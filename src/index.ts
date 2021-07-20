@@ -3,8 +3,8 @@ import { Deck } from '@deck.gl/core';
 
 import { createWxTilesLayerProps, WxServerVarsTimeType, WxTilesLayer } from './layers/WxTilesLayer';
 import { setupWxTilesLib, createWxTilesManager } from './libs/wxTilesLib';
+export { mapAddLayer } from './libs/mapAddLayer';
 export * as DeckGlMapbox from '@deck.gl/mapbox';
-
 export async function start() {
 	const deckgl = new Deck({
 		initialViewState: { latitude: -38, longitude: 176, zoom: 4 },

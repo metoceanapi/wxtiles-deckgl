@@ -2,7 +2,7 @@ const esbuild = require('esbuild');
 // const sassPlugin = require('esbuild-plugin-sass');
 
 const sharedConfig = {
-	entryPoints: ['src/index.ts'],
+	entryPoints: ['src/prod-index.ts'],
 	bundle: true,
 	// plugins: [sassPlugin()],
 	loader: {

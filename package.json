@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "WxTile deck.gl lib to render wxtiles datalayers",
 	"main": "dist/es/bundle.js",
-	"types": "dist/es/index.d.ts",
+	"types": "dist/es/prod-index.d.ts",
 	"scripts": {
 		"build": "rm -rf dist/ && node build.js && tsc",
 		"start": "DISABLE_HOT_RELOAD=true node watch-public.js",

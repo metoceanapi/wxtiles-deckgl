@@ -21,33 +21,6 @@ export const start = async () => {
 	await setupWxTilesLib();
 
 	map.on('load', async () => {
-		const params =
-			//
-			// ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
-			// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
-			// ['ecwmf.global', 'air.humidity.at-2m', 'base'];
-			// ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
-			// ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
-			// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
-			['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
-		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any);
-		const layer = mapAddLayer(map, WxTilesLayer, wxProps);
-
-		// console.log({ wxProps });
-		// var time = '2021-07-18T15:00:00Z';
-		// var time2 = '2021-07-18T18:00:00Z';
-		// const layer = new MapboxLayer({
-		// 	type: WxTilesLayer,
-		// 	...wxProps,
-		// });
-		// map.addLayer(layer);
-		// setTimeout(() => {
-		// 	layer.setProps({
-		// 		...wxProps,
-		// 		data: wxProps.wxprops.URITime.replace('{time}', time),
-		// 	});
-		// }, 2e3);
-
 		// Classic mapbox layers
 		map.addSource('pointLayerSource', {
 			type: 'geojson',
@@ -112,6 +85,18 @@ export const start = async () => {
 			},
 		});
 
+		const params =
+			//
+			['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
+		// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
+		// ['ecwmf.global', 'air.humidity.at-2m', 'base'];
+		// ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
+		// ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
+		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
+		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any);
+		const layer = mapAddLayer(map, WxTilesLayer, wxProps);
+
 		let isPlaying = false;
 		const play = async () => {
 			do {
@@ -122,6 +107,8 @@ export const start = async () => {
 		const nextButton = document.getElementById('next');
 		const prevButton = document.getElementById('prev');
 		const playButton = document.getElementById('play');
+		const removeButton = document.getElementById('remove');
+		removeButton?.addEventListener('click', () => layer.remove());
 		nextButton?.addEventListener('click', () => layer.nextTimestep());
 		prevButton?.addEventListener('click', () => layer.prevTimestep());
 		playButton?.addEventListener('click', () => {

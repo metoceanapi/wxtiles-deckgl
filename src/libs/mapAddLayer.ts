@@ -57,5 +57,10 @@ export const mapAddLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: n
 			await renderCurrentTimestep();
 		},
 		cancel: () => cancelPrevRequest(),
+		remove: () => {
+			cancelPrevRequest();
+			cancelPrevRequest = () => {};
+			prevLayerId && map.removeLayer(prevLayerId)
+		}
 	};
 };

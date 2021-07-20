@@ -61,4 +61,4 @@ typings/
 
 # Dist file
 /dist
-public/wxtiles-deckgl
+public/wxtiles-gl

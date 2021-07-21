@@ -8,8 +8,10 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 	let prevLayer: Layer<any> | null = null;
 
 	const getDeckglLayers = (): Layer<any>[] => {
-		return ((deckgl as any).layerManager).getLayers();
+		return ((deckgl as any).layerManager.getLayers() as Layer<any>[]).filter((layer) => layer.parent === null);
 	};
+
+	let cancelPrevRequest = () => {};
 
 	const renderCurrentTimestep = async () => {
 		const newId = props.id + currentIndex;
@@ -27,15 +29,12 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 					reject(reject);
 				},
 			});
-			console.log(deckgl);
 			const currentLayers = getDeckglLayers();
-			console.log([...currentLayers, newWxtilesLayer]);
-			deckgl.setProps({ layers: [...currentLayers, newWxtilesLayer] });
+			deckgl.setProps({ layers: [newWxtilesLayer, ...currentLayers] });
 		});
-		return
 		const currentLayers = getDeckglLayers();
 		const filteredLayers = currentLayers.filter((layer) => layer !== prevLayer);
-		console.log(filteredLayers);
+		console.log(currentLayers);
 		deckgl.setProps({ layers: filteredLayers });
 		prevLayer = wxtilesLayer;
 	};

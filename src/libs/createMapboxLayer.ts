@@ -61,7 +61,10 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 			currentIndex = --currentIndex % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},
-		cancel: () => cancelPrevRequest(),
+		cancel: () => {
+			cancelPrevRequest();
+			cancelPrevRequest = () => {};
+		},
 		remove: () => {
 			cancelPrevRequest();
 			cancelPrevRequest = () => {};

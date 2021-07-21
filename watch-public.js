@@ -58,8 +58,7 @@ esbuild
 
 		const url = `http://0.0.0.0:${PORT}`;
 		app.listen(PORT, () => {
-			console.log(`Dev is running at ${url}`);
-			console.log(`You can visit: ${url}/mapbox or ${url}/deckgl`)
+			console.log(`See examples: \n${url}/mapbox\n${url}/deckgl`)
 		});
 	})
 	.catch((e) => console.error(e.message));

@@ -4,22 +4,34 @@ import { WxtilesGlLayer } from './WxtilesGlLayer';
 import { Deck, LayerManager, Layer } from '@deck.gl/core';
 
 export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): WxtilesGlLayer => {
-	let currentIndex = 0;
-	let prevLayer: Layer<any> | null = null;
-
 	const getDeckglLayers = (): Layer<any>[] => {
 		return ((deckgl as any).layerManager.getLayers() as Layer<any>[]).filter((layer) => layer.parent === null);
 	};
 
-	let cancelPrevRequest = () => {};
+	let currentIndex = 0;
+	let prevLayer: Layer<any> | null = null;
 
+	let cancelPrevRequest = () => {};
 	const renderCurrentTimestep = async () => {
-		const newId = props.id + currentIndex;
-		const URI = props.wxprops.URITime.replace('{time}', props.wxprops.meta.times[currentIndex]);
-		const wxtilesLayer = await new Promise<WxTilesLayer>((resolve, reject) => {
+		const { cancel, layerId, promise } = renderLayerByTimeIndex(currentIndex);
+		cancelPrevRequest();
+		cancelPrevRequest = cancel;
+		const layer = await promise;
+		if (prevLayer) {
+			const currentLayers = getDeckglLayers();
+			deckgl.setProps({ layers: currentLayers.filter((layer) => layer !== prevLayer) });
+		}
+		prevLayer = layer;
+		cancelPrevRequest = () => {};
+	};
+
+	const renderLayerByTimeIndex = (index: number) => {
+		const layerId = props.id + index;
+		const URI = props.wxprops.URITime.replace('{time}', props.wxprops.meta.times[index]);
+		const promise = new Promise<WxTilesLayer>((resolve, reject) => {
 			const newWxtilesLayer = new WxTilesLayer({
 				...props,
-				id: newId,
+				id: layerId,
 				data: URI,
 				onViewportLoad: (data) => {
 					props?.onViewportLoad?.(data);
@@ -32,23 +44,37 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 			const currentLayers = getDeckglLayers();
 			deckgl.setProps({ layers: [newWxtilesLayer, ...currentLayers] });
 		});
-		const currentLayers = getDeckglLayers();
-		const filteredLayers = currentLayers.filter((layer) => layer !== prevLayer);
-		console.log(currentLayers);
-		deckgl.setProps({ layers: filteredLayers });
-		prevLayer = wxtilesLayer;
+
+		return {
+			promise,
+			layerId,
+			cancel: () => {
+				const currentLayers = getDeckglLayers();
+				deckgl.setProps({ layers: currentLayers.filter(({ id }) => id !== layerId) });
+			},
+		};
 	};
 
 	return {
-		cancel: () => false,
 		nextTimestep: async () => {
 			currentIndex = ++currentIndex % props.wxprops.meta.times.length;
-			return renderCurrentTimestep();
+			await renderCurrentTimestep();
 		},
 		prevTimestep: async () => {
 			currentIndex = --currentIndex % props.wxprops.meta.times.length;
-			return renderCurrentTimestep();
+			await renderCurrentTimestep();
 		},
-		remove: () => false,
+		cancel: () => {
+			cancelPrevRequest();
+			cancelPrevRequest = () => {};
+		},
+		remove: () => {
+			cancelPrevRequest();
+			cancelPrevRequest = () => {};
+			if (prevLayer) {
+				const currentLayers = getDeckglLayers();
+				deckgl.setProps({ layers: currentLayers.filter((layer) => layer !== prevLayer) });
+			}
+		},
 	};
 };

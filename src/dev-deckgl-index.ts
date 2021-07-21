@@ -4,12 +4,23 @@ import { Deck } from '@deck.gl/core';
 import { createWxTilesLayerProps, WxServerVarsTimeType, WxTilesLayer } from './layers/WxTilesLayer';
 import { createDeckGlLayer } from './libs/createDeckGlLayer';
 import { setupWxTilesLib } from './libs/libTools';
+import { DebugTilesLayer } from './layers/DebugTilesLayer';
 
 export async function start() {
 	const deckgl = new Deck({
 		initialViewState: { latitude: -38, longitude: 176, zoom: 4 },
 		controller: true,
 		parent: document.getElementById('map')!,
+		layers: [
+			new DebugTilesLayer({
+				id: 'debugtiles',
+				data: { color: [255, 0, 0] },
+				maxZoom: 24,
+				minZoom: 0,
+				pickable: false,
+				tileSize: 256,
+			}),
+		],
 	});
 
 	const params: WxServerVarsTimeType =
@@ -34,8 +45,6 @@ export async function start() {
 			await layer.nextTimestep();
 		} while (isPlaying);
 	};
-
-	console.log('semka')
 
 	const nextButton = document.getElementById('next');
 	const prevButton = document.getElementById('prev');

@@ -25,7 +25,6 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 	const renderLayerByTimeIndex = (index: number) => {
 		const uri = props.wxprops.URITime.replace('{time}', props.wxprops.meta.times[index]);
 		const layerId = props.id + index;
-		let canceled = false;
 		const promise = new Promise<void>((resolve, reject) => {
 			const layer = new MapboxLayer({
 				type: LayerClass,
@@ -33,11 +32,11 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 				id: layerId,
 				data: uri,
 				onViewportLoad: () => {
-					canceled ? reject(new Error('Cancelled')) : resolve();
+					resolve();
 				},
 				onTileError: (error) => {
 					console.error(error);
-					canceled ? reject(new Error('Cancelled')) : resolve();
+					reject(new Error('Cancelled'));
 				},
 			});
 			map.addLayer(layer, prevLayerId);
@@ -46,7 +45,6 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 			layerId,
 			promise,
 			cancel: () => {
-				canceled = true;
 				map.removeLayer(layerId);
 			},
 		};
@@ -69,6 +67,7 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 			cancelPrevRequest();
 			cancelPrevRequest = () => {};
 			prevLayerId && map.removeLayer(prevLayerId);
+			prevLayerId = undefined;
 		},
 	};
 };

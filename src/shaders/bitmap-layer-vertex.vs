@@ -11,14 +11,6 @@ uniform float coordinateConversion;
 
 const vec3 pickingColor = vec3(1.0, 0.0, 0.0);
 
-// SERG
-varying vec2 vTexCoordC;
-// Tiles are 258x258. 1 pixel border is used to calc isolines and proper interpolation. It needs to be excluded from 'tile filling' process.
-// Modifying 'vertexPosition' in order to skip borders.
-const float tileSzExInv = 1.0 / 258.0;
-const float tileM = 256.0 / 258.0;
-const vec2 one = vec2(tileSzExInv, tileSzExInv);
-
 void main(void) {
   geometry.worldPosition = positions;
   geometry.uv = texCoords;
@@ -37,6 +29,4 @@ void main(void) {
 
   vec4 color = vec4(0.0);
   DECKGL_FILTER_COLOR(color, geometry);
-
-  vTexCoordC = texCoords * tileM + one;
 }

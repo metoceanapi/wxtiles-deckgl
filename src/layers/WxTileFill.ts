@@ -1,5 +1,5 @@
 import { BitmapLayer, BitmapLayerProps } from '@deck.gl/layers';
-import { picking, project32 } from '@deck.gl/core';
+import { picking, project32, Viewport } from '@deck.gl/core';
 import { Texture2D } from '@luma.gl/core';
 import { ColorStyleStrict, HEXtoRGBA, UIntToColor } from '../utils/wxtools';
 import vs from '../shaders/bitmap-layer-vertex.vs';
@@ -25,24 +25,24 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		const { style } = this.props.data;
 		const fill = style.fill !== 'none';
 		const isolineColorUI = HEXtoRGBA(style.isolineColor);
-		let isoline = 3;
-		switch (style.isolineColor) {
-			case 'none':
-				isoline = 0;
-				break;
-			case 'inverted':
-				isoline = 1;
-				break;
-			case 'fill':
-				isoline = 2;
-				break;
-		}
+		const isoline =
+			{
+				none: 0,
+				inverted: 1,
+				fill: 2,
+			}[style.isolineColor] || 3;
+
+		const { desaturate, transparentColor, tintColor, bounds } = this.props;
 		this.state.model.setUniforms({
 			clutTextureUniform: this.props.data.clutTextureUniform,
 			bitmapTexture: this.props.data.imageTextureUniform,
 			fill,
 			isoline,
 			isolineColor: UIntToColor(isolineColorUI),
+			desaturate,
+			transparentColor: transparentColor!.map((x) => x! / 255),
+			tintColor: tintColor!.slice(0, 3).map((x) => x / 255),
+			bounds,
 		});
 	}
 
@@ -51,20 +51,35 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 	}
 
 	draw(opts: any) {
-		const { props, context } = this;
-		const { viewport } = context;
-		const [west, south, east, north] = props.bounds;
-		const [wnX, wnY] = viewport.project([west, north]);
-		const [esX, esY] = viewport.project([east, south]);
-		const pixdif = ((esX - wnX) ** 2 + (esY - wnY) ** 2) ** 0.5;
-		this.state.model.setUniforms({
-			// bitmapTexture: this.props.data.imageTextureUniform,
-			shift: 1.5 / pixdif /* 1.5 = isoline Width in Pixels */,
-			// shift: 1/255,
+		const { uniforms, moduleParameters } = opts;
+		const { model, coordinateConversion, disablePicking } = this.state;
+		const { context } = this;
+
+		if ((moduleParameters.pickingActive && disablePicking) || !model) {
+			return;
+		}
+		const viewport = context.viewport as Viewport & { center: number[] };
+
+		const camPos = viewport.getCameraPosition();
+		const camCent = viewport.center;
+		const sub = Math.sqrt((camPos[0] - camCent[0]) ** 2 + (camPos[1] - camCent[1]) ** 2 + (camPos[2] - camCent[2]) ** 2);
+		model.setUniforms({
+			...uniforms,
+			// shift: 1 / 255,
+			shift: sub / 50000,
+			coordinateConversion,
 		});
 		this.state.model.draw(opts);
-		// super.draw(opts);
 	}
 }
 
 WxTileFill.layerName = 'WxTileFill';
+WxTileFill.defaultProps = {
+	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
+	// More context: because of the blending mode we're using for ground imagery,
+	// alpha is not effective when blending the bitmap layers with the base map.
+	// Instead we need to manually dim/blend rgb values with a background color.
+	transparentColor: { type: 'color', value: [0, 0, 0, 0] },
+	tintColor: { type: 'color', value: [255, 255, 255] },
+	opacity: { type: 'number', min: 0, max: 1, value: 1 },
+};

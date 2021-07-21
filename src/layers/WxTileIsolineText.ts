@@ -3,7 +3,7 @@ import { RGBAColor } from '@deck.gl/core/utils/color';
 import { TextLayer, TextLayerProps } from '@deck.gl/layers';
 
 export interface WxTileIsolineTextData {
-	pos: [number, number];
+	position: [number, number];
 	text: string;
 	angle: number;
 	color: RGBAColor;
@@ -29,10 +29,21 @@ WxTileIsolineText.defaultProps = {
 	getSize: 12,
 	outlineWidth: 5, // to appear in ver 8.5 // TODO
 	outlineColor: [255, 255, 255], // to appear in ver 8.5
-	getTextAnchor: 'middle',
-	getAlignmentBaseline: 'center',
-	getText: (d: WxTileIsolineTextData) => d.text,
-	getPosition: (d: WxTileIsolineTextData) => d.pos,
-	getColor: (d: WxTileIsolineTextData) => d.color,
-	getAngle: (d: WxTileIsolineTextData) => d.angle,
+	// getTextAnchor: 'middle', // default
+	// getAlignmentBaseline: 'center', // default
+	// getText: (d: WxTileIsolineTextData) => d.text, // default
+	// getPosition: (d: WxTileIsolineTextData) => d.position, // default
+	getColor: (d: WxTileIsolineTextData) => {
+		return d.color;
+	},
+	// getAngle: (d: WxTileIsolineTextData) => d.angle,
+	getAngle: {
+		type: 'function',
+		value: (d) => {
+			return d.angle;
+		},
+		compare: false,
+	},
+	animated: true,
+	_animate: true,
 };

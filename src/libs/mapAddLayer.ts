@@ -60,7 +60,7 @@ export const mapAddLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: n
 		remove: () => {
 			cancelPrevRequest();
 			cancelPrevRequest = () => {};
-			prevLayerId && map.removeLayer(prevLayerId)
-		}
+			prevLayerId && map.removeLayer(prevLayerId);
+		},
 	};
 };

@@ -98,7 +98,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		const { tile, id, data } = args;
 		if (!data) return null;
 		const { west, south, east, north } = tile.bbox;
-		const { wxprops } = this.props;
+		const { wxprops, desaturate, transparentColor, tintColor, opacity } = this.props;
 		const { style } = wxprops;
 		return [
 			new WxTileFill({
@@ -111,6 +111,10 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				bounds: [west, south, east, north],
 				image: null,
 				pickable: true,
+				opacity: opacity,
+				// desaturate: desaturate,
+				// transparentColor: transparentColor,
+				// tintColor: tintColor,
 			}),
 			new WxTileIsolineText({
 				id: id + '-isotextBack',
@@ -128,6 +132,9 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 					id: id + '-vector',
 					data: data.vectorData,
 					fontFamily: style.vectorType,
+					getColor: (d: WxTileVectorData) => {
+						return d.color;
+					},
 				}),
 			// new WxVectorAnimation(),
 		];
@@ -244,13 +251,13 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 					const tx = 0.5 + (lic !== lir ? (rdc - iso) / (rdc - rdr) : 0); // x subpixel shift to match isoline position
 					const ty = 0.5 + (lic !== lib ? (rdc - iso) / (rdc - rdb) : 0); // y subpixel shift to match isoline position
 
-					const pos = PixelsToLonLat(ulx + px + tx, uly + py + ty, z); // [lon, lat] of the pixel
+					const position = PixelsToLonLat(ulx + px + tx, uly + py + ty, z); // [lon, lat] of the pixel
 					const text = CLUT.ticks[mli].dataString; // textual data on isoline
 					const color = UIntToColor(style.isolineColor === 'inverted' ? ~CLUT.colorsI[dc] : CLUT.colorsI[dc]);
 					let angle = Math.atan2(dc - dr, dc - db) * 57.3; // 57.3 = 180 / Math.PI;
 					if (-90 > angle || angle > 90) angle += 180;
 
-					res.push({ pos, text, angle, color });
+					res.push({ position, text, angle, color });
 				}
 			} // for x
 		} // for y
@@ -282,12 +289,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				if (!d) continue;
 				const angle = 180 - (min + ldmul * l[i] + style.addDegrees); // unpack data and add degree correction from style
 				const text = 'F';
-				const pos = PixelsToLonLat(ulx + px + 0.5, uly + py + 0.5, z); // [lon, lat] of the pixel
+				const position = PixelsToLonLat(ulx + px + 0.5, uly + py + 0.5, z); // [lon, lat] of the pixel
 				const color = UIntToColor(
 					style.vectorColor === 'inverted' ? ~CLUT.colorsI[d] : style.vectorColor === 'fill' ? CLUT.colorsI[d] : HEXtoRGBA(style.vectorColor)
 				);
 
-				res.push({ pos, text, angle, color });
+				res.push({ position, text, angle, color });
 			}
 		}
 		return res;
@@ -348,12 +355,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				const sm = variables[0].includes('current') ? 5 : 0.2; // arrows are longer for currents than wind
 				const vecCode = Math.min(CLUT.DataToKnots(vecLen) * sm, 25 /* to fit .ttf */) + 65; /* A */
 				const text = String.fromCharCode(vecCode);
-				const pos = PixelsToLonLat(ulx + px, uly + py, z); // [lon, lat] of the pixel
+				const position = PixelsToLonLat(ulx + px, uly + py, z); // [lon, lat] of the pixel
 				const color = UIntToColor(
 					style.vectorColor === 'inverted' ? ~CLUT.colorsI[l[i]] : style.vectorColor === 'fill' ? CLUT.colorsI[l[i]] : HEXtoRGBA(style.vectorColor)
 				);
 
-				res.push({ pos, text, angle, color });
+				res.push({ position, text, angle, color });
 			}
 		}
 		return res;
@@ -365,6 +372,16 @@ WxTilesLayer.defaultProps = {
 	tileSize: 256,
 	pickable: true,
 	loadOptions: { image: { type: 'data', decode: true } },
+	// animated: true,
+	// _animate: true,
+
+	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
+	// More context: because of the blending mode we're using for ground imagery,
+	// alpha is not effective when blending the bitmap layers with the base map.
+	// Instead we need to manually dim/blend rgb values with a background color.
+	transparentColor: { type: 'color', value: [0, 0, 0, 0] },
+	tintColor: { type: 'color', value: [255, 255, 255] },
+	opacity: { type: 'number', min: 0, max: 1, value: 1 },
 };
 
 export type WxServerVarsTimeType = [string, string | [string, string], string];
@@ -372,7 +389,7 @@ export type WxServerVarsTimeType = [string, string | [string, string], string];
 export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType) {
 	const [dataSet, variables, styleName] = params;
 	const { URITime, meta } = await getURIFromDatasetName(server, dataSet);
-	const wxTilesProps = {
+	const wxTilesProps: IWxTilesLayerProps = {
 		id: `wxtiles/${dataSet}/${variables}/`,
 		// WxTiles settings
 		wxprops: {

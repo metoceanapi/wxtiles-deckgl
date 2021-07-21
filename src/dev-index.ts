@@ -95,6 +95,7 @@ export const start = async () => {
 		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
 		// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
 		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any);
+		wxProps.opacity = 0.2;
 		const layer = mapAddLayer(map, WxTilesLayer, wxProps);
 
 		let isPlaying = false;

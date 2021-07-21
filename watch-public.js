@@ -7,7 +7,7 @@ const disableHotReload = process.env.DISABLE_HOT_RELOAD === 'true';
 
 esbuild
 	.build({
-		entryPoints: ['src/index.ts'],
+		entryPoints: ['src/dev-index.ts'],
 		bundle: true,
 		// plugins: [sassPlugin()],
 		loader: {

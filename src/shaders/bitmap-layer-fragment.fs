@@ -80,74 +80,15 @@ vec3 packUVsIntoRGB(vec2 uv) {
   return vec3(uv8bit, fractions) / 255.;
 }
 
-varying vec2 vTexCoordC;
+const float tileSzExInv = 1.0 / 258.0;
+const float tileM = 256.0 / 258.0;
+const vec2 one = vec2(tileSzExInv, tileSzExInv);
+
 uniform sampler2D clutTextureUniform;
 uniform float shift; // the wize of isoline
 uniform int isoline;
 uniform vec3 isolineColor;
 uniform bool fill;
-
-// Consts
-  // Modifying 'vertexPosition' in order to skip borders.
-// const float tileSzExInv = 1.0 / 258.0;
-// float shift = tileSzExInv / zoom; // current zoom let us work out the thickness of the isolines.
-// const float tileM = 256.0 / 258.0;
-// const vec2 one = vec2(tileSzExInv, tileSzExInv);
-
-// Func Protos
-float GetPackedData(vec2);
-vec4 CLUT(float);
-int isolineIndex(float);
-
-void main(void) {
-  vec2 uvC = vTexCoordC;
-
-  if(picking_uActive) {
-    gl_FragColor = texture2D(bitmapTexture, uvC);
-    return;
-  }
-
-  vec2 ucCfloor = floor(uvC * 258.0) / 258.0;
-  vec4 dataCheck1 = texture2D(bitmapTexture, ucCfloor);
-  vec4 dataCheck2 = texture2D(bitmapTexture, ucCfloor + vec2(1.0, 1.0) / 258.0);
-  if((dataCheck1.r == 0.0 && dataCheck1.g == 0.0) || (dataCheck2.r == 0.0 && dataCheck2.g == 0.0))
-    discard;
-
-  // float shift = 1.0 / 258.0; // current zoom let us work out the thickness of the isolines.
-  vec2 uvR = uvC + vec2(shift, 0.0);
-  vec2 uvD = uvC + vec2(0.0, shift);
-
-  float packedC = GetPackedData(uvC); // central
-  if(packedC < 0.00001)
-    discard;
-
-  vec4 colorC = CLUT(packedC);
-  if(fill) {
-    gl_FragColor = colorC;
-  }
-  // return;
-  if(isoline != 0) {
-    int isoC = isolineIndex(packedC);
-
-    float packedR = GetPackedData(uvR); // central
-    int isoR = isolineIndex(packedR);
-
-    float packedD = GetPackedData(uvD); // central
-    int isoD = isolineIndex(packedD);
-
-    if(isoC != isoD || isoC != isoR) {
-      gl_FragColor = vec4(isolineColor, 1.0); // isoline != 1 or 2
-
-      if(isoline == 1)
-        gl_FragColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);
-      if(isoline == 2)
-        gl_FragColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);
-    }
-  }
-  // geometry.uv = uvC;
-  // DECKGL_FILTER_COLOR(gl_FragColor, geometry);
-
-}
 
 float GetPackedData(vec2 texCoord) {
   vec4 tex = texture2D(bitmapTexture, texCoord);
@@ -163,4 +104,70 @@ int isolineIndex(float pos) {
   // bottom pixel is an Isoline index, so if central index != neighbore index then the pixel is on isoline
   float bottomPixel = texture2D(clutTextureUniform, vec2(pos, 1.0)).r;
   return int(bottomPixel * 255.0);
+}
+
+void main(void) {
+
+  vec2 uv = vTexCoord;
+  if(coordinateConversion < -0.5) {
+    vec2 lnglat = mercator_to_lnglat(vTexPos);
+    uv = getUV(lnglat);
+  } else if(coordinateConversion > 0.5) {
+    vec2 commonPos = lnglat_to_mercator(vTexPos);
+    uv = getUV(commonPos);
+  }
+
+  uv = uv * tileM + one; // 256 -> 258 shifted
+
+  if(picking_uActive) {
+    gl_FragColor = texture2D(bitmapTexture, uv);
+    return;
+  }
+
+  vec2 uvC = uv; // central pixel
+
+  // check for NODATA
+  vec2 ucCfloor = floor(uvC * 258.0) / 258.0;
+  vec4 dataCheck1 = texture2D(bitmapTexture, ucCfloor);
+  vec4 dataCheck2 = texture2D(bitmapTexture, ucCfloor + vec2(1.0, 1.0) / 258.0);
+  if((dataCheck1.r == 0.0 && dataCheck1.g == 0.0) || (dataCheck2.r == 0.0 && dataCheck2.g == 0.0))
+    discard;
+
+  // calc Right pixel coord 
+  vec2 uvR = uvC + vec2(shift, 0.0);
+  // calc Bottom pixel coord 
+  vec2 uvB = uvC + vec2(0.0, shift);
+
+  vec4 bitmapColor = vec4(0.0); // result Color
+
+  float packedC = GetPackedData(uvC); // central data
+  vec4 colorC = CLUT(packedC);
+  if(fill) {
+    bitmapColor = colorC;
+  }
+
+  // return;
+  if(isoline != 0) {
+    int isoC = isolineIndex(packedC);
+
+    float packedR = GetPackedData(uvR); // central
+    int isoR = isolineIndex(packedR);
+
+    float packedD = GetPackedData(uvB); // central
+    int isoD = isolineIndex(packedD);
+
+    if(isoC != isoD || isoC != isoR) {
+      bitmapColor = vec4(isolineColor, 1.0); // isoline != 1 or 2
+
+      if(isoline == 1)
+        bitmapColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);
+      if(isoline == 2)
+        bitmapColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);
+    }
+  }
+
+  gl_FragColor = apply_opacity(color_tint(color_desaturate(bitmapColor.rgb)), bitmapColor.a * opacity);
+
+  geometry.uv = uvC;
+  DECKGL_FILTER_COLOR(gl_FragColor, geometry);
 }

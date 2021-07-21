@@ -11,8 +11,8 @@
 		<!-- <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script> -->
 
 		<!-- wxtile js -->
-		<link href="./wxtiles-deckgl/wxtiles-deckgl.css" rel="stylesheet" />
 		<script src="./wxtiles-deckgl/wxtiles-deckgl.js"></script>
+		<link rel="stylesheet" href="./index.css" />
 
 		<style type="text/css">
 			body {
@@ -24,63 +24,13 @@
 	</head>
 
 	<body class="fill-window">
-		<!-- <div style="width: fit-content; position: absolute; max-width: 600px; z-index: 1000">
-			<canvas id="legend" width="600px" height="40px" style="border: 2px"></canvas>
-			<div id="layerPanel" style="width: fit-content" ondblclick="event.stopPropagation();">
-				<div style="border-color: black; border-style: solid; border-width: 2px; background-color: rgba(135, 206, 250, 0.8)" onclick="event.stopPropagation();">
-					<div>
-						Select DataSet:
-						<select id="selectDataSet"></select>
-					</div>
-					<div>
-						Select Variable:
-						<select id="selectVariable"></select>
-						<button id="buttonHold">hold</button>
-						<button id="buttonClear">clear</button>
-					</div>
-					<div>
-						Select time:
-						<select id="selectTime"></select>
-						<button id="buttonPlayStop">play</button>
-						<input id="coarseLevel" type="number" style="width: 3ch" min="0" max="2" step="1" value="0" />corse
-						<input id="animDelay" type="number" style="width: 5ch" min="0" max="900" step="100" value="200" />ms delay
-					</div>
-					<div>
-						Select style:
-						<select id="selectStyle"></select>
-					</div>
-				</div>
-			</div>
-			<div id="styleEditor">
-				<div
-					style="display: flex; flex-direction: column"
-					onclick="event.stopPropagation();"
-					ondblclick="event.stopPropagation();"
-					onwheel="event.stopPropagation();"
-					onmousedown="event.stopPropagation();"
-					onmousemove="event.stopPropagation();"
-				>
-					<button id="customStyleButton" style="height: 1.5em; width: fit-content; background-color: gray">show custom style</button>
-					<textarea id="customStyle" style="max-width: 30vw; max-height: 50vh"></textarea>
-				</div>
-			</div>
-		</div> -->
-		<div
-			id="infoPanel"
-			style="
-				z-index: 1000;
-				position: absolute;
-				bottom: 10px;
-				width: 30em;
-				height: 2em;
-				border-color: black;
-				border-style: solid;
-				border-width: 2px;
-				background-color: rgba(135, 206, 250, 0.8);
-			"
-		></div>
-		<!-- index -->
-		<link rel="stylesheet" href="./index.css" />
+		<div id="map" style="height: 100vh"></div>
+		<div style="position: absolute; z-index: 10; top: 10px">
+			<button id="prev">Prev</button>
+			<button id="next">Next</button>
+			<button id="play">Play</button>
+			<button id="remove">Remove</button>
+		</div>
 		<script src="./index.js"></script>
 	</body>
 </html>

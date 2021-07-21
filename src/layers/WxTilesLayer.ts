@@ -12,7 +12,7 @@ import { IWxTilesLayerData, IWxTilesLayerProps } from './IWxTileLayer';
 import { HEXtoRGBA, UIntToColor, WxGetColorStyles } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
-import { getURIfromDatasetName } from '../libs/libTools';
+import { getURIfromDatasetName as getURIFromDatasetName } from '../libs/libTools';
 
 // type WxTilesLayerData = string;
 
@@ -98,7 +98,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		const { tile, id, data } = args;
 		if (!data) return null;
 		const { west, south, east, north } = tile.bbox;
-		const { wxprops } = this.props;
+		const { wxprops, desaturate, transparentColor, tintColor, opacity } = this.props;
 		const { style } = wxprops;
 		return [
 			new WxTileFill({
@@ -111,6 +111,10 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				bounds: [west, south, east, north],
 				image: null,
 				pickable: true,
+				opacity: opacity,
+				// desaturate: desaturate,
+				// transparentColor: transparentColor,
+				// tintColor: tintColor,
 			}),
 			new WxTileIsolineText({
 				id: id + '-isotextBack',
@@ -368,16 +372,24 @@ WxTilesLayer.defaultProps = {
 	tileSize: 256,
 	pickable: true,
 	loadOptions: { image: { type: 'data', decode: true } },
-	animated: true,
-	_animate: true,
+	// animated: true,
+	// _animate: true,
+
+	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
+	// More context: because of the blending mode we're using for ground imagery,
+	// alpha is not effective when blending the bitmap layers with the base map.
+	// Instead we need to manually dim/blend rgb values with a background color.
+	transparentColor: { type: 'color', value: [0, 0, 0, 0] },
+	tintColor: { type: 'color', value: [255, 255, 255] },
+	opacity: { type: 'number', min: 0, max: 1, value: 1 },
 };
 
 export type WxServerVarsTimeType = [string, string | [string, string], string];
 
 export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType) {
 	const [dataSet, variables, styleName] = params;
-	const { URITime, meta } = await getURIfromDatasetName(server, dataSet);
-	const wxTilesProps = {
+	const { URITime, meta } = await getURIFromDatasetName(server, dataSet);
+	const wxTilesProps: IWxTilesLayerProps = {
 		id: `wxtiles/${dataSet}/${variables}/`,
 		// WxTiles settings
 		wxprops: {

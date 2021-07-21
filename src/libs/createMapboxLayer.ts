@@ -1,8 +1,14 @@
 import { MapboxLayer } from '@deck.gl/mapbox';
 import { Map } from 'mapbox-gl';
 import { IWxTilesLayer } from '../layers/IWxTileLayer';
+import { WxtilesGlLayer } from './WxtilesGlLayer';
 
-export const mapAddLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: new (props: Layer['props']) => Layer, props: Layer['props']) => {
+export const createMapboxLayer = <Layer extends IWxTilesLayer>(
+	map: Map,
+	LayerClass: new (props: Layer['props']) => Layer,
+	props: Layer['props'],
+	beforeLayerId: string = map.getStyle().layers![map.getStyle().layers!.length - 1].id
+): WxtilesGlLayer => {
 	let currentIndex = 0;
 	let prevLayerId: string | undefined = undefined;
 
@@ -12,6 +18,7 @@ export const mapAddLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: n
 		cancelPrevRequest();
 		cancelPrevRequest = cancel;
 		await promise;
+		map.moveLayer(layerId, prevLayerId || beforeLayerId);
 		prevLayerId && map.removeLayer(prevLayerId);
 		prevLayerId = layerId;
 		cancelPrevRequest = () => {};
@@ -20,7 +27,6 @@ export const mapAddLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: n
 	const renderLayerByTimeIndex = (index: number) => {
 		const uri = props.wxprops.URITime.replace('{time}', props.wxprops.meta.times[index]);
 		const layerId = props.id + index;
-		let canceled = false;
 		const promise = new Promise<void>((resolve, reject) => {
 			const layer = new MapboxLayer({
 				type: LayerClass,
@@ -28,20 +34,19 @@ export const mapAddLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: n
 				id: layerId,
 				data: uri,
 				onViewportLoad: () => {
-					canceled ? reject(new Error('Cancelled')) : resolve();
+					resolve();
 				},
 				onTileError: (error) => {
 					console.error(error);
-					canceled ? reject(new Error('Cancelled')) : resolve();
+					reject(new Error('Cancelled'));
 				},
 			});
-			map.addLayer(layer, prevLayerId);
+			map.addLayer(layer, 'background');
 		});
 		return {
 			layerId,
 			promise,
 			cancel: () => {
-				canceled = true;
 				map.removeLayer(layerId);
 			},
 		};
@@ -56,11 +61,15 @@ export const mapAddLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: n
 			currentIndex = --currentIndex % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},
-		cancel: () => cancelPrevRequest(),
+		cancel: () => {
+			cancelPrevRequest();
+			cancelPrevRequest = () => {};
+		},
 		remove: () => {
 			cancelPrevRequest();
 			cancelPrevRequest = () => {};
 			prevLayerId && map.removeLayer(prevLayerId);
+			prevLayerId = undefined;
 		},
 	};
 };

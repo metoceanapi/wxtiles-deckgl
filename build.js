@@ -30,6 +30,6 @@ esbuild
 		...sharedConfig,
 		format: 'iife',
 		outfile: 'dist/web/wxtiledeckgl.js',
-		globalName: 'wxtiledeckgl',
+		globalName: 'wxtilesGl',
 	})
 	.catch((e) => console.error(e.message));

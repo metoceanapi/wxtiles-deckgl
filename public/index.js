@@ -1,3 +1,3 @@
-const { start } = window.wxtiledeckgl;
+const { start } = window.wxtilesGl;
 
 start();

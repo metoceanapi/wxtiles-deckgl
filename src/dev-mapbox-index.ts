@@ -1,9 +1,8 @@
 import './index.css';
 import { createWxTilesLayerProps, WxTilesLayer } from './layers/WxTilesLayer';
-export { mapAddLayer } from './libs/mapAddLayer';
 import mapboxgl from 'mapbox-gl';
 import { setupWxTilesLib } from './libs/libTools';
-import { mapAddLayer } from './libs/mapAddLayer';
+import { createMapboxLayer } from './libs/createMapboxLayer';
 mapboxgl.accessToken = 'pk.eyJ1IjoibWV0b2NlYW4iLCJhIjoia1hXZjVfSSJ9.rQPq6XLE0VhVPtcD9Cfw6A';
 
 /**
@@ -96,8 +95,8 @@ export const start = async () => {
 		// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
 		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any);
 		wxProps.opacity = 0.2;
-		const layer = mapAddLayer(map, WxTilesLayer, wxProps);
-
+		const layer = createMapboxLayer(map, WxTilesLayer, wxProps);
+		
 		let isPlaying = false;
 		const play = async () => {
 			do {

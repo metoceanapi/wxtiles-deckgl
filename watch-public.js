@@ -20,7 +20,7 @@ esbuild
 		// target: 'es2017',
 		format: 'iife',
 		outdir: 'public/wxtiles-gl',
-		globalName: 'wxtilesgl',
+		globalName: 'wxtilesGl',
 		sourcemap: true,
 		// minify: false,
 		watch: {

@@ -1,8 +1,13 @@
 import { MapboxLayer } from '@deck.gl/mapbox';
 import { Map } from 'mapbox-gl';
 import { IWxTilesLayer } from '../layers/IWxTileLayer';
+import { WxtilesGlLayer } from './WxtilesGlLayer';
 
-export const createMapboxLayer = <Layer extends IWxTilesLayer>(map: Map, LayerClass: new (props: Layer['props']) => Layer, props: Layer['props']) => {
+export const createMapboxLayer = <Layer extends IWxTilesLayer>(
+	map: Map,
+	LayerClass: new (props: Layer['props']) => Layer,
+	props: Layer['props']
+): WxtilesGlLayer => {
 	let currentIndex = 0;
 	let prevLayerId: string | undefined = undefined;
 

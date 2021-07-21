@@ -6,7 +6,8 @@ import { WxtilesGlLayer } from './WxtilesGlLayer';
 export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 	map: Map,
 	LayerClass: new (props: Layer['props']) => Layer,
-	props: Layer['props']
+	props: Layer['props'],
+	beforeLayerId: string = map.getStyle().layers![map.getStyle().layers!.length - 1].id
 ): WxtilesGlLayer => {
 	let currentIndex = 0;
 	let prevLayerId: string | undefined = undefined;
@@ -17,6 +18,7 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 		cancelPrevRequest();
 		cancelPrevRequest = cancel;
 		await promise;
+		map.moveLayer(layerId, prevLayerId || beforeLayerId);
 		prevLayerId && map.removeLayer(prevLayerId);
 		prevLayerId = layerId;
 		cancelPrevRequest = () => {};
@@ -39,7 +41,7 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 					reject(new Error('Cancelled'));
 				},
 			});
-			map.addLayer(layer, prevLayerId);
+			map.addLayer(layer, 'background');
 		});
 		return {
 			layerId,

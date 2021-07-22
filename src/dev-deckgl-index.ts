@@ -59,4 +59,5 @@ export async function start() {
 		isPlaying && play();
 		playButton.innerHTML = isPlaying ? 'Stop' : 'Play';
 	});
+	layer.nextTimestep();
 }

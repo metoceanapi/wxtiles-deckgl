@@ -86,13 +86,13 @@ export const start = async () => {
 
 		const params =
 			//
-			['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
-		// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
-		// ['ecwmf.global', 'air.humidity.at-2m', 'base'];
-		// ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
-		// ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
-		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
-		// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
+			// ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
+			// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
+			// ['ecwmf.global', 'air.humidity.at-2m', 'base'];
+			// ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
+			// ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
+			// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+			['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed barbs'];
 		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any);
 		wxProps.opacity = 0.5;
 		const layer = createMapboxLayer(map, WxTilesLayer, wxProps);

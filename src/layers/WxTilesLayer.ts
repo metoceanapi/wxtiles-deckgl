@@ -111,10 +111,10 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				bounds: [west, south, east, north],
 				image: null,
 				pickable: true,
-				opacity: opacity,
-				// desaturate: desaturate,
-				// transparentColor: transparentColor,
-				// tintColor: tintColor,
+				opacity,
+				desaturate,
+				transparentColor,
+				tintColor,
 			}),
 			new WxTileIsolineText({
 				id: id + '-isotextBack',
@@ -122,16 +122,19 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				fontWeight: 'bold',
 				getSize: 13,
 				getColor: [255, 255, 255],
+				opacity,
 			}),
 			new WxTileIsolineText({
 				id: id + '-isotext',
 				data: data.isoData,
+				opacity,
 			}),
 			data.vectorData &&
 				new WxTileVector({
 					id: id + '-vector',
 					data: data.vectorData,
 					fontFamily: style.vectorType,
+					opacity,
 					getColor: (d: WxTileVectorData) => {
 						return d.color;
 					},
@@ -179,7 +182,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		const image: ImageData = await fetch(makeURL(wxprops.variables), { layer: this, signal });
 		const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
 		const isoData = this._createIsolines(image, tile);
-		const vectorData = this._createDegree(image, tile); // if not 'directions' gives 'undefined' - OK
+		const vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
 		return { image, isoData, vectorData, imageTextureUniform };
 	}
 
@@ -375,13 +378,13 @@ WxTilesLayer.defaultProps = {
 	// animated: true,
 	// _animate: true,
 
-	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
 	// More context: because of the blending mode we're using for ground imagery,
 	// alpha is not effective when blending the bitmap layers with the base map.
 	// Instead we need to manually dim/blend rgb values with a background color.
 	transparentColor: { type: 'color', value: [0, 0, 0, 0] },
-	tintColor: { type: 'color', value: [255, 255, 255] },
 	opacity: { type: 'number', min: 0, max: 1, value: 1 },
+	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
+	tintColor: { type: 'color', value: [255, 255, 255] },
 };
 
 export type WxServerVarsTimeType = [string, string | [string, string], string];

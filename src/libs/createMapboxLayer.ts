@@ -55,11 +55,11 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 
 	return {
 		nextTimestep: async () => {
-			currentIndex = ++currentIndex % props.wxprops.meta.times.length;
+			currentIndex = (++currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},
 		prevTimestep: async () => {
-			currentIndex = --currentIndex % props.wxprops.meta.times.length;
+			currentIndex = (--currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},
 		cancel: () => {

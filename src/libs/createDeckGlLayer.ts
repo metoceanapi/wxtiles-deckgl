@@ -37,9 +37,6 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 					props?.onViewportLoad?.(data);
 					resolve(newWxtilesLayer);
 				},
-				onTileError: (error) => {
-					reject(reject);
-				},
 			});
 			const currentLayers = getDeckglLayers();
 			deckgl.setProps({ layers: [newWxtilesLayer, ...currentLayers] });

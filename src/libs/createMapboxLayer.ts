@@ -9,7 +9,7 @@ export const createMapboxLayer = (
 	beforeLayerId: string = map.getStyle().layers![map.getStyle().layers!.length - 1].id
 ): WxtilesGlLayer => {
 	const firstLayer = map.getStyle().layers![0].id;
-	let currentIndex = 0;
+	let currentIndex = -1;
 	let prevLayerId: string | undefined = undefined;
 
 	let cancelPrevRequest = () => {};
@@ -50,9 +50,15 @@ export const createMapboxLayer = (
 		nextTimestep: async () => {
 			currentIndex = (++currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
+			return currentIndex;
 		},
 		prevTimestep: async () => {
 			currentIndex = (--currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
+			await renderCurrentTimestep();
+			return currentIndex;
+		},
+		goToTimestep: async (index: number) => {
+			currentIndex = (index + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},
 		cancel: () => {

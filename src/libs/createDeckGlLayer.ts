@@ -64,6 +64,9 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 			return currentIndex;
 		},
 		goToTimestep: async (index: number) => {
+			if (index === currentIndex) {
+				return;
+			}
 			currentIndex = (index + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},

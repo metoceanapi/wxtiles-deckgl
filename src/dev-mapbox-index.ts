@@ -1,5 +1,5 @@
 import './index.css';
-import { createWxTilesLayerProps, WxTilesLayer } from './layers/WxTilesLayer';
+import { createWxTilesLayerProps } from './layers/WxTilesLayer';
 import mapboxgl from 'mapbox-gl';
 import { setupWxTilesLib } from './libs/libTools';
 import { createMapboxLayer } from './libs/createMapboxLayer';
@@ -13,8 +13,8 @@ export const start = async () => {
 	const map = new mapboxgl.Map({
 		container: 'map',
 		style: 'mapbox://styles/mapbox/streets-v9',
-		center: [-74.5, 40],
-		zoom: 5,
+		center: [175, -40],
+		zoom: 7,
 	});
 
 	await setupWxTilesLib();
@@ -87,15 +87,21 @@ export const start = async () => {
 		const params =
 			//
 			// ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
-			// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
-			// ['ecwmf.global', 'air.humidity.at-2m', 'base'];
-			// ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
-			// ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
-			// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
-			['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed barbs'];
-		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any);
-		wxProps.opacity = 0.5;
-		const layer = createMapboxLayer(map, WxTilesLayer, wxProps);
+			// ['nz_wave_trki', 'hs_mean', 'Significant wave height'];
+		// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
+		// ['ecwmf.global', 'air.humidity.at-2m', 'base'];
+		// ['ww3-ecmwf.global', 'wave.height', 'Significant wave height'];
+		// ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
+		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
+		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any, {
+		// const wxProps = await createWxTilesLayerProps('https://d29otq43i8lkyo.cloudfront.net/data-tiles/', params as any, {
+			headers: {
+				/* You can put your headers here*/
+			},
+		});
+		wxProps.opacity = 0.7;
+		const layer = createMapboxLayer(map, wxProps);
 
 		let isPlaying = false;
 		const play = async () => {

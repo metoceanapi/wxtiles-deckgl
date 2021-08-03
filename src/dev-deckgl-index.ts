@@ -25,6 +25,7 @@ export async function start() {
 
 	const params: WxServerVarsTimeType =
 		//
+			// ['nz_wave_trki', 'hs_mean', 'Significant wave height'];
 		// ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
 		// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 		// ['ecwmf.global', 'air.humidity.at-2m', 'base'];
@@ -35,7 +36,12 @@ export async function start() {
 
 	// ESSENTIAL step to get lib ready.
 	await setupWxTilesLib(); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
-	const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params);
+	const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params, {
+	// const wxProps = await createWxTilesLayerProps('https://d29otq43i8lkyo.cloudfront.net/data-tiles/', params, {
+		headers: {
+			/* You can put your headers here*/
+		},
+	});
 
 	const layer = createDeckGlLayer(deckgl, wxProps);
 

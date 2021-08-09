@@ -94,12 +94,7 @@ export const start = async () => {
 		// ['ww3-ecmwf.global', 'wave.direction.above-8s.peak', 'direction'];
 		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
 		['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'] as [string, string], 'Wind Speed2'];
-		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any, {
-		// const wxProps = await createWxTilesLayerProps('https://d29otq43i8lkyo.cloudfront.net/data-tiles/', params as any, {
-			headers: {
-				/* You can put your headers here*/
-			},
-		});
+		const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params as any);
 		wxProps.opacity = 0.7;
 		const layer = createMapboxLayer(map, wxProps);
 

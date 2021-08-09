@@ -36,12 +36,7 @@ export async function start() {
 
 	// ESSENTIAL step to get lib ready.
 	await setupWxTilesLib(); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
-	const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params, {
-	// const wxProps = await createWxTilesLayerProps('https://d29otq43i8lkyo.cloudfront.net/data-tiles/', params, {
-		headers: {
-			/* You can put your headers here*/
-		},
-	});
+	const wxProps = await createWxTilesLayerProps('https://tiles.metoceanapi.com/data/', params);
 
 	const layer = createDeckGlLayer(deckgl, wxProps);
 

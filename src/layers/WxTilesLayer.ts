@@ -129,14 +129,6 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				tintColor,
 			}),
 			new WxTileIsolineText({
-				id: id + '-isotextBack',
-				data: data.isoData,
-				fontWeight: 'bold',
-				getSize: 13,
-				getColor: [255, 255, 255],
-				opacity,
-			}),
-			new WxTileIsolineText({
 				id: id + '-isotext',
 				data: data.isoData,
 				opacity,
@@ -147,9 +139,6 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 					data: data.vectorData,
 					fontFamily: style.vectorType,
 					opacity,
-					getColor: (d: WxTileVectorData) => {
-						return d.color;
-					},
 				}),
 			// new WxVectorAnimation(),
 		];

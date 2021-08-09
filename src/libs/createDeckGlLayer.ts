@@ -37,9 +37,6 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 					props?.onViewportLoad?.(data);
 					resolve(newWxtilesLayer);
 				},
-				onTileError: (error) => {
-					reject(reject);
-				},
 			});
 			const currentLayers = getDeckglLayers();
 			deckgl.setProps({ layers: [newWxtilesLayer, ...currentLayers] });
@@ -59,9 +56,18 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 		nextTimestep: async () => {
 			currentIndex = (++currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
+			return currentIndex;
 		},
 		prevTimestep: async () => {
 			currentIndex = (--currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
+			await renderCurrentTimestep();
+			return currentIndex;
+		},
+		goToTimestep: async (index: number) => {
+			if (index === currentIndex) {
+				return;
+			}
+			currentIndex = (index + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},
 		cancel: () => {

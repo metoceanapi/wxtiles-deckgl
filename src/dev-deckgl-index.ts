@@ -25,6 +25,7 @@ export async function start() {
 
 	const params: WxServerVarsTimeType =
 		//
+			// ['nz_wave_trki', 'hs_mean', 'Significant wave height'];
 		// ['ecwmf.global', 'air.temperature.at-2m', 'temper2m'];
 		// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 		// ['ecwmf.global', 'air.humidity.at-2m', 'base'];

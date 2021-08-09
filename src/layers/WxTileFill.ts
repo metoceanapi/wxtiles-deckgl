@@ -1,6 +1,6 @@
 import { BitmapLayer, BitmapLayerProps } from '@deck.gl/layers';
 import { picking, project32, Viewport } from '@deck.gl/core';
-import { Texture2D } from '@luma.gl/core';
+import { Texture2D } from '@luma.gl/webgl';
 import { ColorStyleStrict, HEXtoRGBA, UIntToColor } from '../utils/wxtools';
 import vs from '../shaders/bitmap-layer-vertex.vs';
 import fs from '../shaders/bitmap-layer-fragment.fs';

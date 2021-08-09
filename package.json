@@ -21,6 +21,7 @@
 	"homepage": "https://github.com/metocean/wxtiledeckgl#readme",
 	"devDependencies": {
 		"@danmarshall/deckgl-typings": "^4.9.2",
+		"@luma.gl/core": "^8.5.4",
 		"@types/mapbox-gl": "^2.3.3",
 		"esbuild": "^0.12.14",
 		"esbuild-plugin-sass": "^0.5.0",

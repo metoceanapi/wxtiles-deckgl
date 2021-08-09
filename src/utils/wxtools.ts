@@ -336,26 +336,6 @@ function cacheIt(fn: CacheableFunc): CacheableFunc {
 	};
 }
 
-// abortable 'loadImage'
-async function loadImage(url: string, signal: AbortSignal): Promise<HTMLImageElement> {
-	const img = new Image();
-	img.crossOrigin = 'anonymous'; // essential
-	const abortFunc = () => {
-		img.src = '';
-	}; // stop loading
-	signal.addEventListener('abort', abortFunc);
-	////// Method 1
-	img.src = url;
-	await img.decode();
-	signal.removeEventListener('abort', abortFunc);
-	return img;
-	//// Method 2
-	// return new Promise((resolve) => {
-	// 	img.onload = () => {signal.removeEventListener('abort', abortFunc);resolve(img);};
-	// 	img.src = url; // should be after .onload
-	// });
-}
-
 interface IntegralPare {
 	integral: Uint32Array;
 	integralNZ: Uint32Array;
@@ -372,48 +352,8 @@ export interface DataPictureIntegral extends DataPicture {
 	integral: IntegralPare;
 	radius: number;
 }
-// http://webpjs.appspot.com/ = webp lossless decoder
-// https://chromium.googlesource.com/webm/libwebp/+/refs/tags/v0.6.1/README.webp_js
-async function loadDataPicture(url: string, signal: AbortSignal): Promise<DataPictureIntegral> {
-	const pictureToData = (imData: ImageData): DataPictureIntegral => {
-		// picTile contains bytes RGBARGBARGBA ...
-		// we need RG and don't need BA, so output is a 16 byte array picData with every second value dropped.
-		const size = imData.height * imData.width;
-		const imbuf = new Uint16Array(imData.data.buffer);
-		const raw = new Uint16Array(size);
-		for (let i = 0; i < size; i++) {
-			raw[i] = imbuf[i * 2];
-		}
-
-		const minmaxbuf = new Uint8Array(imData.data.buffer);
-		for (let i = 0; i < 8; ++i) {
-			minmaxbuf[i] = minmaxbuf[i * 4 + 2];
-		}
-
-		const view = new DataView(imData.data.buffer);
-		const dmin = view.getFloat32(0, true);
-		const dmax = view.getFloat32(4, true);
-		const dmul = (dmax - dmin) / 65535;
-		const integral = integralImage(raw);
-		return { raw, dmin, dmax, dmul, integral, radius: 0 };
-	};
-
-	const context = Object.assign(document.createElement('canvas'), { width: 258, height: 258, imageSmoothingEnabled: false }).getContext('2d');
-	if (!context) return Promise.reject();
-	const img = await loadImage(url, signal); ///*Old approach to solve 'crossorigin' and 'abort'*/ const img = await loadImage(URL.createObjectURL(await (await fetch(url, { signal, cache: 'force-cache' })).blob()));
-	context.drawImage(img, 0, 0);
-	return pictureToData(context.getImageData(0, 0, 258, 258));
-}
-
 export interface AbortableCacheableFunc extends CacheableFunc {
 	abort(): void;
-}
-
-export function loadDataPictureCachedAbortable() {
-	const controller = new AbortController();
-	const func = <AbortableCacheableFunc>cacheIt((url: string) => loadDataPicture(url, controller.signal));
-	func.abort = () => controller.abort();
-	return func;
 }
 
 // Integarl image: https://en.wikipedia.org/wiki/Summed-area_table

@@ -1,16 +1,15 @@
 import { MapboxLayer } from '@deck.gl/mapbox';
 import { Map } from 'mapbox-gl';
-import { IWxTilesLayer } from '../layers/IWxTileLayer';
+import { WxTilesLayer } from '../layers/WxTilesLayer';
 import { WxtilesGlLayer } from './WxtilesGlLayer';
 
-export const createMapboxLayer = <Layer extends IWxTilesLayer>(
+export const createMapboxLayer = (
 	map: Map,
-	LayerClass: new (props: Layer['props']) => Layer,
-	props: Layer['props'],
+	props: WxTilesLayer['props'],
 	beforeLayerId: string = map.getStyle().layers![map.getStyle().layers!.length - 1].id
 ): WxtilesGlLayer => {
 	const firstLayer = map.getStyle().layers![0].id;
-	let currentIndex = 0;
+	let currentIndex = -1;
 	let prevLayerId: string | undefined = undefined;
 
 	let cancelPrevRequest = () => {};
@@ -30,17 +29,11 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 		const layerId = props.id + index;
 		const promise = new Promise<void>((resolve, reject) => {
 			const layer = new MapboxLayer({
-				type: LayerClass,
+				type: WxTilesLayer,
 				...props,
 				id: layerId,
 				data: uri,
-				onViewportLoad: () => {
-					resolve();
-				},
-				onTileError: (error) => {
-					console.error(error);
-					reject(new Error('Cancelled'));
-				},
+				onViewportLoad: resolve,
 			});
 			map.addLayer(layer, firstLayer);
 		});
@@ -57,9 +50,18 @@ export const createMapboxLayer = <Layer extends IWxTilesLayer>(
 		nextTimestep: async () => {
 			currentIndex = (++currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
+			return currentIndex;
 		},
 		prevTimestep: async () => {
 			currentIndex = (--currentIndex + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
+			await renderCurrentTimestep();
+			return currentIndex;
+		},
+		goToTimestep: async (index: number) => {
+			if (index === currentIndex) {
+				return;
+			}
+			currentIndex = (index + props.wxprops.meta.times.length) % props.wxprops.meta.times.length;
 			await renderCurrentTimestep();
 		},
 		cancel: () => {

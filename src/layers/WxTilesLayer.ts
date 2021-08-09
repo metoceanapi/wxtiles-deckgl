@@ -394,7 +394,7 @@ WxTilesLayer.defaultProps = {
 
 export type WxServerVarsTimeType = [string, string | [string, string], string];
 
-export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType) {
+export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType, requestInit?: RequestInit) {
 	const [dataSet, variables, styleName] = params;
 	const { URITime, meta } = await getURIFromDatasetName(server, dataSet);
 	const wxTilesProps: IWxTilesLayerProps = {
@@ -410,6 +410,13 @@ export async function createWxTilesLayerProps(server: string, params: WxServerVa
 		data: URITime.replace('{time}', meta.times[0]),
 		// DECK.gl settings
 		maxZoom: meta.maxZoom,
+		loadOptions: {
+			fetch: requestInit,
+			image: {
+				decode: true,
+				type: 'data',
+			},
+		},
 	};
 
 	return wxTilesProps;

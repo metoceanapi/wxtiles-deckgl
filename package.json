@@ -1,5 +1,5 @@
 {
-	"name": "@metservice/wxtiledeckgl",
+	"name": "@metoceanapi/wxtile-gl",
 	"version": "0.0.1",
 	"description": "WxTile deck.gl lib to render wxtiles datalayers",
 	"main": "dist/es/bundle.js",

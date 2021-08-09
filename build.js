@@ -11,7 +11,7 @@ const sharedConfig = {
 		'.fs': 'text',
 		'.vs': 'text',
 	},
-	target: 'es6',
+	// target: 'es6',
 	minify: true,
 };
 

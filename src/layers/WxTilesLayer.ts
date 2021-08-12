@@ -435,9 +435,3 @@ export async function createWxTilesLayerProps(server: string, params: WxServerVa
 
 	return wxTilesProps;
 }
-
-// TODO: check boundaries and avoid empty fetches
-function boudariesBboxIntersection(bbox: Bbox, boundaries: BoundaryMeta[]) {
-	const rectIntersect = (b: BoundaryMeta) => !(bbox.west > b.east || b.west > bbox.east || bbox.south > b.north || b.south > bbox.north);
-	return boundaries.some(rectIntersect);
-}

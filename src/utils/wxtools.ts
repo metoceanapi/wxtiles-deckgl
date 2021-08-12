@@ -5,11 +5,25 @@ export interface VariableMeta {
 		max: number;
 	};
 }
+
+export interface BoundaryMeta {
+	west: number;
+	north: number;
+	east: number;
+	south: number;
+}
+export interface AllBoundariesMeta {
+	boundariesnorm: BoundaryMeta;
+	boundaries180: BoundaryMeta[];
+	boundaries360: BoundaryMeta[];
+}
+
 export interface Meta {
 	variables: string[];
 	variablesMeta: VariableMeta;
 	maxZoom: number;
 	times: string[];
+	boundaries?: AllBoundariesMeta;
 }
 
 export type UnitTuple = [string, number, number?];

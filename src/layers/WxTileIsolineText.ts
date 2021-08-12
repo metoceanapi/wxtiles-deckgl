@@ -27,23 +27,20 @@ WxTileIsolineText.defaultProps = {
 	},
 	fontFamily: 'Sans-serif',
 	getSize: 12,
-	outlineWidth: 5, // to appear in ver 8.5 // TODO
-	outlineColor: [255, 255, 255], // to appear in ver 8.5
+	fontSettings: { sdf: true },
+	outlineWidth: 0.5, // appeared in ver 8.5
+	outlineColor: [200, 200, 200], // appeared in ver 8.5
 	// getTextAnchor: 'middle', // default
 	// getAlignmentBaseline: 'center', // default
 	// getText: (d: WxTileIsolineTextData) => d.text, // default
 	// getPosition: (d: WxTileIsolineTextData) => d.position, // default
-	getColor: (d: WxTileIsolineTextData) => {
-		return d.color;
-	},
-	// getAngle: (d: WxTileIsolineTextData) => d.angle,
-	getAngle: {
-		type: 'function',
-		value: (d) => {
-			return d.angle;
-		},
-		compare: false,
-	},
-	animated: true,
-	_animate: true,
+	getColor: (d: WxTileIsolineTextData) => d.color,
+	getAngle: (d: WxTileIsolineTextData) => d.angle,
+	// getAngle: {
+	// 	type: 'function',
+	// 	value: (d) => {
+	// 		return d.angle;
+	// 	},
+	// 	compare: false,
+	// },
 };

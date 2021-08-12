@@ -1,7 +1,7 @@
 import { TileLayer } from '@deck.gl/geo-layers';
 import { UpdateStateInfo } from '@deck.gl/core/lib/layer';
 import GL from '@luma.gl/constants';
-import { Texture2D } from '@luma.gl/core';
+import { Texture2D } from '@luma.gl/webgl';
 
 import { RenderSubLayers } from './IRenderSubLayers';
 import { WxTileIsolineTextData, WxTileIsolineText } from './WxTileIsolineText';
@@ -46,7 +46,18 @@ interface WxTileData {
 	imageV?: ImageData;
 	vectorData?: WxTileVectorData[];
 }
+
+interface WxTilesLayerState {
+	CLUT: RawCLUT;
+	clutTextureUniform: Texture2D;
+	imageTextureUniform: Texture2D;
+	min: number;
+	max: number;
+	[name: string]: any;
+}
 export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProps> {
+	state!: WxTilesLayerState;
+
 	constructor(props: IWxTilesLayerProps) {
 		super(props);
 	}
@@ -72,8 +83,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		// const { props } = sourceLayer;
 		// const { image } = props.data;
 		// const { data } = image;
-		const CLUT: RawCLUT = this.state.CLUT;
-		const { min, max } = this.state;
+		const { min, max, CLUT } = this.state;
 		const mul = (max - min) / 65535;
 
 		// const index = ((y + 1) * 258 + (x + 1)) * 2;
@@ -100,12 +110,14 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		const { west, south, east, north } = tile.bbox;
 		const { wxprops, desaturate, transparentColor, tintColor, opacity } = this.props;
 		const { style } = wxprops;
+		const { clutTextureUniform } = this.state;
+		const { imageTextureUniform } = data;
 		return [
 			new WxTileFill({
 				id: id + '-fill',
 				data: {
-					clutTextureUniform: this.state.clutTextureUniform,
-					imageTextureUniform: data.imageTextureUniform,
+					clutTextureUniform,
+					imageTextureUniform,
 					style,
 				},
 				bounds: [west, south, east, north],
@@ -115,14 +127,6 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				desaturate,
 				transparentColor,
 				tintColor,
-			}),
-			new WxTileIsolineText({
-				id: id + '-isotextBack',
-				data: data.isoData,
-				fontWeight: 'bold',
-				getSize: 13,
-				getColor: [255, 255, 255],
-				opacity,
 			}),
 			new WxTileIsolineText({
 				id: id + '-isotext',
@@ -135,9 +139,6 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 					data: data.vectorData,
 					fontFamily: style.vectorType,
 					opacity,
-					getColor: (d: WxTileVectorData) => {
-						return d.color;
-					},
 				}),
 			// new WxVectorAnimation(),
 		];
@@ -170,20 +171,24 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 			mipmaps: false,
 		};
 
+		let imageU: ImageData | undefined = undefined;
+		let imageV: ImageData | undefined = undefined;
+		let image: ImageData;
+		let vectorData: WxTileVectorData[] | undefined;
+		const fetchVariableImage = (varName: string): Promise<ImageData> => fetch(makeURL(varName), { layer: this, signal });
+
 		if (wxprops.variables instanceof Array) {
-			const [imageU, imageV] = await Promise.all(wxprops.variables.map((v): Promise<ImageData> => fetch(makeURL(v), { layer: this, signal })));
-			const image = this._createVelocities(imageU, imageV);
-			const isoData = this._createIsolines(image, tile);
-			const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
-			const vectorData = this._createVectorData(image, imageU, imageV, tile);
-			return { image, imageU, imageV, isoData, vectorData, imageTextureUniform };
+			[imageU, imageV] = await Promise.all(wxprops.variables.map(fetchVariableImage));
+			image = this._createVelocitiesImage(imageU, imageV);
+			vectorData = this._createVectorData(image, imageU, imageV, tile);
+		} else {
+			image = await fetchVariableImage(wxprops.variables);
+			vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
 		}
 
-		const image: ImageData = await fetch(makeURL(wxprops.variables), { layer: this, signal });
-		const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
 		const isoData = this._createIsolines(image, tile);
-		const vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
-		return { image, isoData, vectorData, imageTextureUniform };
+		const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
+		return { image, imageU, imageV, isoData, vectorData, imageTextureUniform };
 	}
 
 	_prepareStateAndCLUT() {
@@ -303,12 +308,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		return res;
 	}
 
-	_createVelocities(imageU: ImageData, imageV: ImageData): ImageData {
+	_createVelocitiesImage(imageU: ImageData, imageV: ImageData): ImageData {
 		const { meta, variables } = this.props.wxprops;
 		const image = new ImageData(258, 258);
 		if (!(variables instanceof Array)) return image;
 		const [uMeta, vMeta] = variables.map((v) => meta.variablesMeta[v]);
-		const { min, max }: { min: number; max: number } = this.state;
+		const { min, max } = this.state;
 		const ldmul = (max - min) / 65535;
 		const vdmul = (vMeta.max - vMeta.min) / 65535;
 		const udmul = (uMeta.max - uMeta.min) / 65535;
@@ -330,11 +335,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 
 	_createVectorData(image: ImageData, imageU: ImageData, imageV: ImageData, { x, y, z }): WxTileVectorData[] {
 		const { meta, variables } = this.props.wxprops;
-		const CLUT: RawCLUT = this.state.CLUT;
+		const CLUT = this.state.CLUT;
 		const { style } = this.props.wxprops;
 
 		if (!(variables instanceof Array) || !CLUT.DataToKnots || style.vectorColor === 'none') return [];
-		const { min, max }: { min: number; max: number } = this.state;
+		const { min, max } = this.state;
 		const [uMeta, vMeta] = variables.map((v) => meta.variablesMeta[v]);
 		const l = new Uint16Array(image.data.buffer);
 		const u = new Uint16Array(imageU.data.buffer);

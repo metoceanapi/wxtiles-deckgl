@@ -9,16 +9,17 @@
 			"version": "0.0.2-main.0",
 			"license": "ISC",
 			"dependencies": {
-				"@deck.gl/geo-layers": "8.4.20",
-				"@deck.gl/layers": "8.4.20",
-				"@deck.gl/mapbox": "8.4.20",
-				"deck.gl": "8.4.20"
+				"@deck.gl/geo-layers": "8.5.2",
+				"@deck.gl/layers": "8.5.2",
+				"@deck.gl/mapbox": "8.5.2",
+				"deck.gl": "8.5.2"
 			},
 			"devDependencies": {
 				"@danmarshall/deckgl-typings": "^4.9.2",
+				"@luma.gl/core": "^8.5.4",
 				"@types/mapbox-gl": "^2.3.3",
-				"esbuild": "^0.12.14",
-				"esbuild-plugin-sass": "^0.5.0",
+				"esbuild": "^0.12.19",
+				"esbuild-plugin-sass": "^0.6.0",
 				"express": "^4.17.1",
 				"mapbox-gl": "^2.3.1",
 				"typescript": "^4.3.5"
@@ -55,417 +56,381 @@
 			}
 		},
 		"node_modules/@deck.gl/aggregation-layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/aggregation-layers/-/aggregation-layers-8.4.20.tgz",
-			"integrity": "sha512-mYtVHkL/TGtqfh0jA35aiE6ZlfJkVmvUfrK+4UJ+bBdpY5F3z+gGZtxH3RsZbh+x+aOHm4Zdd/XXpijdOFlc/Q==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/aggregation-layers/-/aggregation-layers-8.5.2.tgz",
+			"integrity": "sha512-oiqXPmyn2v0lX9tWCvgmWs29stHSLS3tje71Ff2FVXDNmvP5FoZItFa8y7O7KSTkej2/rSwZeSte/a9pri6Njg==",
 			"dependencies": {
-				"@luma.gl/shadertools": "^8.4.1",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@luma.gl/shadertools": "^8.5.4",
+				"@math.gl/web-mercator": "^3.5.3",
 				"d3-hexbin": "^0.2.1"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0",
+				"@deck.gl/layers": "^8.0.0"
 			}
 		},
 		"node_modules/@deck.gl/carto": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/carto/-/carto-8.4.20.tgz",
-			"integrity": "sha512-TE2wWU353Zx6SWauQEgmFDEkkBSMnkc1p1S9Ttox7Ijs5kyxqlS44+nRwdLUYxYSTo7YU6QC2ei3cA0if1IlZw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/carto/-/carto-8.5.2.tgz",
+			"integrity": "sha512-Kw/3NUM+2NcHjxH6b7IOUYXEwmJ4SNQujFzAVFW5amG4Lut8074NGSF5XHi+4M/zgk7vXDFsGRxLqspsA/dg8w==",
 			"dependencies": {
-				"@loaders.gl/loader-utils": "^2.3.13",
-				"@loaders.gl/mvt": "^2.3.13",
-				"@loaders.gl/tiles": "^2.3.13",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@loaders.gl/loader-utils": "^3.0.6",
+				"@loaders.gl/mvt": "^3.0.6",
+				"@loaders.gl/tiles": "^3.0.6",
+				"@math.gl/web-mercator": "^3.5.3",
 				"cartocolor": "^4.0.2",
 				"d3-scale": "^3.2.3"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0",
+				"@deck.gl/geo-layers": "^8.0.0",
+				"@deck.gl/layers": "^8.0.0",
+				"@loaders.gl/core": "^3.0.0"
 			}
 		},
 		"node_modules/@deck.gl/core": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/core/-/core-8.4.20.tgz",
-			"integrity": "sha512-P3shxzuCbUZt62oSYfeI4oyD1R8LBXjaSViKMEj0ZGW3IOEj/XQetKCMAS+WocrJMB8adIx3eT1bcaM9TPAesA==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/core/-/core-8.5.2.tgz",
+			"integrity": "sha512-SAFv7fKx6k1Rj8R4qTMQO2wEhEfixROzbcoSS6RivxrfES00KYYj6jJ7iNEnq3dFn6qc37LPpxqtYYHO4BcvYA==",
 			"dependencies": {
-				"@loaders.gl/core": "^2.3.13",
-				"@loaders.gl/images": "^2.3.13",
-				"@luma.gl/core": "^8.4.1",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@loaders.gl/core": "^3.0.6",
+				"@loaders.gl/images": "^3.0.6",
+				"@luma.gl/core": "^8.5.4",
+				"@math.gl/web-mercator": "^3.5.3",
 				"gl-matrix": "^3.0.0",
-				"math.gl": "^3.4.2",
+				"math.gl": "^3.5.3",
 				"mjolnir.js": "^2.5.0",
-				"probe.gl": "^3.2.1"
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"node_modules/@deck.gl/extensions": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/extensions/-/extensions-8.4.20.tgz",
-			"integrity": "sha512-U0xKlHuRM2kuRZgk9eNMHmoLKiVfkVcOe7aNcXcdQN25Cxy8i4Cmc5gWbw51x8wXZ6SP81FZqF7o5vGN3qT2bw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/extensions/-/extensions-8.5.2.tgz",
+			"integrity": "sha512-VhbQsMNPM7RCR/ERwb1u1x0rEWAxgXfcCWttW+gYvbiagW/LrAJ22jhOghlRW/wilEmupHYbXQlWkW2V/mYfsg==",
 			"dependencies": {
-				"@luma.gl/shadertools": "^8.4.1"
+				"@luma.gl/shadertools": "^8.5.4"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0",
+				"gl-matrix": "^3.0.0"
 			}
 		},
 		"node_modules/@deck.gl/geo-layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/geo-layers/-/geo-layers-8.4.20.tgz",
-			"integrity": "sha512-xNlre+rcle+XYs3W+YGanIR0JXpRlVuAZuqU5fI9gNrSW2N6YZqECIynBVKw4wrgZMXXW56k0avdtlIhQ8FLJw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/geo-layers/-/geo-layers-8.5.2.tgz",
+			"integrity": "sha512-t6+TgAdbKWDw8g9UX1y6D+5twcdJuKaXw4qSib/0yVurWi/Mil5Plihybt1l9uBZuwkr+UcpxPR73zzo+qd9MA==",
 			"dependencies": {
-				"@loaders.gl/3d-tiles": "^2.3.13",
-				"@loaders.gl/gis": "^2.3.13",
-				"@loaders.gl/loader-utils": "^2.3.13",
-				"@loaders.gl/mvt": "^2.3.13",
-				"@loaders.gl/terrain": "^2.3.13",
-				"@loaders.gl/tiles": "^2.3.13",
-				"@math.gl/culling": "^3.4.2",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@loaders.gl/3d-tiles": "^3.0.6",
+				"@loaders.gl/gis": "^3.0.6",
+				"@loaders.gl/loader-utils": "^3.0.6",
+				"@loaders.gl/mvt": "^3.0.6",
+				"@loaders.gl/terrain": "^3.0.6",
+				"@loaders.gl/tiles": "^3.0.6",
+				"@luma.gl/experimental": "^8.5.4",
+				"@math.gl/culling": "^3.5.3",
+				"@math.gl/web-mercator": "^3.5.3",
 				"h3-js": "^3.6.0",
 				"long": "^3.2.0",
-				"math.gl": "^3.4.2"
+				"math.gl": "^3.5.3"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0",
+				"@deck.gl/extensions": "^8.0.0",
+				"@deck.gl/layers": "^8.0.0",
+				"@deck.gl/mesh-layers": "^8.0.0",
+				"@loaders.gl/core": "^3.0.0"
 			}
 		},
 		"node_modules/@deck.gl/google-maps": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/google-maps/-/google-maps-8.4.20.tgz",
-			"integrity": "sha512-x6+2CYN2HsvBPCAwH5CzdEkTrE4GOsz/a8yn6hzAHTDsl/s+QuXRvH0N/4OG2hLEwoiJT5ZoJz9Q6TfHNORIGg=="
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/google-maps/-/google-maps-8.5.2.tgz",
+			"integrity": "sha512-Dk3ozenBWgt9nFSYOT4N82urNW/JhiMszfFq6zLt3jUp0N7EJ9d2XO81hclM59BhjIdGWb6drTe96NvtbabVLQ==",
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0"
+			}
 		},
 		"node_modules/@deck.gl/json": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/json/-/json-8.4.20.tgz",
-			"integrity": "sha512-XcMZ6qJ/D4i0a1Rrg2udtb2aDZbTOq4ZXBHYMJ48MAQBT1aFMlMdZxBAGf7eqta+KdfeGBSW8Cg2bAYJojaPOA==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/json/-/json-8.5.2.tgz",
+			"integrity": "sha512-lVS16bvPfLUSidgBURZvGbWEjgK8GjLWlp1iGuLvua2W6TnWIyiKa6a3XoebgeXd8kqwSbQxhNnuSVPX+Di6Rg==",
 			"dependencies": {
 				"d3-dsv": "^1.0.8",
 				"expression-eval": "^2.0.0"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0"
 			}
 		},
 		"node_modules/@deck.gl/layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/layers/-/layers-8.4.20.tgz",
-			"integrity": "sha512-YL91cmJ9BkM6oMCZ5v39NcOYpPlYhK/obGA9XHP3LpQk/JqJxcCrxJGV+mu1mhTYJ7Gut09BbptDquXgltgYkQ==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/layers/-/layers-8.5.2.tgz",
+			"integrity": "sha512-HmpE3qf9CI7sU/xa2DMCNg31pzpzK5XuUHyC70dsLq8AV7Sm3vZQz17KMU/CWSZpVr7yQ8uxTeSQARiv/zeOFQ==",
 			"dependencies": {
-				"@loaders.gl/images": "^2.3.13",
+				"@loaders.gl/images": "^3.0.6",
 				"@mapbox/tiny-sdf": "^1.1.0",
-				"@math.gl/polygon": "^3.4.2",
+				"@math.gl/polygon": "^3.5.3",
 				"earcut": "^2.0.6"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0",
+				"@loaders.gl/core": "^3.0.0"
 			}
 		},
 		"node_modules/@deck.gl/mapbox": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/mapbox/-/mapbox-8.4.20.tgz",
-			"integrity": "sha512-rNdrD893d8N+YXx50pjiFJG2yv2PJ9dhPkiLoX8yL56QwByY3FNeMG8O8JFGd4V7lWXbttJyDmDmQ2w3vRhW6A=="
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/mapbox/-/mapbox-8.5.2.tgz",
+			"integrity": "sha512-nMpzfdPFBVthT+EMgIcKo4YO6bZCqADQtqnxIFtfofZIiKS6R5OSuJ3sXPSNZ9ReCJGzdmndEz7/Qtm9Sia/bA==",
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0"
+			}
 		},
 		"node_modules/@deck.gl/mesh-layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/mesh-layers/-/mesh-layers-8.4.20.tgz",
-			"integrity": "sha512-bVkdMvqY8jULNgOd9U29je2SGxyWYaJPY9LICIuXlSKfy+7/KbxzDnn/oS2zd4/BzYTALMqYaWWF7Ee9p7aebA==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/mesh-layers/-/mesh-layers-8.5.2.tgz",
+			"integrity": "sha512-dUfQyGjm5CYQg9AQdRsGtEEXGSGHxifPlws0zWWoj1r757wjqM0aZ663TUJEsJQDTLNOvbBLGTiuFeCBUoKO4Q==",
 			"dependencies": {
-				"@loaders.gl/gltf": "^2.3.13",
-				"@luma.gl/experimental": "^8.4.1",
-				"@luma.gl/shadertools": "^8.4.1"
+				"@loaders.gl/gltf": "^3.0.6",
+				"@luma.gl/experimental": "^8.5.4",
+				"@luma.gl/shadertools": "^8.5.4"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0"
 			}
 		},
 		"node_modules/@deck.gl/react": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/react/-/react-8.4.20.tgz",
-			"integrity": "sha512-KeEom4PwYRaFrv+RW92/VIVjopE3tbZyeTlFHGFQ/gkdFNplBGFwtvOVnGRaK+n63csL72ZdeRWChNhcKgM4DQ==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/react/-/react-8.5.2.tgz",
+			"integrity": "sha512-h7AJ9nPY1PTjrAVP7T1fvWDChWZrVOsEfYIoEP4W6ILSjvDqEQfVL0+9RhjUwQV2nKrg0QmpqCmbfOrgKQQbYw==",
 			"dependencies": {
 				"prop-types": "^15.6.0"
+			},
+			"peerDependencies": {
+				"@deck.gl/core": "^8.0.0",
+				"react": ">=16.3",
+				"react-dom": ">=16.3"
 			}
 		},
 		"node_modules/@loaders.gl/3d-tiles": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/3d-tiles/-/3d-tiles-2.3.13.tgz",
-			"integrity": "sha512-WccDTlv/AJo5GJFEa6MIjk1H0294hTs8zhmEDq5mmdQ4B7la+4aWKmIfJmgCcIv8vWUkzQIuRIHTgxi0ShmUTw==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/3d-tiles/-/3d-tiles-3.0.8.tgz",
+			"integrity": "sha512-jZeOyDPGD2wEkTLW4Do9A4UUQ+OGjhhNXztB0AsttZ69OpkmsxJXb76xxwevf+eThrsTgSTjZ06eC5DHX0kyXA==",
 			"dependencies": {
-				"@loaders.gl/core": "2.3.13",
-				"@loaders.gl/draco": "2.3.13",
-				"@loaders.gl/gltf": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@loaders.gl/math": "2.3.13",
-				"@loaders.gl/tiles": "2.3.13",
-				"@math.gl/core": "^3.3.0",
-				"@math.gl/geospatial": "^3.3.0",
-				"@probe.gl/stats": "^3.3.0"
+				"@loaders.gl/core": "3.0.8",
+				"@loaders.gl/draco": "3.0.8",
+				"@loaders.gl/gltf": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/math": "3.0.8",
+				"@loaders.gl/tiles": "3.0.8",
+				"@math.gl/core": "^3.5.1",
+				"@math.gl/geospatial": "^3.5.1"
 			}
 		},
 		"node_modules/@loaders.gl/core": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/core/-/core-2.3.13.tgz",
-			"integrity": "sha512-Hjm8eJjS/OUnaHrOSgXtE+qDg5V4Do0jIpp2u0Dv3CMxPrtd2TpwkDfAyZWmmbZew9rzqPoAVMINejS/ItWUeg==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/core/-/core-3.0.8.tgz",
+			"integrity": "sha512-FIfbhMkoRX2JonEHXHgClC7jwOSsEwvvmjlaTMRAY+gFKvJPGmegkp4VgUZquLFf6GedJt/1TuMMvAX6gdq1pg==",
 			"dependencies": {
 				"@babel/runtime": "^7.3.1",
-				"@loaders.gl/loader-utils": "2.3.13"
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/worker-utils": "3.0.8",
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"node_modules/@loaders.gl/draco": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/draco/-/draco-2.3.13.tgz",
-			"integrity": "sha512-rePkoM/xpvNyjO2vvBRQ39Aa3tCpBFCWf/jheka4bFXnLJzy8X7ZGNXojZEsrdT0lAiHM+QrCeAWvtyDEujURA==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/draco/-/draco-3.0.8.tgz",
+			"integrity": "sha512-ZCXzXNHWQ7H0qk/kC+rWzjMWjLzZGzQcDbdpIuy8xJdp4rTpmMkLUseFPby8vhkmIaqxWPwPB6mx/vM7L6JENg==",
 			"dependencies": {
 				"@babel/runtime": "^7.3.1",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"draco3d": "^1.3.6"
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/schema": "3.0.8",
+				"@loaders.gl/worker-utils": "3.0.8",
+				"draco3d": "1.4.1"
 			}
 		},
 		"node_modules/@loaders.gl/gis": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/gis/-/gis-2.3.13.tgz",
-			"integrity": "sha512-i+hot7QeW53GhRwnvF5H65lsZYv4/ESbFuGtNy5TKivPaTIqn1oIFtLOku9Ntw5xTfky9qNNlbMPcsDMoniavQ==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/gis/-/gis-3.0.8.tgz",
+			"integrity": "sha512-7NL+lIb7NezlMupYskVil6M3RZunXJl+TyaVAW82GLbzPSOq+m/G7h3+z0GBa8iv/U/I+cB5BhSN+GZmvFwqEA==",
 			"dependencies": {
-				"@loaders.gl/loader-utils": "2.3.13",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/schema": "3.0.8",
 				"@mapbox/vector-tile": "^1.3.1",
 				"pbf": "^3.2.1"
 			}
 		},
 		"node_modules/@loaders.gl/gltf": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/gltf/-/gltf-2.3.13.tgz",
-			"integrity": "sha512-V/GUMe1Gm8cEfKnp899l0Nu6rKycEbLidO9WYhlwbB5avcwrxltWRqoWvQKFKNCqJyH5neJbl8vDmaaeeELD3w==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/gltf/-/gltf-3.0.8.tgz",
+			"integrity": "sha512-4PXWTlqyvlbZE2Vp4iQ+Y87ZO1WuRvSlbImDhygd0hoINfmJ9ObxrFS3yJcpJTu007nWxXorNVEOKyuoo+4Iyw==",
 			"dependencies": {
-				"@loaders.gl/core": "2.3.13",
-				"@loaders.gl/draco": "2.3.13",
-				"@loaders.gl/images": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13"
-			},
-			"bin": {
-				"glbdump": "bin/glbdump.js"
+				"@loaders.gl/core": "3.0.8",
+				"@loaders.gl/draco": "3.0.8",
+				"@loaders.gl/images": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8"
 			}
 		},
 		"node_modules/@loaders.gl/images": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/images/-/images-2.3.13.tgz",
-			"integrity": "sha512-BBgLf17udhRnYwvsObAOM7jEeLBaeU3di1NyLhpTMa7WbG3jAnDlmy1BRue8wYfgVpWnmk18YubZtX6vCRrJnA==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/images/-/images-3.0.8.tgz",
+			"integrity": "sha512-rO2cIYJYlMs/uO9YSoF4/BEA4p/9xQ3gHZ1sIJkPYVnDqzpbu8nvUjWTQqIdL/MkQBTW8tz3twCdM+B6G9Fa2w==",
 			"dependencies": {
-				"@loaders.gl/loader-utils": "2.3.13"
+				"@loaders.gl/loader-utils": "3.0.8"
 			}
 		},
 		"node_modules/@loaders.gl/loader-utils": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/loader-utils/-/loader-utils-2.3.13.tgz",
-			"integrity": "sha512-vXzH5CWG8pWjUEb7hUr6CM4ERj4NVRpA60OxvVv/OaZZ7hNN63+9/tSUA5IXD9QArWPWrFBnKnvE+5gg4WNqTg==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/loader-utils/-/loader-utils-3.0.8.tgz",
+			"integrity": "sha512-PW1WyyQ+LXkqoGHBZHsmfNQkKiLAYf1gok+kHnHvY9fCzhJeA1iTNEUKPXGXKgS00m/k5cBTkOWAaOG9KRvBCQ==",
 			"dependencies": {
 				"@babel/runtime": "^7.3.1",
-				"@probe.gl/stats": "^3.3.0"
+				"@loaders.gl/worker-utils": "3.0.8",
+				"@probe.gl/stats": "^3.4.0"
 			}
 		},
 		"node_modules/@loaders.gl/math": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/math/-/math-2.3.13.tgz",
-			"integrity": "sha512-ewlpk+5NR+DWSDx7OIptcd+KaPRmwgOlSg/54p+pjw1oO0rqs7y8tv7s+KfYJX66rN7i9MiBaJ0JwfC0lrB09A==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/math/-/math-3.0.8.tgz",
+			"integrity": "sha512-jfFpxxr4Bq5JfOPqLVJc4JJGoGGvVTOCWiJhnTtSAKhaNSwldmNWaZ0w8E2nlgPKPMAHiTRKOQnd9sSY5m66Cw==",
 			"dependencies": {
-				"@loaders.gl/images": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@math.gl/core": "^3.3.0"
+				"@loaders.gl/images": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@math.gl/core": "^3.5.1"
 			}
 		},
 		"node_modules/@loaders.gl/mvt": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/mvt/-/mvt-2.3.13.tgz",
-			"integrity": "sha512-Zi1Gc6XzxTY05tVbxMITvy6zUiBhMpMWvhPkaCcOfktblDMnhQTkIb9fVnhv7ioe4hId4rvuXDIUXhtrBTJEKQ==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/mvt/-/mvt-3.0.8.tgz",
+			"integrity": "sha512-Jk1QTHgpxMsUT01w5IJJ2en9qq0yOZcL2wGXVc7CFp2h6inB22rC3drUwq1mUNGe6iy3EWIo7EeJVd9B+5JyTQ==",
 			"dependencies": {
-				"@loaders.gl/gis": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@mapbox/point-geometry": "~0.1.0",
-				"@mapbox/vector-tile": "^1.3.1",
+				"@loaders.gl/gis": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@math.gl/polygon": "^3.5.1",
 				"pbf": "^3.2.1"
 			}
 		},
+		"node_modules/@loaders.gl/schema": {
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/schema/-/schema-3.0.8.tgz",
+			"integrity": "sha512-yne5WE7fZZWFl2zF8fzDlYhPVJua6h6mTCSmlQ5pryaMXTZS9mfzXXIFWRL3kswqnQTu/QNFdyFj1mP0haF24w==",
+			"dependencies": {
+				"@types/geojson": "^7946.0.7",
+				"apache-arrow": "^4.0.0",
+				"d3-dsv": "^1.2.0"
+			}
+		},
 		"node_modules/@loaders.gl/terrain": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/terrain/-/terrain-2.3.13.tgz",
-			"integrity": "sha512-sZi/CMcNxKbcv7F8pk0PLX5P0o11Sy8DzOk4MB0mRe4XM1ITeiaXf8L6JZkOC3HBdBOzNlId6N3f32fK9OHPnw==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/terrain/-/terrain-3.0.8.tgz",
+			"integrity": "sha512-MtOAYEB/xJB4CN4B0YNPkO4v1ZY332joxiOHQI1x37x4sWVAqOrKLr9jB42sZCB8aINi2WMWGiErtf9wh9L5Pg==",
 			"dependencies": {
 				"@babel/runtime": "^7.3.1",
-				"@loaders.gl/loader-utils": "2.3.13",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/schema": "3.0.8",
 				"@mapbox/martini": "^0.2.0"
 			}
 		},
 		"node_modules/@loaders.gl/tiles": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/tiles/-/tiles-2.3.13.tgz",
-			"integrity": "sha512-3ZSlMgcPTo5lCnvKw/is5dvTayzvX+wi6n1u4lEe4gt8Ml9KYp/e45hOqp6qXR6SckO2+ohBXOzQP2e8ZhRxXQ==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/tiles/-/tiles-3.0.8.tgz",
+			"integrity": "sha512-Rc+yHFdQg2sYmcYkwvszukFWdm9EW354F9HUR7y/oauos6tsdo4YTj31zgytaYR63/EqWQ7kwI29/eePEcutzg==",
 			"dependencies": {
-				"@loaders.gl/core": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@loaders.gl/math": "2.3.13",
-				"@math.gl/core": "^3.3.0",
-				"@math.gl/culling": "^3.3.0",
-				"@math.gl/geospatial": "^3.3.0",
-				"@math.gl/web-mercator": "^3.3.0",
-				"@probe.gl/stats": "^3.3.0"
+				"@loaders.gl/core": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/math": "3.0.8",
+				"@math.gl/core": "^3.5.1",
+				"@math.gl/culling": "^3.5.1",
+				"@math.gl/geospatial": "^3.5.1",
+				"@math.gl/web-mercator": "^3.5.1",
+				"@probe.gl/stats": "^3.4.0"
+			}
+		},
+		"node_modules/@loaders.gl/worker-utils": {
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/worker-utils/-/worker-utils-3.0.8.tgz",
+			"integrity": "sha512-Pg72HuXPcL725TrOlOr83xloVUHj6OMWmno1dI8ccuqfOBsgoRjxNZrcSvwBzfK8tFCzuN2X30I+mHl3BkuYLw==",
+			"dependencies": {
+				"@babel/runtime": "^7.3.1"
 			}
 		},
 		"node_modules/@luma.gl/constants": {
-			"version": "8.4.5",
-			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.4.5.tgz",
-			"integrity": "sha512-TKQJ/sktJ8KHS18hnY30EiLIeTfKo0bc7ECNpUrEWQdls9nZRC5mF+JDSfPv1JlDFWvNXwXR0k3D2X8J/tg3VA=="
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.4.tgz",
+			"integrity": "sha512-lrA4ja92om/gDHYOvM9itL5S7FVzjKulyknDz6S+Y7gmgHgXk2ln1Xar5zUCsLnhAYx4glHITXGH5Y5rdWgT1Q=="
 		},
 		"node_modules/@luma.gl/core": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/core/-/core-8.5.1.tgz",
-			"integrity": "sha512-cQG7CnErB8iISQry0c6X/d7hFQA09At2jDtloq+ekbKAhE7tCGOu6iqz8/VV1FlasDf/aKA6Z6WVBelogtJAQg==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/core/-/core-8.5.4.tgz",
+			"integrity": "sha512-+saDz1D3mcPd53vgbG60ryg1w5CF9Z2wdakKHzR810VoJLw97t4aNdg/eNgyWOvbOHxaKJBPm8K0sGjej67+jw==",
 			"dependencies": {
 				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"@luma.gl/engine": "8.5.1",
-				"@luma.gl/gltools": "8.5.1",
-				"@luma.gl/shadertools": "8.5.1",
-				"@luma.gl/webgl": "8.5.1"
-			}
-		},
-		"node_modules/@luma.gl/core/node_modules/@luma.gl/constants": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-			"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
-		},
-		"node_modules/@luma.gl/core/node_modules/@luma.gl/shadertools": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.5.1.tgz",
-			"integrity": "sha512-HVxA/Pch9vbAmEQmkVwGiEyZ+p+f/HB5C/AxQN21ysK9zwRB9QTIKZKp7Bm3AgeOBiX2JZ40eEtXyH6senxjXQ==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0",
-				"@math.gl/core": "^3.5.0"
-			}
-		},
-		"node_modules/@luma.gl/core/node_modules/@math.gl/core": {
-			"version": "3.5.2",
-			"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.5.2.tgz",
-			"integrity": "sha512-wBhueL1zH3rVt6pS4FkoY8EU5ZRTN0hLgCookTUBOSPZBhUV6IdhE7y9NpT99BCAsXxrbv7TM8KA198GR8QyCA==",
-			"dependencies": {
-				"@babel/runtime": "^7.12.0",
-				"gl-matrix": "^3.0.0"
+				"@luma.gl/constants": "8.5.4",
+				"@luma.gl/engine": "8.5.4",
+				"@luma.gl/gltools": "8.5.4",
+				"@luma.gl/shadertools": "8.5.4",
+				"@luma.gl/webgl": "8.5.4"
 			}
 		},
 		"node_modules/@luma.gl/engine": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/engine/-/engine-8.5.1.tgz",
-			"integrity": "sha512-RF3+DAyIAbgrp3DFbUKjHV/Mwz8frWxxlwR25mURV/R5qdEkHdJKyJMIhNGUDf3xcVEteteaZfjJ0l4M6ZFEfg==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/engine/-/engine-8.5.4.tgz",
+			"integrity": "sha512-Sfv972IzvR9s9kKWugs67XQUh9jC0e/PpBrzvyGVnPU4XvFq42RZVF73pzEklVU6AlpR8Zg5CPtxGdhyOHtT7w==",
 			"dependencies": {
 				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"@luma.gl/gltools": "8.5.1",
-				"@luma.gl/shadertools": "8.5.1",
-				"@luma.gl/webgl": "8.5.1",
+				"@luma.gl/constants": "8.5.4",
+				"@luma.gl/gltools": "8.5.4",
+				"@luma.gl/shadertools": "8.5.4",
+				"@luma.gl/webgl": "8.5.4",
 				"@math.gl/core": "^3.5.0",
-				"probe.gl": "^3.4.0-beta.2"
+				"probe.gl": "^3.4.0"
 			}
 		},
-		"node_modules/@luma.gl/engine/node_modules/@luma.gl/constants": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-			"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
+		"node_modules/@luma.gl/experimental": {
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/experimental/-/experimental-8.5.4.tgz",
+			"integrity": "sha512-09waqRhgIrw+Sq0/in4tw4jPag5YsFfV1nEHJaLAg5RFv92S53IEubSJgkuG02HoOBkPxQ7KYvs9VNmriisnYg==",
+			"dependencies": {
+				"@luma.gl/constants": "8.5.4",
+				"@math.gl/core": "^3.5.0",
+				"earcut": "^2.0.6"
+			},
+			"peerDependencies": {
+				"@loaders.gl/gltf": "^3.0.0",
+				"@loaders.gl/images": "^3.0.0",
+				"@luma.gl/engine": "^8.4.0",
+				"@luma.gl/gltools": "^8.4.0",
+				"@luma.gl/shadertools": "^8.4.0",
+				"@luma.gl/webgl": "^8.4.0"
+			}
 		},
-		"node_modules/@luma.gl/engine/node_modules/@luma.gl/shadertools": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.5.1.tgz",
-			"integrity": "sha512-HVxA/Pch9vbAmEQmkVwGiEyZ+p+f/HB5C/AxQN21ysK9zwRB9QTIKZKp7Bm3AgeOBiX2JZ40eEtXyH6senxjXQ==",
+		"node_modules/@luma.gl/gltools": {
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/gltools/-/gltools-8.5.4.tgz",
+			"integrity": "sha512-JotiPuymQz2Xc41AYlS2moJC/EHxU+OX/OMKi0+/MeOlEFLsdochgTA0I64j8yofLTXdeiGCneGtD1Ao8fk+bw==",
+			"dependencies": {
+				"@babel/runtime": "^7.0.0",
+				"@luma.gl/constants": "8.5.4",
+				"probe.gl": "^3.4.0"
+			}
+		},
+		"node_modules/@luma.gl/shadertools": {
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.5.4.tgz",
+			"integrity": "sha512-rwLBLrACi75aWnuJm8rVKCQnJR2sMTCxHuexfjHJ7Uecl0vVcVJZT7c9EnCFaz5LUTNbdupvuhq0SKNckKiKmw==",
 			"dependencies": {
 				"@babel/runtime": "^7.0.0",
 				"@math.gl/core": "^3.5.0"
 			}
 		},
-		"node_modules/@luma.gl/engine/node_modules/@math.gl/core": {
-			"version": "3.5.2",
-			"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.5.2.tgz",
-			"integrity": "sha512-wBhueL1zH3rVt6pS4FkoY8EU5ZRTN0hLgCookTUBOSPZBhUV6IdhE7y9NpT99BCAsXxrbv7TM8KA198GR8QyCA==",
-			"dependencies": {
-				"@babel/runtime": "^7.12.0",
-				"gl-matrix": "^3.0.0"
-			}
-		},
-		"node_modules/@luma.gl/engine/node_modules/@probe.gl/stats": {
-			"version": "3.4.0",
-			"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
-			"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0"
-			}
-		},
-		"node_modules/@luma.gl/engine/node_modules/probe.gl": {
-			"version": "3.4.0",
-			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
-			"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0",
-				"@probe.gl/stats": "3.4.0"
-			}
-		},
-		"node_modules/@luma.gl/experimental": {
-			"version": "8.4.5",
-			"resolved": "https://registry.npmjs.org/@luma.gl/experimental/-/experimental-8.4.5.tgz",
-			"integrity": "sha512-SZuz6P+Oxz0SpJhfgueo6PT8JilOBAPd6KtfqUG5J8t+ZUAbpTG65O7rY+dja5gMhTyyNuNgTwzKgvjXvEMiVQ==",
-			"dependencies": {
-				"@luma.gl/constants": "8.4.5",
-				"@math.gl/core": "^3.4.1",
-				"earcut": "^2.0.6"
-			}
-		},
-		"node_modules/@luma.gl/gltools": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/gltools/-/gltools-8.5.1.tgz",
-			"integrity": "sha512-LksziPGcJaQnJuT5FTEOGNUgbAiIPyC8B1fMPiG9OJZjjL6fpscUL2iJXs6JtP+msoIov6ZlYgGqa11b/nTQUw==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"probe.gl": "^3.4.0-beta.2"
-			}
-		},
-		"node_modules/@luma.gl/gltools/node_modules/@luma.gl/constants": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-			"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
-		},
-		"node_modules/@luma.gl/gltools/node_modules/@probe.gl/stats": {
-			"version": "3.4.0",
-			"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
-			"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0"
-			}
-		},
-		"node_modules/@luma.gl/gltools/node_modules/probe.gl": {
-			"version": "3.4.0",
-			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
-			"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0",
-				"@probe.gl/stats": "3.4.0"
-			}
-		},
-		"node_modules/@luma.gl/shadertools": {
-			"version": "8.4.5",
-			"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.4.5.tgz",
-			"integrity": "sha512-XToDDXRfzI3mqcPu36sSABq5AOHXDUHndckNnDlaDMrIpKMzJaqe4RqEL2/j/kuv85ssctTQLl/BmhrGJ/ij8g==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0",
-				"@math.gl/core": "^3.4.2"
-			}
-		},
 		"node_modules/@luma.gl/webgl": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/webgl/-/webgl-8.5.1.tgz",
-			"integrity": "sha512-QZ6oFo0/2asJcrHm5mHlp23iXN1htaxwFrYUfRciwi41I+nqht4ZS7Affi/bb+cZ/lERcelVbDZUhWvl950APA==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/webgl/-/webgl-8.5.4.tgz",
+			"integrity": "sha512-dWy4dhTbtvDO9zQBdx1Yb+DxNx/1JWV9rhhJxJUtTKbGZSX0RjkASTT6GBWMl5jrH1JYJefS1wswHmmPVXjK0Q==",
 			"dependencies": {
 				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"@luma.gl/gltools": "8.5.1",
-				"probe.gl": "^3.4.0-beta.2"
-			}
-		},
-		"node_modules/@luma.gl/webgl/node_modules/@luma.gl/constants": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-			"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
-		},
-		"node_modules/@luma.gl/webgl/node_modules/@probe.gl/stats": {
-			"version": "3.4.0",
-			"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
-			"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0"
-			}
-		},
-		"node_modules/@luma.gl/webgl/node_modules/probe.gl": {
-			"version": "3.4.0",
-			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
-			"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
-			"dependencies": {
-				"@babel/runtime": "^7.0.0",
-				"@probe.gl/stats": "3.4.0"
+				"@luma.gl/constants": "8.5.4",
+				"@luma.gl/gltools": "8.5.4",
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"node_modules/@mapbox/geojson-rewind": {
@@ -541,64 +506,68 @@
 			}
 		},
 		"node_modules/@math.gl/core": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.4.3.tgz",
-			"integrity": "sha512-gWAuVkNi8cS4+ejZnhkMjTcKHFSYUSCTSXyCY3ReLIOknyy1QEucecOCyl3xpubRwCzPgCOiQ0yFvEdIFPpH6Q==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.5.3.tgz",
+			"integrity": "sha512-TaSnvG0qFh1VxeNW5L58jSx0nJUMWMpUl6zo6Z3ScQzFySG5cicGOBzk/D40RkIZWPazCKCZ+ZThg5npSK9y3g==",
 			"dependencies": {
 				"@babel/runtime": "^7.12.0",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"node_modules/@math.gl/culling": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/culling/-/culling-3.4.3.tgz",
-			"integrity": "sha512-110pCxuzu3IUMaYFeiKVvVB/NMMkNXTph2x8U5FFOUgyDbLqKKH/l1ZRoK9JyZ5qbYJZzYr6v++bxcnc5uHOIg==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/culling/-/culling-3.5.3.tgz",
+			"integrity": "sha512-ABpAcrvoIOLSm1EUkwgDem4RfO28HWPBs/+taZ/ZSpJG6KiVPklpKU1NCK+05HuJStkpFZ+XlWtehWU6FAMCyA==",
 			"dependencies": {
 				"@babel/runtime": "^7.12.0",
-				"@math.gl/core": "3.4.3",
+				"@math.gl/core": "3.5.3",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"node_modules/@math.gl/geospatial": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/geospatial/-/geospatial-3.4.3.tgz",
-			"integrity": "sha512-5IG85T0WkjxQD8xumcxQypWCw6OscvCAh7IH7E3G6P6r5et2UYUPXFtjXI1ZIdUS/SjD3Jd9Sr4ZKeVSAigt6w==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/geospatial/-/geospatial-3.5.3.tgz",
+			"integrity": "sha512-cnc8VMQrt30JmlG200VDJmmvSjaGW57gY9KEZ+raapxyyFyfDNuAuIrIxe+zbK66FbvFWTbJlDaNmKqVG+ohyw==",
 			"dependencies": {
 				"@babel/runtime": "^7.12.0",
-				"@math.gl/core": "3.4.3",
+				"@math.gl/core": "3.5.3",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"node_modules/@math.gl/polygon": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/polygon/-/polygon-3.4.3.tgz",
-			"integrity": "sha512-ZhccVGn0PgwsN/SNT1jlPPOydkY8bW0YDDWOK4eH70zypLVYSorAyxWEwefqBjZxCkgbQU3WnpxHNSMLr+jVCQ==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/polygon/-/polygon-3.5.3.tgz",
+			"integrity": "sha512-VktscmyQg/Rd56nJk0Nj/UyvnPDbsnZNMWCdl3G5AYenYzLWy6h4FEWhLx8pD+Xw7VuFot8LR4WAK2TPzXzrWw==",
 			"dependencies": {
-				"@math.gl/core": "3.4.3"
+				"@math.gl/core": "3.5.3"
 			}
 		},
 		"node_modules/@math.gl/web-mercator": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/web-mercator/-/web-mercator-3.4.3.tgz",
-			"integrity": "sha512-wfT1ku2b0k9MmaesFev60PXCCqqDvCR9batcY99ob/nMRXcQ/F5yVChS07OIqjUJseK6+6Gep9iYXiflPyPR2Q==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/web-mercator/-/web-mercator-3.5.3.tgz",
+			"integrity": "sha512-WZE9ALeTS4n3HDgkqTxcNLBU7DL0mjmPXSrcqSZIUeDY00+LCtNvMQWUAwqolpB7nD71vD6HLW8delzVuy4teA==",
 			"dependencies": {
 				"@babel/runtime": "^7.12.0",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"node_modules/@probe.gl/stats": {
-			"version": "3.3.1",
-			"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.3.1.tgz",
-			"integrity": "sha512-7ekl4qYndDgmCzZMNhicgJpIzApyjdqo67qv1zKx8hmAgC+AeCk6LE8sdiTauddd8+FDViAkxhrr271KwOgHfw==",
+			"version": "3.4.0",
+			"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
+			"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
 			"dependencies": {
 				"@babel/runtime": "^7.0.0"
 			}
 		},
+		"node_modules/@types/flatbuffers": {
+			"version": "1.10.0",
+			"resolved": "https://registry.npmjs.org/@types/flatbuffers/-/flatbuffers-1.10.0.tgz",
+			"integrity": "sha512-7btbphLrKvo5yl/5CC2OCxUSMx1wV1wvGT1qDXkSt7yi00/YW7E8k6qzXqJHsp+WU0eoG7r6MTQQXI9lIvd0qA=="
+		},
 		"node_modules/@types/geojson": {
 			"version": "7946.0.8",
 			"resolved": "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.8.tgz",
-			"integrity": "sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==",
-			"dev": true
+			"integrity": "sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA=="
 		},
 		"node_modules/@types/hammerjs": {
 			"version": "2.0.39",
@@ -614,6 +583,11 @@
 			"dependencies": {
 				"@types/geojson": "*"
 			}
+		},
+		"node_modules/@types/node": {
+			"version": "14.17.9",
+			"resolved": "https://registry.npmjs.org/@types/node/-/node-14.17.9.tgz",
+			"integrity": "sha512-CMjgRNsks27IDwI785YMY0KLt3co/c0cQ5foxHYv/shC2w8oOnVwz5Ubq1QG5KzrcW+AXk6gzdnxIkDnTvzu3g=="
 		},
 		"node_modules/@types/prop-types": {
 			"version": "15.7.3",
@@ -638,6 +612,11 @@
 			"integrity": "sha512-EaCxbanVeyxDRTQBkdLb3Bvl/HK7PBK6UJjsSixB0iHKoWxE5uu2Q/DgtpOhPIojN0Zl1whvOd7PoHs2P0s5eA==",
 			"dev": true
 		},
+		"node_modules/@types/text-encoding-utf-8": {
+			"version": "1.0.2",
+			"resolved": "https://registry.npmjs.org/@types/text-encoding-utf-8/-/text-encoding-utf-8-1.0.2.tgz",
+			"integrity": "sha512-AQ6zewa0ucLJvtUi5HsErbOFKAcQfRLt9zFLlUOvcXBy2G36a+ZDpCHSGdzJVUD8aNURtIjh9aSjCStNMRCcRQ=="
+		},
 		"node_modules/accepts": {
 			"version": "1.3.7",
 			"resolved": "https://registry.npmjs.org/accepts/-/accepts-1.3.7.tgz",
@@ -651,6 +630,17 @@
 				"node": ">= 0.6"
 			}
 		},
+		"node_modules/ansi-styles": {
+			"version": "3.2.1",
+			"resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-3.2.1.tgz",
+			"integrity": "sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==",
+			"dependencies": {
+				"color-convert": "^1.9.0"
+			},
+			"engines": {
+				"node": ">=4"
+			}
+		},
 		"node_modules/anymatch": {
 			"version": "3.1.2",
 			"resolved": "https://registry.npmjs.org/anymatch/-/anymatch-3.1.2.tgz",
@@ -662,6 +652,34 @@
 			},
 			"engines": {
 				"node": ">= 8"
+			}
+		},
+		"node_modules/apache-arrow": {
+			"version": "4.0.1",
+			"resolved": "https://registry.npmjs.org/apache-arrow/-/apache-arrow-4.0.1.tgz",
+			"integrity": "sha512-DyF7GXCbSjsw4P5C8b+qW7OnJKa6w9mJI0mhV0+EfZbVZCmhfiF6ffqcnrI/kzBrRqn9hH/Ft9n5+m4DTbBJpg==",
+			"dependencies": {
+				"@types/flatbuffers": "^1.10.0",
+				"@types/node": "^14.14.37",
+				"@types/text-encoding-utf-8": "^1.0.1",
+				"command-line-args": "5.1.1",
+				"command-line-usage": "6.1.1",
+				"flatbuffers": "1.12.0",
+				"json-bignum": "^0.0.3",
+				"pad-left": "^2.1.0",
+				"text-encoding-utf-8": "^1.0.2",
+				"tslib": "^2.2.0"
+			},
+			"bin": {
+				"arrow2csv": "bin/arrow2csv.js"
+			}
+		},
+		"node_modules/array-back": {
+			"version": "3.1.0",
+			"resolved": "https://registry.npmjs.org/array-back/-/array-back-3.1.0.tgz",
+			"integrity": "sha512-TkuxA4UCOvxuDK6NZYXCalszEzj+TLszyASooky+i742l9TqsOdYCMJJupxRic61hwquNtppB3hgcuq9SVSH1Q==",
+			"engines": {
+				"node": ">=6"
 			}
 		},
 		"node_modules/array-flatten": {
@@ -754,6 +772,19 @@
 				"colorbrewer": "1.0.0"
 			}
 		},
+		"node_modules/chalk": {
+			"version": "2.4.2",
+			"resolved": "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz",
+			"integrity": "sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==",
+			"dependencies": {
+				"ansi-styles": "^3.2.1",
+				"escape-string-regexp": "^1.0.5",
+				"supports-color": "^5.3.0"
+			},
+			"engines": {
+				"node": ">=4"
+			}
+		},
 		"node_modules/chokidar": {
 			"version": "3.5.2",
 			"resolved": "https://registry.npmjs.org/chokidar/-/chokidar-3.5.2.tgz",
@@ -775,10 +806,67 @@
 				"fsevents": "~2.3.2"
 			}
 		},
+		"node_modules/color-convert": {
+			"version": "1.9.3",
+			"resolved": "https://registry.npmjs.org/color-convert/-/color-convert-1.9.3.tgz",
+			"integrity": "sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==",
+			"dependencies": {
+				"color-name": "1.1.3"
+			}
+		},
+		"node_modules/color-name": {
+			"version": "1.1.3",
+			"resolved": "https://registry.npmjs.org/color-name/-/color-name-1.1.3.tgz",
+			"integrity": "sha1-p9BVi9icQveV3UIyj3QIMcpTvCU="
+		},
 		"node_modules/colorbrewer": {
 			"version": "1.0.0",
 			"resolved": "https://registry.npmjs.org/colorbrewer/-/colorbrewer-1.0.0.tgz",
 			"integrity": "sha1-T5czO5abp2Ejgr5LwzlLNB+0yKI="
+		},
+		"node_modules/command-line-args": {
+			"version": "5.1.1",
+			"resolved": "https://registry.npmjs.org/command-line-args/-/command-line-args-5.1.1.tgz",
+			"integrity": "sha512-hL/eG8lrll1Qy1ezvkant+trihbGnaKaeEjj6Scyr3DN+RC7iQ5Rz84IeLERfAWDGo0HBSNAakczwgCilDXnWg==",
+			"dependencies": {
+				"array-back": "^3.0.1",
+				"find-replace": "^3.0.0",
+				"lodash.camelcase": "^4.3.0",
+				"typical": "^4.0.0"
+			},
+			"engines": {
+				"node": ">=4.0.0"
+			}
+		},
+		"node_modules/command-line-usage": {
+			"version": "6.1.1",
+			"resolved": "https://registry.npmjs.org/command-line-usage/-/command-line-usage-6.1.1.tgz",
+			"integrity": "sha512-F59pEuAR9o1SF/bD0dQBDluhpT4jJQNWUHEuVBqpDmCUo6gPjCi+m9fCWnWZVR/oG6cMTUms4h+3NPl74wGXvA==",
+			"dependencies": {
+				"array-back": "^4.0.1",
+				"chalk": "^2.4.2",
+				"table-layout": "^1.0.1",
+				"typical": "^5.2.0"
+			},
+			"engines": {
+				"node": ">=8.0.0"
+			}
+		},
+		"node_modules/command-line-usage/node_modules/array-back": {
+			"version": "4.0.2",
+			"resolved": "https://registry.npmjs.org/array-back/-/array-back-4.0.2.tgz",
+			"integrity": "sha512-NbdMezxqf94cnNfWLL7V/im0Ub+Anbb0IoZhvzie8+4HJ4nMQuzHuy49FkGYCJK2yAloZ3meiB6AVMClbrI1vg==",
+			"engines": {
+				"node": ">=8"
+			}
+		},
+		"node_modules/command-line-usage/node_modules/typical": {
+			"version": "5.2.0",
+			"resolved": "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz",
+			"integrity": "sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg==",
+			"engines": {
+				"node": ">=8"
+			}
 		},
 		"node_modules/commander": {
 			"version": "2.20.3",
@@ -942,21 +1030,29 @@
 			}
 		},
 		"node_modules/deck.gl": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/deck.gl/-/deck.gl-8.4.20.tgz",
-			"integrity": "sha512-7/2RKqTvWoI51YIbyTvtb9ioXggB2Pzrz0LIiJTwwvYGMO+9zVA+B8BRi0sLZON8cZniIBP/kJvjhPa+GJEyDw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/deck.gl/-/deck.gl-8.5.2.tgz",
+			"integrity": "sha512-tsEyv62Zzc+GT3By0Y1R2gqEJ8K3tGBDaLprAoeAsg7fvIa5ikFBdWEBFHa1UDbgE2UEmYbcBK/yK4GAL8Ia4A==",
 			"dependencies": {
-				"@deck.gl/aggregation-layers": "8.4.20",
-				"@deck.gl/carto": "8.4.20",
-				"@deck.gl/core": "8.4.20",
-				"@deck.gl/extensions": "8.4.20",
-				"@deck.gl/geo-layers": "8.4.20",
-				"@deck.gl/google-maps": "8.4.20",
-				"@deck.gl/json": "8.4.20",
-				"@deck.gl/layers": "8.4.20",
-				"@deck.gl/mapbox": "8.4.20",
-				"@deck.gl/mesh-layers": "8.4.20",
-				"@deck.gl/react": "8.4.20"
+				"@deck.gl/aggregation-layers": "8.5.2",
+				"@deck.gl/carto": "8.5.2",
+				"@deck.gl/core": "8.5.2",
+				"@deck.gl/extensions": "8.5.2",
+				"@deck.gl/geo-layers": "8.5.2",
+				"@deck.gl/google-maps": "8.5.2",
+				"@deck.gl/json": "8.5.2",
+				"@deck.gl/layers": "8.5.2",
+				"@deck.gl/mapbox": "8.5.2",
+				"@deck.gl/mesh-layers": "8.5.2",
+				"@deck.gl/react": "8.5.2"
+			}
+		},
+		"node_modules/deep-extend": {
+			"version": "0.6.0",
+			"resolved": "https://registry.npmjs.org/deep-extend/-/deep-extend-0.6.0.tgz",
+			"integrity": "sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==",
+			"engines": {
+				"node": ">=4.0.0"
 			}
 		},
 		"node_modules/depd": {
@@ -1000,24 +1096,28 @@
 			}
 		},
 		"node_modules/esbuild": {
-			"version": "0.12.14",
-			"resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.12.14.tgz",
-			"integrity": "sha512-z8p+6FGiplR7a3pPonXREbm+8IeXjBGvDpVidZmGB/AJMsJSfGCU+n7KOMCazA9AwvagadRWBhiKorC0w9WJvw==",
+			"version": "0.12.19",
+			"resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.12.19.tgz",
+			"integrity": "sha512-5NuT1G6THW7l3fsSCDkcPepn24R0XtyPjKoqKHD8LfhqMXzCdz0mrS9HgO6hIhzVT7zt0T+JGbzCqF5AH8hS9w==",
 			"dev": true,
+			"hasInstallScript": true,
 			"bin": {
 				"esbuild": "bin/esbuild"
 			}
 		},
 		"node_modules/esbuild-plugin-sass": {
-			"version": "0.5.1",
-			"resolved": "https://registry.npmjs.org/esbuild-plugin-sass/-/esbuild-plugin-sass-0.5.1.tgz",
-			"integrity": "sha512-45rjQFyzYpR1pRk4gWLKLblQyn/CmZJ11/7ZGoFtlmyhj58WXv3or1Vmn76iDPd/g44QL1VnzP1qg2s78xsBSw==",
+			"version": "0.6.0",
+			"resolved": "https://registry.npmjs.org/esbuild-plugin-sass/-/esbuild-plugin-sass-0.6.0.tgz",
+			"integrity": "sha512-WuQu6sIx9SUwEJ5yLO3Bk86R4vPnC5rzCr4mdOzBWdi0CyC56pIVNrpVgoNkqG/qrQPmh49aYg+9QYJTCRuYAw==",
 			"dev": true,
 			"dependencies": {
 				"css-tree": "^1.1.2",
 				"fs-extra": "^9.0.1",
 				"sass": "^1.32.4",
 				"tmp": "^0.2.1"
+			},
+			"peerDependencies": {
+				"esbuild": ">=0.11.14"
 			}
 		},
 		"node_modules/escape-html": {
@@ -1025,6 +1125,14 @@
 			"resolved": "https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz",
 			"integrity": "sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=",
 			"dev": true
+		},
+		"node_modules/escape-string-regexp": {
+			"version": "1.0.5",
+			"resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz",
+			"integrity": "sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=",
+			"engines": {
+				"node": ">=0.8.0"
+			}
 		},
 		"node_modules/etag": {
 			"version": "1.8.1",
@@ -1113,6 +1221,22 @@
 			"engines": {
 				"node": ">= 0.8"
 			}
+		},
+		"node_modules/find-replace": {
+			"version": "3.0.0",
+			"resolved": "https://registry.npmjs.org/find-replace/-/find-replace-3.0.0.tgz",
+			"integrity": "sha512-6Tb2myMioCAgv5kfvP5/PkZZ/ntTpVK39fHY7WkWBgvbeE+VHd/tZuZ4mrC+bxh4cfOZeYKVPaJIZtZXV7GNCQ==",
+			"dependencies": {
+				"array-back": "^3.0.1"
+			},
+			"engines": {
+				"node": ">=4.0.0"
+			}
+		},
+		"node_modules/flatbuffers": {
+			"version": "1.12.0",
+			"resolved": "https://registry.npmjs.org/flatbuffers/-/flatbuffers-1.12.0.tgz",
+			"integrity": "sha512-c7CZADjRcl6j0PlvFy0ZqXQ67qSEZfrVPynmnL+2zPc+NtMvrF8Y0QceMo7QqnSPc7+uWjUIAbvCQ5WIKlMVdQ=="
 		},
 		"node_modules/forwarded": {
 			"version": "0.2.0",
@@ -1243,6 +1367,14 @@
 			"integrity": "sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=",
 			"engines": {
 				"node": ">=0.8.0"
+			}
+		},
+		"node_modules/has-flag": {
+			"version": "3.0.0",
+			"resolved": "https://registry.npmjs.org/has-flag/-/has-flag-3.0.0.tgz",
+			"integrity": "sha1-tdRU3CGZriJWmfNGfloH87lVuv0=",
+			"engines": {
+				"node": ">=4"
 			}
 		},
 		"node_modules/http-errors": {
@@ -1407,6 +1539,14 @@
 				"node": ">= 6.0.0"
 			}
 		},
+		"node_modules/json-bignum": {
+			"version": "0.0.3",
+			"resolved": "https://registry.npmjs.org/json-bignum/-/json-bignum-0.0.3.tgz",
+			"integrity": "sha1-QRY7UENsdz2CQk28IO1w23YEuNc=",
+			"engines": {
+				"node": ">=0.8"
+			}
+		},
 		"node_modules/jsonfile": {
 			"version": "6.1.0",
 			"resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
@@ -1422,6 +1562,11 @@
 			"resolved": "https://registry.npmjs.org/kdbush/-/kdbush-3.0.0.tgz",
 			"integrity": "sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==",
 			"dev": true
+		},
+		"node_modules/lodash.camelcase": {
+			"version": "4.3.0",
+			"resolved": "https://registry.npmjs.org/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz",
+			"integrity": "sha1-soqmKIorn8ZRA1x3EfZathkDMaY="
 		},
 		"node_modules/long": {
 			"version": "3.2.0",
@@ -1477,11 +1622,11 @@
 			}
 		},
 		"node_modules/math.gl": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/math.gl/-/math.gl-3.4.3.tgz",
-			"integrity": "sha512-GSX4GQUVbEQtFnQryDIJVx35WO4HP55NbnIP18/a9G7e5jbTj7QqR2pHKkdlvP5D3jDHP09o39cXMcx0YxqUSA==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/math.gl/-/math.gl-3.5.3.tgz",
+			"integrity": "sha512-cRQRZlc+XvNHd3bIfu3kdPPPAW0vwDelZJmkjn2TDvCyPcmyDtAiZ2Poo1aFoINP7HzN6oHYxapc/0wV3q6Opg==",
 			"dependencies": {
-				"@math.gl/core": "3.4.3"
+				"@math.gl/core": "3.5.3"
 			}
 		},
 		"node_modules/mdn-data": {
@@ -1637,6 +1782,17 @@
 				"wrappy": "1"
 			}
 		},
+		"node_modules/pad-left": {
+			"version": "2.1.0",
+			"resolved": "https://registry.npmjs.org/pad-left/-/pad-left-2.1.0.tgz",
+			"integrity": "sha1-FuajstRKjhOMsIOMx8tAOk/J6ZQ=",
+			"dependencies": {
+				"repeat-string": "^1.5.4"
+			},
+			"engines": {
+				"node": ">=0.10.0"
+			}
+		},
 		"node_modules/parseurl": {
 			"version": "1.3.3",
 			"resolved": "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz",
@@ -1689,12 +1845,12 @@
 			"dev": true
 		},
 		"node_modules/probe.gl": {
-			"version": "3.3.1",
-			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.3.1.tgz",
-			"integrity": "sha512-RI6gxvEyTEdRMzT1np8HvbBOFNYQ0HwE3kZvK790tg/ldwFy7Qvs7cllz4MDT84QG2IMDUu7EsTXQX3qtzdx3w==",
+			"version": "3.4.0",
+			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
+			"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
 			"dependencies": {
 				"@babel/runtime": "^7.0.0",
-				"@probe.gl/stats": "3.3.1"
+				"@probe.gl/stats": "3.4.0"
 			}
 		},
 		"node_modules/prop-types": {
@@ -1764,6 +1920,33 @@
 				"node": ">= 0.8"
 			}
 		},
+		"node_modules/react": {
+			"version": "17.0.2",
+			"resolved": "https://registry.npmjs.org/react/-/react-17.0.2.tgz",
+			"integrity": "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==",
+			"peer": true,
+			"dependencies": {
+				"loose-envify": "^1.1.0",
+				"object-assign": "^4.1.1"
+			},
+			"engines": {
+				"node": ">=0.10.0"
+			}
+		},
+		"node_modules/react-dom": {
+			"version": "17.0.2",
+			"resolved": "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz",
+			"integrity": "sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==",
+			"peer": true,
+			"dependencies": {
+				"loose-envify": "^1.1.0",
+				"object-assign": "^4.1.1",
+				"scheduler": "^0.20.2"
+			},
+			"peerDependencies": {
+				"react": "17.0.2"
+			}
+		},
 		"node_modules/react-is": {
 			"version": "16.13.1",
 			"resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
@@ -1781,10 +1964,26 @@
 				"node": ">=8.10.0"
 			}
 		},
+		"node_modules/reduce-flatten": {
+			"version": "2.0.0",
+			"resolved": "https://registry.npmjs.org/reduce-flatten/-/reduce-flatten-2.0.0.tgz",
+			"integrity": "sha512-EJ4UNY/U1t2P/2k6oqotuX2Cc3T6nxJwsM0N0asT7dhrtH1ltUxDn4NalSYmPE2rCkVpcf/X6R0wDwcFpzhd4w==",
+			"engines": {
+				"node": ">=6"
+			}
+		},
 		"node_modules/regenerator-runtime": {
 			"version": "0.13.7",
 			"resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.7.tgz",
 			"integrity": "sha512-a54FxoJDIr27pgf7IgeQGxmqUNYrcV338lf/6gH456HZ/PhX+5BcwHXG9ajESmwe6WRO0tAzRUrRmNONWgkrew=="
+		},
+		"node_modules/repeat-string": {
+			"version": "1.6.1",
+			"resolved": "https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz",
+			"integrity": "sha1-jcrkcOHIirwtYA//Sndihtp15jc=",
+			"engines": {
+				"node": ">=0.10"
+			}
 		},
 		"node_modules/resolve-protobuf-schema": {
 			"version": "2.1.0",
@@ -1835,6 +2034,16 @@
 			},
 			"engines": {
 				"node": ">=8.9.0"
+			}
+		},
+		"node_modules/scheduler": {
+			"version": "0.20.2",
+			"resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.20.2.tgz",
+			"integrity": "sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==",
+			"peer": true,
+			"dependencies": {
+				"loose-envify": "^1.1.0",
+				"object-assign": "^4.1.1"
 			}
 		},
 		"node_modules/send": {
@@ -1915,6 +2124,52 @@
 				"kdbush": "^3.0.0"
 			}
 		},
+		"node_modules/supports-color": {
+			"version": "5.5.0",
+			"resolved": "https://registry.npmjs.org/supports-color/-/supports-color-5.5.0.tgz",
+			"integrity": "sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==",
+			"dependencies": {
+				"has-flag": "^3.0.0"
+			},
+			"engines": {
+				"node": ">=4"
+			}
+		},
+		"node_modules/table-layout": {
+			"version": "1.0.2",
+			"resolved": "https://registry.npmjs.org/table-layout/-/table-layout-1.0.2.tgz",
+			"integrity": "sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==",
+			"dependencies": {
+				"array-back": "^4.0.1",
+				"deep-extend": "~0.6.0",
+				"typical": "^5.2.0",
+				"wordwrapjs": "^4.0.0"
+			},
+			"engines": {
+				"node": ">=8.0.0"
+			}
+		},
+		"node_modules/table-layout/node_modules/array-back": {
+			"version": "4.0.2",
+			"resolved": "https://registry.npmjs.org/array-back/-/array-back-4.0.2.tgz",
+			"integrity": "sha512-NbdMezxqf94cnNfWLL7V/im0Ub+Anbb0IoZhvzie8+4HJ4nMQuzHuy49FkGYCJK2yAloZ3meiB6AVMClbrI1vg==",
+			"engines": {
+				"node": ">=8"
+			}
+		},
+		"node_modules/table-layout/node_modules/typical": {
+			"version": "5.2.0",
+			"resolved": "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz",
+			"integrity": "sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg==",
+			"engines": {
+				"node": ">=8"
+			}
+		},
+		"node_modules/text-encoding-utf-8": {
+			"version": "1.0.2",
+			"resolved": "https://registry.npmjs.org/text-encoding-utf-8/-/text-encoding-utf-8-1.0.2.tgz",
+			"integrity": "sha512-8bw4MY9WjdsD2aMtO0OzOCY3pXGYNx2d2FfHRVUKkiCPDWjKuOlhLVASS+pD7VkLTVjW268LYJHwsnPFlBpbAg=="
+		},
 		"node_modules/tinyqueue": {
 			"version": "2.0.3",
 			"resolved": "https://registry.npmjs.org/tinyqueue/-/tinyqueue-2.0.3.tgz",
@@ -1954,6 +2209,11 @@
 				"node": ">=0.6"
 			}
 		},
+		"node_modules/tslib": {
+			"version": "2.3.0",
+			"resolved": "https://registry.npmjs.org/tslib/-/tslib-2.3.0.tgz",
+			"integrity": "sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg=="
+		},
 		"node_modules/type-is": {
 			"version": "1.6.18",
 			"resolved": "https://registry.npmjs.org/type-is/-/type-is-1.6.18.tgz",
@@ -1978,6 +2238,14 @@
 			},
 			"engines": {
 				"node": ">=4.2.0"
+			}
+		},
+		"node_modules/typical": {
+			"version": "4.0.0",
+			"resolved": "https://registry.npmjs.org/typical/-/typical-4.0.0.tgz",
+			"integrity": "sha512-VAH4IvQ7BDFYglMd7BPRDfLgxZZX4O4TFcRDA6EN5X7erNJJq+McIEp8np9aVtxrCJ6qx4GTYVfOWNjcqwZgRw==",
+			"engines": {
+				"node": ">=8"
 			}
 		},
 		"node_modules/universalify": {
@@ -2027,6 +2295,26 @@
 				"pbf": "^3.2.1"
 			}
 		},
+		"node_modules/wordwrapjs": {
+			"version": "4.0.1",
+			"resolved": "https://registry.npmjs.org/wordwrapjs/-/wordwrapjs-4.0.1.tgz",
+			"integrity": "sha512-kKlNACbvHrkpIw6oPeYDSmdCTu2hdMHoyXLTcUKala++lx5Y+wjJ/e474Jqv5abnVmwxw08DiTuHmw69lJGksA==",
+			"dependencies": {
+				"reduce-flatten": "^2.0.0",
+				"typical": "^5.2.0"
+			},
+			"engines": {
+				"node": ">=8.0.0"
+			}
+		},
+		"node_modules/wordwrapjs/node_modules/typical": {
+			"version": "5.2.0",
+			"resolved": "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz",
+			"integrity": "sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg==",
+			"engines": {
+				"node": ">=8"
+			}
+		},
 		"node_modules/wrappy": {
 			"version": "1.0.2",
 			"resolved": "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz",
@@ -2055,422 +2343,333 @@
 			}
 		},
 		"@deck.gl/aggregation-layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/aggregation-layers/-/aggregation-layers-8.4.20.tgz",
-			"integrity": "sha512-mYtVHkL/TGtqfh0jA35aiE6ZlfJkVmvUfrK+4UJ+bBdpY5F3z+gGZtxH3RsZbh+x+aOHm4Zdd/XXpijdOFlc/Q==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/aggregation-layers/-/aggregation-layers-8.5.2.tgz",
+			"integrity": "sha512-oiqXPmyn2v0lX9tWCvgmWs29stHSLS3tje71Ff2FVXDNmvP5FoZItFa8y7O7KSTkej2/rSwZeSte/a9pri6Njg==",
 			"requires": {
-				"@luma.gl/shadertools": "^8.4.1",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@luma.gl/shadertools": "^8.5.4",
+				"@math.gl/web-mercator": "^3.5.3",
 				"d3-hexbin": "^0.2.1"
 			}
 		},
 		"@deck.gl/carto": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/carto/-/carto-8.4.20.tgz",
-			"integrity": "sha512-TE2wWU353Zx6SWauQEgmFDEkkBSMnkc1p1S9Ttox7Ijs5kyxqlS44+nRwdLUYxYSTo7YU6QC2ei3cA0if1IlZw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/carto/-/carto-8.5.2.tgz",
+			"integrity": "sha512-Kw/3NUM+2NcHjxH6b7IOUYXEwmJ4SNQujFzAVFW5amG4Lut8074NGSF5XHi+4M/zgk7vXDFsGRxLqspsA/dg8w==",
 			"requires": {
-				"@loaders.gl/loader-utils": "^2.3.13",
-				"@loaders.gl/mvt": "^2.3.13",
-				"@loaders.gl/tiles": "^2.3.13",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@loaders.gl/loader-utils": "^3.0.6",
+				"@loaders.gl/mvt": "^3.0.6",
+				"@loaders.gl/tiles": "^3.0.6",
+				"@math.gl/web-mercator": "^3.5.3",
 				"cartocolor": "^4.0.2",
 				"d3-scale": "^3.2.3"
 			}
 		},
 		"@deck.gl/core": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/core/-/core-8.4.20.tgz",
-			"integrity": "sha512-P3shxzuCbUZt62oSYfeI4oyD1R8LBXjaSViKMEj0ZGW3IOEj/XQetKCMAS+WocrJMB8adIx3eT1bcaM9TPAesA==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/core/-/core-8.5.2.tgz",
+			"integrity": "sha512-SAFv7fKx6k1Rj8R4qTMQO2wEhEfixROzbcoSS6RivxrfES00KYYj6jJ7iNEnq3dFn6qc37LPpxqtYYHO4BcvYA==",
 			"requires": {
-				"@loaders.gl/core": "^2.3.13",
-				"@loaders.gl/images": "^2.3.13",
-				"@luma.gl/core": "^8.4.1",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@loaders.gl/core": "^3.0.6",
+				"@loaders.gl/images": "^3.0.6",
+				"@luma.gl/core": "^8.5.4",
+				"@math.gl/web-mercator": "^3.5.3",
 				"gl-matrix": "^3.0.0",
-				"math.gl": "^3.4.2",
+				"math.gl": "^3.5.3",
 				"mjolnir.js": "^2.5.0",
-				"probe.gl": "^3.2.1"
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"@deck.gl/extensions": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/extensions/-/extensions-8.4.20.tgz",
-			"integrity": "sha512-U0xKlHuRM2kuRZgk9eNMHmoLKiVfkVcOe7aNcXcdQN25Cxy8i4Cmc5gWbw51x8wXZ6SP81FZqF7o5vGN3qT2bw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/extensions/-/extensions-8.5.2.tgz",
+			"integrity": "sha512-VhbQsMNPM7RCR/ERwb1u1x0rEWAxgXfcCWttW+gYvbiagW/LrAJ22jhOghlRW/wilEmupHYbXQlWkW2V/mYfsg==",
 			"requires": {
-				"@luma.gl/shadertools": "^8.4.1"
+				"@luma.gl/shadertools": "^8.5.4"
 			}
 		},
 		"@deck.gl/geo-layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/geo-layers/-/geo-layers-8.4.20.tgz",
-			"integrity": "sha512-xNlre+rcle+XYs3W+YGanIR0JXpRlVuAZuqU5fI9gNrSW2N6YZqECIynBVKw4wrgZMXXW56k0avdtlIhQ8FLJw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/geo-layers/-/geo-layers-8.5.2.tgz",
+			"integrity": "sha512-t6+TgAdbKWDw8g9UX1y6D+5twcdJuKaXw4qSib/0yVurWi/Mil5Plihybt1l9uBZuwkr+UcpxPR73zzo+qd9MA==",
 			"requires": {
-				"@loaders.gl/3d-tiles": "^2.3.13",
-				"@loaders.gl/gis": "^2.3.13",
-				"@loaders.gl/loader-utils": "^2.3.13",
-				"@loaders.gl/mvt": "^2.3.13",
-				"@loaders.gl/terrain": "^2.3.13",
-				"@loaders.gl/tiles": "^2.3.13",
-				"@math.gl/culling": "^3.4.2",
-				"@math.gl/web-mercator": "^3.4.2",
+				"@loaders.gl/3d-tiles": "^3.0.6",
+				"@loaders.gl/gis": "^3.0.6",
+				"@loaders.gl/loader-utils": "^3.0.6",
+				"@loaders.gl/mvt": "^3.0.6",
+				"@loaders.gl/terrain": "^3.0.6",
+				"@loaders.gl/tiles": "^3.0.6",
+				"@luma.gl/experimental": "^8.5.4",
+				"@math.gl/culling": "^3.5.3",
+				"@math.gl/web-mercator": "^3.5.3",
 				"h3-js": "^3.6.0",
 				"long": "^3.2.0",
-				"math.gl": "^3.4.2"
+				"math.gl": "^3.5.3"
 			}
 		},
 		"@deck.gl/google-maps": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/google-maps/-/google-maps-8.4.20.tgz",
-			"integrity": "sha512-x6+2CYN2HsvBPCAwH5CzdEkTrE4GOsz/a8yn6hzAHTDsl/s+QuXRvH0N/4OG2hLEwoiJT5ZoJz9Q6TfHNORIGg=="
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/google-maps/-/google-maps-8.5.2.tgz",
+			"integrity": "sha512-Dk3ozenBWgt9nFSYOT4N82urNW/JhiMszfFq6zLt3jUp0N7EJ9d2XO81hclM59BhjIdGWb6drTe96NvtbabVLQ==",
+			"requires": {}
 		},
 		"@deck.gl/json": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/json/-/json-8.4.20.tgz",
-			"integrity": "sha512-XcMZ6qJ/D4i0a1Rrg2udtb2aDZbTOq4ZXBHYMJ48MAQBT1aFMlMdZxBAGf7eqta+KdfeGBSW8Cg2bAYJojaPOA==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/json/-/json-8.5.2.tgz",
+			"integrity": "sha512-lVS16bvPfLUSidgBURZvGbWEjgK8GjLWlp1iGuLvua2W6TnWIyiKa6a3XoebgeXd8kqwSbQxhNnuSVPX+Di6Rg==",
 			"requires": {
 				"d3-dsv": "^1.0.8",
 				"expression-eval": "^2.0.0"
 			}
 		},
 		"@deck.gl/layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/layers/-/layers-8.4.20.tgz",
-			"integrity": "sha512-YL91cmJ9BkM6oMCZ5v39NcOYpPlYhK/obGA9XHP3LpQk/JqJxcCrxJGV+mu1mhTYJ7Gut09BbptDquXgltgYkQ==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/layers/-/layers-8.5.2.tgz",
+			"integrity": "sha512-HmpE3qf9CI7sU/xa2DMCNg31pzpzK5XuUHyC70dsLq8AV7Sm3vZQz17KMU/CWSZpVr7yQ8uxTeSQARiv/zeOFQ==",
 			"requires": {
-				"@loaders.gl/images": "^2.3.13",
+				"@loaders.gl/images": "^3.0.6",
 				"@mapbox/tiny-sdf": "^1.1.0",
-				"@math.gl/polygon": "^3.4.2",
+				"@math.gl/polygon": "^3.5.3",
 				"earcut": "^2.0.6"
 			}
 		},
 		"@deck.gl/mapbox": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/mapbox/-/mapbox-8.4.20.tgz",
-			"integrity": "sha512-rNdrD893d8N+YXx50pjiFJG2yv2PJ9dhPkiLoX8yL56QwByY3FNeMG8O8JFGd4V7lWXbttJyDmDmQ2w3vRhW6A=="
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/mapbox/-/mapbox-8.5.2.tgz",
+			"integrity": "sha512-nMpzfdPFBVthT+EMgIcKo4YO6bZCqADQtqnxIFtfofZIiKS6R5OSuJ3sXPSNZ9ReCJGzdmndEz7/Qtm9Sia/bA==",
+			"requires": {}
 		},
 		"@deck.gl/mesh-layers": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/mesh-layers/-/mesh-layers-8.4.20.tgz",
-			"integrity": "sha512-bVkdMvqY8jULNgOd9U29je2SGxyWYaJPY9LICIuXlSKfy+7/KbxzDnn/oS2zd4/BzYTALMqYaWWF7Ee9p7aebA==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/mesh-layers/-/mesh-layers-8.5.2.tgz",
+			"integrity": "sha512-dUfQyGjm5CYQg9AQdRsGtEEXGSGHxifPlws0zWWoj1r757wjqM0aZ663TUJEsJQDTLNOvbBLGTiuFeCBUoKO4Q==",
 			"requires": {
-				"@loaders.gl/gltf": "^2.3.13",
-				"@luma.gl/experimental": "^8.4.1",
-				"@luma.gl/shadertools": "^8.4.1"
+				"@loaders.gl/gltf": "^3.0.6",
+				"@luma.gl/experimental": "^8.5.4",
+				"@luma.gl/shadertools": "^8.5.4"
 			}
 		},
 		"@deck.gl/react": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/@deck.gl/react/-/react-8.4.20.tgz",
-			"integrity": "sha512-KeEom4PwYRaFrv+RW92/VIVjopE3tbZyeTlFHGFQ/gkdFNplBGFwtvOVnGRaK+n63csL72ZdeRWChNhcKgM4DQ==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/@deck.gl/react/-/react-8.5.2.tgz",
+			"integrity": "sha512-h7AJ9nPY1PTjrAVP7T1fvWDChWZrVOsEfYIoEP4W6ILSjvDqEQfVL0+9RhjUwQV2nKrg0QmpqCmbfOrgKQQbYw==",
 			"requires": {
 				"prop-types": "^15.6.0"
 			}
 		},
 		"@loaders.gl/3d-tiles": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/3d-tiles/-/3d-tiles-2.3.13.tgz",
-			"integrity": "sha512-WccDTlv/AJo5GJFEa6MIjk1H0294hTs8zhmEDq5mmdQ4B7la+4aWKmIfJmgCcIv8vWUkzQIuRIHTgxi0ShmUTw==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/3d-tiles/-/3d-tiles-3.0.8.tgz",
+			"integrity": "sha512-jZeOyDPGD2wEkTLW4Do9A4UUQ+OGjhhNXztB0AsttZ69OpkmsxJXb76xxwevf+eThrsTgSTjZ06eC5DHX0kyXA==",
 			"requires": {
-				"@loaders.gl/core": "2.3.13",
-				"@loaders.gl/draco": "2.3.13",
-				"@loaders.gl/gltf": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@loaders.gl/math": "2.3.13",
-				"@loaders.gl/tiles": "2.3.13",
-				"@math.gl/core": "^3.3.0",
-				"@math.gl/geospatial": "^3.3.0",
-				"@probe.gl/stats": "^3.3.0"
+				"@loaders.gl/core": "3.0.8",
+				"@loaders.gl/draco": "3.0.8",
+				"@loaders.gl/gltf": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/math": "3.0.8",
+				"@loaders.gl/tiles": "3.0.8",
+				"@math.gl/core": "^3.5.1",
+				"@math.gl/geospatial": "^3.5.1"
 			}
 		},
 		"@loaders.gl/core": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/core/-/core-2.3.13.tgz",
-			"integrity": "sha512-Hjm8eJjS/OUnaHrOSgXtE+qDg5V4Do0jIpp2u0Dv3CMxPrtd2TpwkDfAyZWmmbZew9rzqPoAVMINejS/ItWUeg==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/core/-/core-3.0.8.tgz",
+			"integrity": "sha512-FIfbhMkoRX2JonEHXHgClC7jwOSsEwvvmjlaTMRAY+gFKvJPGmegkp4VgUZquLFf6GedJt/1TuMMvAX6gdq1pg==",
 			"requires": {
 				"@babel/runtime": "^7.3.1",
-				"@loaders.gl/loader-utils": "2.3.13"
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/worker-utils": "3.0.8",
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"@loaders.gl/draco": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/draco/-/draco-2.3.13.tgz",
-			"integrity": "sha512-rePkoM/xpvNyjO2vvBRQ39Aa3tCpBFCWf/jheka4bFXnLJzy8X7ZGNXojZEsrdT0lAiHM+QrCeAWvtyDEujURA==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/draco/-/draco-3.0.8.tgz",
+			"integrity": "sha512-ZCXzXNHWQ7H0qk/kC+rWzjMWjLzZGzQcDbdpIuy8xJdp4rTpmMkLUseFPby8vhkmIaqxWPwPB6mx/vM7L6JENg==",
 			"requires": {
 				"@babel/runtime": "^7.3.1",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"draco3d": "^1.3.6"
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/schema": "3.0.8",
+				"@loaders.gl/worker-utils": "3.0.8",
+				"draco3d": "1.4.1"
 			}
 		},
 		"@loaders.gl/gis": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/gis/-/gis-2.3.13.tgz",
-			"integrity": "sha512-i+hot7QeW53GhRwnvF5H65lsZYv4/ESbFuGtNy5TKivPaTIqn1oIFtLOku9Ntw5xTfky9qNNlbMPcsDMoniavQ==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/gis/-/gis-3.0.8.tgz",
+			"integrity": "sha512-7NL+lIb7NezlMupYskVil6M3RZunXJl+TyaVAW82GLbzPSOq+m/G7h3+z0GBa8iv/U/I+cB5BhSN+GZmvFwqEA==",
 			"requires": {
-				"@loaders.gl/loader-utils": "2.3.13",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/schema": "3.0.8",
 				"@mapbox/vector-tile": "^1.3.1",
 				"pbf": "^3.2.1"
 			}
 		},
 		"@loaders.gl/gltf": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/gltf/-/gltf-2.3.13.tgz",
-			"integrity": "sha512-V/GUMe1Gm8cEfKnp899l0Nu6rKycEbLidO9WYhlwbB5avcwrxltWRqoWvQKFKNCqJyH5neJbl8vDmaaeeELD3w==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/gltf/-/gltf-3.0.8.tgz",
+			"integrity": "sha512-4PXWTlqyvlbZE2Vp4iQ+Y87ZO1WuRvSlbImDhygd0hoINfmJ9ObxrFS3yJcpJTu007nWxXorNVEOKyuoo+4Iyw==",
 			"requires": {
-				"@loaders.gl/core": "2.3.13",
-				"@loaders.gl/draco": "2.3.13",
-				"@loaders.gl/images": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13"
+				"@loaders.gl/core": "3.0.8",
+				"@loaders.gl/draco": "3.0.8",
+				"@loaders.gl/images": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8"
 			}
 		},
 		"@loaders.gl/images": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/images/-/images-2.3.13.tgz",
-			"integrity": "sha512-BBgLf17udhRnYwvsObAOM7jEeLBaeU3di1NyLhpTMa7WbG3jAnDlmy1BRue8wYfgVpWnmk18YubZtX6vCRrJnA==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/images/-/images-3.0.8.tgz",
+			"integrity": "sha512-rO2cIYJYlMs/uO9YSoF4/BEA4p/9xQ3gHZ1sIJkPYVnDqzpbu8nvUjWTQqIdL/MkQBTW8tz3twCdM+B6G9Fa2w==",
 			"requires": {
-				"@loaders.gl/loader-utils": "2.3.13"
+				"@loaders.gl/loader-utils": "3.0.8"
 			}
 		},
 		"@loaders.gl/loader-utils": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/loader-utils/-/loader-utils-2.3.13.tgz",
-			"integrity": "sha512-vXzH5CWG8pWjUEb7hUr6CM4ERj4NVRpA60OxvVv/OaZZ7hNN63+9/tSUA5IXD9QArWPWrFBnKnvE+5gg4WNqTg==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/loader-utils/-/loader-utils-3.0.8.tgz",
+			"integrity": "sha512-PW1WyyQ+LXkqoGHBZHsmfNQkKiLAYf1gok+kHnHvY9fCzhJeA1iTNEUKPXGXKgS00m/k5cBTkOWAaOG9KRvBCQ==",
 			"requires": {
 				"@babel/runtime": "^7.3.1",
-				"@probe.gl/stats": "^3.3.0"
+				"@loaders.gl/worker-utils": "3.0.8",
+				"@probe.gl/stats": "^3.4.0"
 			}
 		},
 		"@loaders.gl/math": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/math/-/math-2.3.13.tgz",
-			"integrity": "sha512-ewlpk+5NR+DWSDx7OIptcd+KaPRmwgOlSg/54p+pjw1oO0rqs7y8tv7s+KfYJX66rN7i9MiBaJ0JwfC0lrB09A==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/math/-/math-3.0.8.tgz",
+			"integrity": "sha512-jfFpxxr4Bq5JfOPqLVJc4JJGoGGvVTOCWiJhnTtSAKhaNSwldmNWaZ0w8E2nlgPKPMAHiTRKOQnd9sSY5m66Cw==",
 			"requires": {
-				"@loaders.gl/images": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@math.gl/core": "^3.3.0"
+				"@loaders.gl/images": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@math.gl/core": "^3.5.1"
 			}
 		},
 		"@loaders.gl/mvt": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/mvt/-/mvt-2.3.13.tgz",
-			"integrity": "sha512-Zi1Gc6XzxTY05tVbxMITvy6zUiBhMpMWvhPkaCcOfktblDMnhQTkIb9fVnhv7ioe4hId4rvuXDIUXhtrBTJEKQ==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/mvt/-/mvt-3.0.8.tgz",
+			"integrity": "sha512-Jk1QTHgpxMsUT01w5IJJ2en9qq0yOZcL2wGXVc7CFp2h6inB22rC3drUwq1mUNGe6iy3EWIo7EeJVd9B+5JyTQ==",
 			"requires": {
-				"@loaders.gl/gis": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@mapbox/point-geometry": "~0.1.0",
-				"@mapbox/vector-tile": "^1.3.1",
+				"@loaders.gl/gis": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@math.gl/polygon": "^3.5.1",
 				"pbf": "^3.2.1"
 			}
 		},
+		"@loaders.gl/schema": {
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/schema/-/schema-3.0.8.tgz",
+			"integrity": "sha512-yne5WE7fZZWFl2zF8fzDlYhPVJua6h6mTCSmlQ5pryaMXTZS9mfzXXIFWRL3kswqnQTu/QNFdyFj1mP0haF24w==",
+			"requires": {
+				"@types/geojson": "^7946.0.7",
+				"apache-arrow": "^4.0.0",
+				"d3-dsv": "^1.2.0"
+			}
+		},
 		"@loaders.gl/terrain": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/terrain/-/terrain-2.3.13.tgz",
-			"integrity": "sha512-sZi/CMcNxKbcv7F8pk0PLX5P0o11Sy8DzOk4MB0mRe4XM1ITeiaXf8L6JZkOC3HBdBOzNlId6N3f32fK9OHPnw==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/terrain/-/terrain-3.0.8.tgz",
+			"integrity": "sha512-MtOAYEB/xJB4CN4B0YNPkO4v1ZY332joxiOHQI1x37x4sWVAqOrKLr9jB42sZCB8aINi2WMWGiErtf9wh9L5Pg==",
 			"requires": {
 				"@babel/runtime": "^7.3.1",
-				"@loaders.gl/loader-utils": "2.3.13",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/schema": "3.0.8",
 				"@mapbox/martini": "^0.2.0"
 			}
 		},
 		"@loaders.gl/tiles": {
-			"version": "2.3.13",
-			"resolved": "https://registry.npmjs.org/@loaders.gl/tiles/-/tiles-2.3.13.tgz",
-			"integrity": "sha512-3ZSlMgcPTo5lCnvKw/is5dvTayzvX+wi6n1u4lEe4gt8Ml9KYp/e45hOqp6qXR6SckO2+ohBXOzQP2e8ZhRxXQ==",
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/tiles/-/tiles-3.0.8.tgz",
+			"integrity": "sha512-Rc+yHFdQg2sYmcYkwvszukFWdm9EW354F9HUR7y/oauos6tsdo4YTj31zgytaYR63/EqWQ7kwI29/eePEcutzg==",
 			"requires": {
-				"@loaders.gl/core": "2.3.13",
-				"@loaders.gl/loader-utils": "2.3.13",
-				"@loaders.gl/math": "2.3.13",
-				"@math.gl/core": "^3.3.0",
-				"@math.gl/culling": "^3.3.0",
-				"@math.gl/geospatial": "^3.3.0",
-				"@math.gl/web-mercator": "^3.3.0",
-				"@probe.gl/stats": "^3.3.0"
+				"@loaders.gl/core": "3.0.8",
+				"@loaders.gl/loader-utils": "3.0.8",
+				"@loaders.gl/math": "3.0.8",
+				"@math.gl/core": "^3.5.1",
+				"@math.gl/culling": "^3.5.1",
+				"@math.gl/geospatial": "^3.5.1",
+				"@math.gl/web-mercator": "^3.5.1",
+				"@probe.gl/stats": "^3.4.0"
+			}
+		},
+		"@loaders.gl/worker-utils": {
+			"version": "3.0.8",
+			"resolved": "https://registry.npmjs.org/@loaders.gl/worker-utils/-/worker-utils-3.0.8.tgz",
+			"integrity": "sha512-Pg72HuXPcL725TrOlOr83xloVUHj6OMWmno1dI8ccuqfOBsgoRjxNZrcSvwBzfK8tFCzuN2X30I+mHl3BkuYLw==",
+			"requires": {
+				"@babel/runtime": "^7.3.1"
 			}
 		},
 		"@luma.gl/constants": {
-			"version": "8.4.5",
-			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.4.5.tgz",
-			"integrity": "sha512-TKQJ/sktJ8KHS18hnY30EiLIeTfKo0bc7ECNpUrEWQdls9nZRC5mF+JDSfPv1JlDFWvNXwXR0k3D2X8J/tg3VA=="
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.4.tgz",
+			"integrity": "sha512-lrA4ja92om/gDHYOvM9itL5S7FVzjKulyknDz6S+Y7gmgHgXk2ln1Xar5zUCsLnhAYx4glHITXGH5Y5rdWgT1Q=="
 		},
 		"@luma.gl/core": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/core/-/core-8.5.1.tgz",
-			"integrity": "sha512-cQG7CnErB8iISQry0c6X/d7hFQA09At2jDtloq+ekbKAhE7tCGOu6iqz8/VV1FlasDf/aKA6Z6WVBelogtJAQg==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/core/-/core-8.5.4.tgz",
+			"integrity": "sha512-+saDz1D3mcPd53vgbG60ryg1w5CF9Z2wdakKHzR810VoJLw97t4aNdg/eNgyWOvbOHxaKJBPm8K0sGjej67+jw==",
 			"requires": {
 				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"@luma.gl/engine": "8.5.1",
-				"@luma.gl/gltools": "8.5.1",
-				"@luma.gl/shadertools": "8.5.1",
-				"@luma.gl/webgl": "8.5.1"
-			},
-			"dependencies": {
-				"@luma.gl/constants": {
-					"version": "8.5.1",
-					"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-					"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
-				},
-				"@luma.gl/shadertools": {
-					"version": "8.5.1",
-					"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.5.1.tgz",
-					"integrity": "sha512-HVxA/Pch9vbAmEQmkVwGiEyZ+p+f/HB5C/AxQN21ysK9zwRB9QTIKZKp7Bm3AgeOBiX2JZ40eEtXyH6senxjXQ==",
-					"requires": {
-						"@babel/runtime": "^7.0.0",
-						"@math.gl/core": "^3.5.0"
-					}
-				},
-				"@math.gl/core": {
-					"version": "3.5.2",
-					"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.5.2.tgz",
-					"integrity": "sha512-wBhueL1zH3rVt6pS4FkoY8EU5ZRTN0hLgCookTUBOSPZBhUV6IdhE7y9NpT99BCAsXxrbv7TM8KA198GR8QyCA==",
-					"requires": {
-						"@babel/runtime": "^7.12.0",
-						"gl-matrix": "^3.0.0"
-					}
-				}
+				"@luma.gl/constants": "8.5.4",
+				"@luma.gl/engine": "8.5.4",
+				"@luma.gl/gltools": "8.5.4",
+				"@luma.gl/shadertools": "8.5.4",
+				"@luma.gl/webgl": "8.5.4"
 			}
 		},
 		"@luma.gl/engine": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/engine/-/engine-8.5.1.tgz",
-			"integrity": "sha512-RF3+DAyIAbgrp3DFbUKjHV/Mwz8frWxxlwR25mURV/R5qdEkHdJKyJMIhNGUDf3xcVEteteaZfjJ0l4M6ZFEfg==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/engine/-/engine-8.5.4.tgz",
+			"integrity": "sha512-Sfv972IzvR9s9kKWugs67XQUh9jC0e/PpBrzvyGVnPU4XvFq42RZVF73pzEklVU6AlpR8Zg5CPtxGdhyOHtT7w==",
 			"requires": {
 				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"@luma.gl/gltools": "8.5.1",
-				"@luma.gl/shadertools": "8.5.1",
-				"@luma.gl/webgl": "8.5.1",
+				"@luma.gl/constants": "8.5.4",
+				"@luma.gl/gltools": "8.5.4",
+				"@luma.gl/shadertools": "8.5.4",
+				"@luma.gl/webgl": "8.5.4",
 				"@math.gl/core": "^3.5.0",
-				"probe.gl": "^3.4.0-beta.2"
-			},
-			"dependencies": {
-				"@luma.gl/constants": {
-					"version": "8.5.1",
-					"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-					"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
-				},
-				"@luma.gl/shadertools": {
-					"version": "8.5.1",
-					"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.5.1.tgz",
-					"integrity": "sha512-HVxA/Pch9vbAmEQmkVwGiEyZ+p+f/HB5C/AxQN21ysK9zwRB9QTIKZKp7Bm3AgeOBiX2JZ40eEtXyH6senxjXQ==",
-					"requires": {
-						"@babel/runtime": "^7.0.0",
-						"@math.gl/core": "^3.5.0"
-					}
-				},
-				"@math.gl/core": {
-					"version": "3.5.2",
-					"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.5.2.tgz",
-					"integrity": "sha512-wBhueL1zH3rVt6pS4FkoY8EU5ZRTN0hLgCookTUBOSPZBhUV6IdhE7y9NpT99BCAsXxrbv7TM8KA198GR8QyCA==",
-					"requires": {
-						"@babel/runtime": "^7.12.0",
-						"gl-matrix": "^3.0.0"
-					}
-				},
-				"@probe.gl/stats": {
-					"version": "3.4.0",
-					"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
-					"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
-					"requires": {
-						"@babel/runtime": "^7.0.0"
-					}
-				},
-				"probe.gl": {
-					"version": "3.4.0",
-					"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
-					"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
-					"requires": {
-						"@babel/runtime": "^7.0.0",
-						"@probe.gl/stats": "3.4.0"
-					}
-				}
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"@luma.gl/experimental": {
-			"version": "8.4.5",
-			"resolved": "https://registry.npmjs.org/@luma.gl/experimental/-/experimental-8.4.5.tgz",
-			"integrity": "sha512-SZuz6P+Oxz0SpJhfgueo6PT8JilOBAPd6KtfqUG5J8t+ZUAbpTG65O7rY+dja5gMhTyyNuNgTwzKgvjXvEMiVQ==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/experimental/-/experimental-8.5.4.tgz",
+			"integrity": "sha512-09waqRhgIrw+Sq0/in4tw4jPag5YsFfV1nEHJaLAg5RFv92S53IEubSJgkuG02HoOBkPxQ7KYvs9VNmriisnYg==",
 			"requires": {
-				"@luma.gl/constants": "8.4.5",
-				"@math.gl/core": "^3.4.1",
+				"@luma.gl/constants": "8.5.4",
+				"@math.gl/core": "^3.5.0",
 				"earcut": "^2.0.6"
 			}
 		},
 		"@luma.gl/gltools": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/gltools/-/gltools-8.5.1.tgz",
-			"integrity": "sha512-LksziPGcJaQnJuT5FTEOGNUgbAiIPyC8B1fMPiG9OJZjjL6fpscUL2iJXs6JtP+msoIov6ZlYgGqa11b/nTQUw==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/gltools/-/gltools-8.5.4.tgz",
+			"integrity": "sha512-JotiPuymQz2Xc41AYlS2moJC/EHxU+OX/OMKi0+/MeOlEFLsdochgTA0I64j8yofLTXdeiGCneGtD1Ao8fk+bw==",
 			"requires": {
 				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"probe.gl": "^3.4.0-beta.2"
-			},
-			"dependencies": {
-				"@luma.gl/constants": {
-					"version": "8.5.1",
-					"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-					"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
-				},
-				"@probe.gl/stats": {
-					"version": "3.4.0",
-					"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
-					"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
-					"requires": {
-						"@babel/runtime": "^7.0.0"
-					}
-				},
-				"probe.gl": {
-					"version": "3.4.0",
-					"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
-					"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
-					"requires": {
-						"@babel/runtime": "^7.0.0",
-						"@probe.gl/stats": "3.4.0"
-					}
-				}
+				"@luma.gl/constants": "8.5.4",
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"@luma.gl/shadertools": {
-			"version": "8.4.5",
-			"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.4.5.tgz",
-			"integrity": "sha512-XToDDXRfzI3mqcPu36sSABq5AOHXDUHndckNnDlaDMrIpKMzJaqe4RqEL2/j/kuv85ssctTQLl/BmhrGJ/ij8g==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/shadertools/-/shadertools-8.5.4.tgz",
+			"integrity": "sha512-rwLBLrACi75aWnuJm8rVKCQnJR2sMTCxHuexfjHJ7Uecl0vVcVJZT7c9EnCFaz5LUTNbdupvuhq0SKNckKiKmw==",
 			"requires": {
 				"@babel/runtime": "^7.0.0",
-				"@math.gl/core": "^3.4.2"
+				"@math.gl/core": "^3.5.0"
 			}
 		},
 		"@luma.gl/webgl": {
-			"version": "8.5.1",
-			"resolved": "https://registry.npmjs.org/@luma.gl/webgl/-/webgl-8.5.1.tgz",
-			"integrity": "sha512-QZ6oFo0/2asJcrHm5mHlp23iXN1htaxwFrYUfRciwi41I+nqht4ZS7Affi/bb+cZ/lERcelVbDZUhWvl950APA==",
+			"version": "8.5.4",
+			"resolved": "https://registry.npmjs.org/@luma.gl/webgl/-/webgl-8.5.4.tgz",
+			"integrity": "sha512-dWy4dhTbtvDO9zQBdx1Yb+DxNx/1JWV9rhhJxJUtTKbGZSX0RjkASTT6GBWMl5jrH1JYJefS1wswHmmPVXjK0Q==",
 			"requires": {
 				"@babel/runtime": "^7.0.0",
-				"@luma.gl/constants": "8.5.1",
-				"@luma.gl/gltools": "8.5.1",
-				"probe.gl": "^3.4.0-beta.2"
-			},
-			"dependencies": {
-				"@luma.gl/constants": {
-					"version": "8.5.1",
-					"resolved": "https://registry.npmjs.org/@luma.gl/constants/-/constants-8.5.1.tgz",
-					"integrity": "sha512-odEdMFSYNokYaC+B0OUVVDD2OIboqBwz7jtny3G5DGH1WYkpHwN8cBeZ5QuVBROwMlicpvSKmGFS7W/nYgf1Cg=="
-				},
-				"@probe.gl/stats": {
-					"version": "3.4.0",
-					"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
-					"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
-					"requires": {
-						"@babel/runtime": "^7.0.0"
-					}
-				},
-				"probe.gl": {
-					"version": "3.4.0",
-					"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
-					"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
-					"requires": {
-						"@babel/runtime": "^7.0.0",
-						"@probe.gl/stats": "3.4.0"
-					}
-				}
+				"@luma.gl/constants": "8.5.4",
+				"@luma.gl/gltools": "8.5.4",
+				"probe.gl": "^3.4.0"
 			}
 		},
 		"@mapbox/geojson-rewind": {
@@ -2537,64 +2736,68 @@
 			"dev": true
 		},
 		"@math.gl/core": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.4.3.tgz",
-			"integrity": "sha512-gWAuVkNi8cS4+ejZnhkMjTcKHFSYUSCTSXyCY3ReLIOknyy1QEucecOCyl3xpubRwCzPgCOiQ0yFvEdIFPpH6Q==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/core/-/core-3.5.3.tgz",
+			"integrity": "sha512-TaSnvG0qFh1VxeNW5L58jSx0nJUMWMpUl6zo6Z3ScQzFySG5cicGOBzk/D40RkIZWPazCKCZ+ZThg5npSK9y3g==",
 			"requires": {
 				"@babel/runtime": "^7.12.0",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"@math.gl/culling": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/culling/-/culling-3.4.3.tgz",
-			"integrity": "sha512-110pCxuzu3IUMaYFeiKVvVB/NMMkNXTph2x8U5FFOUgyDbLqKKH/l1ZRoK9JyZ5qbYJZzYr6v++bxcnc5uHOIg==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/culling/-/culling-3.5.3.tgz",
+			"integrity": "sha512-ABpAcrvoIOLSm1EUkwgDem4RfO28HWPBs/+taZ/ZSpJG6KiVPklpKU1NCK+05HuJStkpFZ+XlWtehWU6FAMCyA==",
 			"requires": {
 				"@babel/runtime": "^7.12.0",
-				"@math.gl/core": "3.4.3",
+				"@math.gl/core": "3.5.3",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"@math.gl/geospatial": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/geospatial/-/geospatial-3.4.3.tgz",
-			"integrity": "sha512-5IG85T0WkjxQD8xumcxQypWCw6OscvCAh7IH7E3G6P6r5et2UYUPXFtjXI1ZIdUS/SjD3Jd9Sr4ZKeVSAigt6w==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/geospatial/-/geospatial-3.5.3.tgz",
+			"integrity": "sha512-cnc8VMQrt30JmlG200VDJmmvSjaGW57gY9KEZ+raapxyyFyfDNuAuIrIxe+zbK66FbvFWTbJlDaNmKqVG+ohyw==",
 			"requires": {
 				"@babel/runtime": "^7.12.0",
-				"@math.gl/core": "3.4.3",
+				"@math.gl/core": "3.5.3",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"@math.gl/polygon": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/polygon/-/polygon-3.4.3.tgz",
-			"integrity": "sha512-ZhccVGn0PgwsN/SNT1jlPPOydkY8bW0YDDWOK4eH70zypLVYSorAyxWEwefqBjZxCkgbQU3WnpxHNSMLr+jVCQ==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/polygon/-/polygon-3.5.3.tgz",
+			"integrity": "sha512-VktscmyQg/Rd56nJk0Nj/UyvnPDbsnZNMWCdl3G5AYenYzLWy6h4FEWhLx8pD+Xw7VuFot8LR4WAK2TPzXzrWw==",
 			"requires": {
-				"@math.gl/core": "3.4.3"
+				"@math.gl/core": "3.5.3"
 			}
 		},
 		"@math.gl/web-mercator": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/@math.gl/web-mercator/-/web-mercator-3.4.3.tgz",
-			"integrity": "sha512-wfT1ku2b0k9MmaesFev60PXCCqqDvCR9batcY99ob/nMRXcQ/F5yVChS07OIqjUJseK6+6Gep9iYXiflPyPR2Q==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/@math.gl/web-mercator/-/web-mercator-3.5.3.tgz",
+			"integrity": "sha512-WZE9ALeTS4n3HDgkqTxcNLBU7DL0mjmPXSrcqSZIUeDY00+LCtNvMQWUAwqolpB7nD71vD6HLW8delzVuy4teA==",
 			"requires": {
 				"@babel/runtime": "^7.12.0",
 				"gl-matrix": "^3.0.0"
 			}
 		},
 		"@probe.gl/stats": {
-			"version": "3.3.1",
-			"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.3.1.tgz",
-			"integrity": "sha512-7ekl4qYndDgmCzZMNhicgJpIzApyjdqo67qv1zKx8hmAgC+AeCk6LE8sdiTauddd8+FDViAkxhrr271KwOgHfw==",
+			"version": "3.4.0",
+			"resolved": "https://registry.npmjs.org/@probe.gl/stats/-/stats-3.4.0.tgz",
+			"integrity": "sha512-Gl37r9qGuiKadIvTZdSZvzCNOttJYw6RcY1oT0oDuB8r2uhuZAdSMQRQTy9FTinp6MY6O9wngGnV6EpQ8wSBAw==",
 			"requires": {
 				"@babel/runtime": "^7.0.0"
 			}
 		},
+		"@types/flatbuffers": {
+			"version": "1.10.0",
+			"resolved": "https://registry.npmjs.org/@types/flatbuffers/-/flatbuffers-1.10.0.tgz",
+			"integrity": "sha512-7btbphLrKvo5yl/5CC2OCxUSMx1wV1wvGT1qDXkSt7yi00/YW7E8k6qzXqJHsp+WU0eoG7r6MTQQXI9lIvd0qA=="
+		},
 		"@types/geojson": {
 			"version": "7946.0.8",
 			"resolved": "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.8.tgz",
-			"integrity": "sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==",
-			"dev": true
+			"integrity": "sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA=="
 		},
 		"@types/hammerjs": {
 			"version": "2.0.39",
@@ -2610,6 +2813,11 @@
 			"requires": {
 				"@types/geojson": "*"
 			}
+		},
+		"@types/node": {
+			"version": "14.17.9",
+			"resolved": "https://registry.npmjs.org/@types/node/-/node-14.17.9.tgz",
+			"integrity": "sha512-CMjgRNsks27IDwI785YMY0KLt3co/c0cQ5foxHYv/shC2w8oOnVwz5Ubq1QG5KzrcW+AXk6gzdnxIkDnTvzu3g=="
 		},
 		"@types/prop-types": {
 			"version": "15.7.3",
@@ -2634,6 +2842,11 @@
 			"integrity": "sha512-EaCxbanVeyxDRTQBkdLb3Bvl/HK7PBK6UJjsSixB0iHKoWxE5uu2Q/DgtpOhPIojN0Zl1whvOd7PoHs2P0s5eA==",
 			"dev": true
 		},
+		"@types/text-encoding-utf-8": {
+			"version": "1.0.2",
+			"resolved": "https://registry.npmjs.org/@types/text-encoding-utf-8/-/text-encoding-utf-8-1.0.2.tgz",
+			"integrity": "sha512-AQ6zewa0ucLJvtUi5HsErbOFKAcQfRLt9zFLlUOvcXBy2G36a+ZDpCHSGdzJVUD8aNURtIjh9aSjCStNMRCcRQ=="
+		},
 		"accepts": {
 			"version": "1.3.7",
 			"resolved": "https://registry.npmjs.org/accepts/-/accepts-1.3.7.tgz",
@@ -2642,6 +2855,14 @@
 			"requires": {
 				"mime-types": "~2.1.24",
 				"negotiator": "0.6.2"
+			}
+		},
+		"ansi-styles": {
+			"version": "3.2.1",
+			"resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-3.2.1.tgz",
+			"integrity": "sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==",
+			"requires": {
+				"color-convert": "^1.9.0"
 			}
 		},
 		"anymatch": {
@@ -2653,6 +2874,28 @@
 				"normalize-path": "^3.0.0",
 				"picomatch": "^2.0.4"
 			}
+		},
+		"apache-arrow": {
+			"version": "4.0.1",
+			"resolved": "https://registry.npmjs.org/apache-arrow/-/apache-arrow-4.0.1.tgz",
+			"integrity": "sha512-DyF7GXCbSjsw4P5C8b+qW7OnJKa6w9mJI0mhV0+EfZbVZCmhfiF6ffqcnrI/kzBrRqn9hH/Ft9n5+m4DTbBJpg==",
+			"requires": {
+				"@types/flatbuffers": "^1.10.0",
+				"@types/node": "^14.14.37",
+				"@types/text-encoding-utf-8": "^1.0.1",
+				"command-line-args": "5.1.1",
+				"command-line-usage": "6.1.1",
+				"flatbuffers": "1.12.0",
+				"json-bignum": "^0.0.3",
+				"pad-left": "^2.1.0",
+				"text-encoding-utf-8": "^1.0.2",
+				"tslib": "^2.2.0"
+			}
+		},
+		"array-back": {
+			"version": "3.1.0",
+			"resolved": "https://registry.npmjs.org/array-back/-/array-back-3.1.0.tgz",
+			"integrity": "sha512-TkuxA4UCOvxuDK6NZYXCalszEzj+TLszyASooky+i742l9TqsOdYCMJJupxRic61hwquNtppB3hgcuq9SVSH1Q=="
 		},
 		"array-flatten": {
 			"version": "1.1.1",
@@ -2729,6 +2972,16 @@
 				"colorbrewer": "1.0.0"
 			}
 		},
+		"chalk": {
+			"version": "2.4.2",
+			"resolved": "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz",
+			"integrity": "sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==",
+			"requires": {
+				"ansi-styles": "^3.2.1",
+				"escape-string-regexp": "^1.0.5",
+				"supports-color": "^5.3.0"
+			}
+		},
 		"chokidar": {
 			"version": "3.5.2",
 			"resolved": "https://registry.npmjs.org/chokidar/-/chokidar-3.5.2.tgz",
@@ -2745,10 +2998,57 @@
 				"readdirp": "~3.6.0"
 			}
 		},
+		"color-convert": {
+			"version": "1.9.3",
+			"resolved": "https://registry.npmjs.org/color-convert/-/color-convert-1.9.3.tgz",
+			"integrity": "sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==",
+			"requires": {
+				"color-name": "1.1.3"
+			}
+		},
+		"color-name": {
+			"version": "1.1.3",
+			"resolved": "https://registry.npmjs.org/color-name/-/color-name-1.1.3.tgz",
+			"integrity": "sha1-p9BVi9icQveV3UIyj3QIMcpTvCU="
+		},
 		"colorbrewer": {
 			"version": "1.0.0",
 			"resolved": "https://registry.npmjs.org/colorbrewer/-/colorbrewer-1.0.0.tgz",
 			"integrity": "sha1-T5czO5abp2Ejgr5LwzlLNB+0yKI="
+		},
+		"command-line-args": {
+			"version": "5.1.1",
+			"resolved": "https://registry.npmjs.org/command-line-args/-/command-line-args-5.1.1.tgz",
+			"integrity": "sha512-hL/eG8lrll1Qy1ezvkant+trihbGnaKaeEjj6Scyr3DN+RC7iQ5Rz84IeLERfAWDGo0HBSNAakczwgCilDXnWg==",
+			"requires": {
+				"array-back": "^3.0.1",
+				"find-replace": "^3.0.0",
+				"lodash.camelcase": "^4.3.0",
+				"typical": "^4.0.0"
+			}
+		},
+		"command-line-usage": {
+			"version": "6.1.1",
+			"resolved": "https://registry.npmjs.org/command-line-usage/-/command-line-usage-6.1.1.tgz",
+			"integrity": "sha512-F59pEuAR9o1SF/bD0dQBDluhpT4jJQNWUHEuVBqpDmCUo6gPjCi+m9fCWnWZVR/oG6cMTUms4h+3NPl74wGXvA==",
+			"requires": {
+				"array-back": "^4.0.1",
+				"chalk": "^2.4.2",
+				"table-layout": "^1.0.1",
+				"typical": "^5.2.0"
+			},
+			"dependencies": {
+				"array-back": {
+					"version": "4.0.2",
+					"resolved": "https://registry.npmjs.org/array-back/-/array-back-4.0.2.tgz",
+					"integrity": "sha512-NbdMezxqf94cnNfWLL7V/im0Ub+Anbb0IoZhvzie8+4HJ4nMQuzHuy49FkGYCJK2yAloZ3meiB6AVMClbrI1vg=="
+				},
+				"typical": {
+					"version": "5.2.0",
+					"resolved": "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz",
+					"integrity": "sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg=="
+				}
+			}
 		},
 		"commander": {
 			"version": "2.20.3",
@@ -2889,22 +3189,27 @@
 			}
 		},
 		"deck.gl": {
-			"version": "8.4.20",
-			"resolved": "https://registry.npmjs.org/deck.gl/-/deck.gl-8.4.20.tgz",
-			"integrity": "sha512-7/2RKqTvWoI51YIbyTvtb9ioXggB2Pzrz0LIiJTwwvYGMO+9zVA+B8BRi0sLZON8cZniIBP/kJvjhPa+GJEyDw==",
+			"version": "8.5.2",
+			"resolved": "https://registry.npmjs.org/deck.gl/-/deck.gl-8.5.2.tgz",
+			"integrity": "sha512-tsEyv62Zzc+GT3By0Y1R2gqEJ8K3tGBDaLprAoeAsg7fvIa5ikFBdWEBFHa1UDbgE2UEmYbcBK/yK4GAL8Ia4A==",
 			"requires": {
-				"@deck.gl/aggregation-layers": "8.4.20",
-				"@deck.gl/carto": "8.4.20",
-				"@deck.gl/core": "8.4.20",
-				"@deck.gl/extensions": "8.4.20",
-				"@deck.gl/geo-layers": "8.4.20",
-				"@deck.gl/google-maps": "8.4.20",
-				"@deck.gl/json": "8.4.20",
-				"@deck.gl/layers": "8.4.20",
-				"@deck.gl/mapbox": "8.4.20",
-				"@deck.gl/mesh-layers": "8.4.20",
-				"@deck.gl/react": "8.4.20"
+				"@deck.gl/aggregation-layers": "8.5.2",
+				"@deck.gl/carto": "8.5.2",
+				"@deck.gl/core": "8.5.2",
+				"@deck.gl/extensions": "8.5.2",
+				"@deck.gl/geo-layers": "8.5.2",
+				"@deck.gl/google-maps": "8.5.2",
+				"@deck.gl/json": "8.5.2",
+				"@deck.gl/layers": "8.5.2",
+				"@deck.gl/mapbox": "8.5.2",
+				"@deck.gl/mesh-layers": "8.5.2",
+				"@deck.gl/react": "8.5.2"
 			}
+		},
+		"deep-extend": {
+			"version": "0.6.0",
+			"resolved": "https://registry.npmjs.org/deep-extend/-/deep-extend-0.6.0.tgz",
+			"integrity": "sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA=="
 		},
 		"depd": {
 			"version": "1.1.2",
@@ -2941,15 +3246,15 @@
 			"dev": true
 		},
 		"esbuild": {
-			"version": "0.12.14",
-			"resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.12.14.tgz",
-			"integrity": "sha512-z8p+6FGiplR7a3pPonXREbm+8IeXjBGvDpVidZmGB/AJMsJSfGCU+n7KOMCazA9AwvagadRWBhiKorC0w9WJvw==",
+			"version": "0.12.19",
+			"resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.12.19.tgz",
+			"integrity": "sha512-5NuT1G6THW7l3fsSCDkcPepn24R0XtyPjKoqKHD8LfhqMXzCdz0mrS9HgO6hIhzVT7zt0T+JGbzCqF5AH8hS9w==",
 			"dev": true
 		},
 		"esbuild-plugin-sass": {
-			"version": "0.5.1",
-			"resolved": "https://registry.npmjs.org/esbuild-plugin-sass/-/esbuild-plugin-sass-0.5.1.tgz",
-			"integrity": "sha512-45rjQFyzYpR1pRk4gWLKLblQyn/CmZJ11/7ZGoFtlmyhj58WXv3or1Vmn76iDPd/g44QL1VnzP1qg2s78xsBSw==",
+			"version": "0.6.0",
+			"resolved": "https://registry.npmjs.org/esbuild-plugin-sass/-/esbuild-plugin-sass-0.6.0.tgz",
+			"integrity": "sha512-WuQu6sIx9SUwEJ5yLO3Bk86R4vPnC5rzCr4mdOzBWdi0CyC56pIVNrpVgoNkqG/qrQPmh49aYg+9QYJTCRuYAw==",
 			"dev": true,
 			"requires": {
 				"css-tree": "^1.1.2",
@@ -2963,6 +3268,11 @@
 			"resolved": "https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz",
 			"integrity": "sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=",
 			"dev": true
+		},
+		"escape-string-regexp": {
+			"version": "1.0.5",
+			"resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz",
+			"integrity": "sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ="
 		},
 		"etag": {
 			"version": "1.8.1",
@@ -3039,6 +3349,19 @@
 				"statuses": "~1.5.0",
 				"unpipe": "~1.0.0"
 			}
+		},
+		"find-replace": {
+			"version": "3.0.0",
+			"resolved": "https://registry.npmjs.org/find-replace/-/find-replace-3.0.0.tgz",
+			"integrity": "sha512-6Tb2myMioCAgv5kfvP5/PkZZ/ntTpVK39fHY7WkWBgvbeE+VHd/tZuZ4mrC+bxh4cfOZeYKVPaJIZtZXV7GNCQ==",
+			"requires": {
+				"array-back": "^3.0.1"
+			}
+		},
+		"flatbuffers": {
+			"version": "1.12.0",
+			"resolved": "https://registry.npmjs.org/flatbuffers/-/flatbuffers-1.12.0.tgz",
+			"integrity": "sha512-c7CZADjRcl6j0PlvFy0ZqXQ67qSEZfrVPynmnL+2zPc+NtMvrF8Y0QceMo7QqnSPc7+uWjUIAbvCQ5WIKlMVdQ=="
 		},
 		"forwarded": {
 			"version": "0.2.0",
@@ -3138,6 +3461,11 @@
 			"version": "2.0.8",
 			"resolved": "https://registry.npmjs.org/hammerjs/-/hammerjs-2.0.8.tgz",
 			"integrity": "sha1-BO93hiz/K7edMPdpIJWTAiK/YPE="
+		},
+		"has-flag": {
+			"version": "3.0.0",
+			"resolved": "https://registry.npmjs.org/has-flag/-/has-flag-3.0.0.tgz",
+			"integrity": "sha1-tdRU3CGZriJWmfNGfloH87lVuv0="
 		},
 		"http-errors": {
 			"version": "1.7.2",
@@ -3270,6 +3598,11 @@
 			"resolved": "https://registry.npmjs.org/jsep/-/jsep-0.3.5.tgz",
 			"integrity": "sha512-AoRLBDc6JNnKjNcmonituEABS5bcfqDhQAWWXNTFrqu6nVXBpBAGfcoTGZMFlIrh9FjmE1CQyX9CTNwZrXMMDA=="
 		},
+		"json-bignum": {
+			"version": "0.0.3",
+			"resolved": "https://registry.npmjs.org/json-bignum/-/json-bignum-0.0.3.tgz",
+			"integrity": "sha1-QRY7UENsdz2CQk28IO1w23YEuNc="
+		},
 		"jsonfile": {
 			"version": "6.1.0",
 			"resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
@@ -3285,6 +3618,11 @@
 			"resolved": "https://registry.npmjs.org/kdbush/-/kdbush-3.0.0.tgz",
 			"integrity": "sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==",
 			"dev": true
+		},
+		"lodash.camelcase": {
+			"version": "4.3.0",
+			"resolved": "https://registry.npmjs.org/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz",
+			"integrity": "sha1-soqmKIorn8ZRA1x3EfZathkDMaY="
 		},
 		"long": {
 			"version": "3.2.0",
@@ -3331,11 +3669,11 @@
 			}
 		},
 		"math.gl": {
-			"version": "3.4.3",
-			"resolved": "https://registry.npmjs.org/math.gl/-/math.gl-3.4.3.tgz",
-			"integrity": "sha512-GSX4GQUVbEQtFnQryDIJVx35WO4HP55NbnIP18/a9G7e5jbTj7QqR2pHKkdlvP5D3jDHP09o39cXMcx0YxqUSA==",
+			"version": "3.5.3",
+			"resolved": "https://registry.npmjs.org/math.gl/-/math.gl-3.5.3.tgz",
+			"integrity": "sha512-cRQRZlc+XvNHd3bIfu3kdPPPAW0vwDelZJmkjn2TDvCyPcmyDtAiZ2Poo1aFoINP7HzN6oHYxapc/0wV3q6Opg==",
 			"requires": {
-				"@math.gl/core": "3.4.3"
+				"@math.gl/core": "3.5.3"
 			}
 		},
 		"mdn-data": {
@@ -3454,6 +3792,14 @@
 				"wrappy": "1"
 			}
 		},
+		"pad-left": {
+			"version": "2.1.0",
+			"resolved": "https://registry.npmjs.org/pad-left/-/pad-left-2.1.0.tgz",
+			"integrity": "sha1-FuajstRKjhOMsIOMx8tAOk/J6ZQ=",
+			"requires": {
+				"repeat-string": "^1.5.4"
+			}
+		},
 		"parseurl": {
 			"version": "1.3.3",
 			"resolved": "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz",
@@ -3494,12 +3840,12 @@
 			"dev": true
 		},
 		"probe.gl": {
-			"version": "3.3.1",
-			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.3.1.tgz",
-			"integrity": "sha512-RI6gxvEyTEdRMzT1np8HvbBOFNYQ0HwE3kZvK790tg/ldwFy7Qvs7cllz4MDT84QG2IMDUu7EsTXQX3qtzdx3w==",
+			"version": "3.4.0",
+			"resolved": "https://registry.npmjs.org/probe.gl/-/probe.gl-3.4.0.tgz",
+			"integrity": "sha512-9CLByZATuhuG/Viq3ckfWU+dAhb7dMmjzsyCy4s7ds9ueTejcVRENxL197/XacOK/AN61YrEERB0QnouB0Qc0Q==",
 			"requires": {
 				"@babel/runtime": "^7.0.0",
-				"@probe.gl/stats": "3.3.1"
+				"@probe.gl/stats": "3.4.0"
 			}
 		},
 		"prop-types": {
@@ -3557,6 +3903,27 @@
 				"unpipe": "1.0.0"
 			}
 		},
+		"react": {
+			"version": "17.0.2",
+			"resolved": "https://registry.npmjs.org/react/-/react-17.0.2.tgz",
+			"integrity": "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==",
+			"peer": true,
+			"requires": {
+				"loose-envify": "^1.1.0",
+				"object-assign": "^4.1.1"
+			}
+		},
+		"react-dom": {
+			"version": "17.0.2",
+			"resolved": "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz",
+			"integrity": "sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==",
+			"peer": true,
+			"requires": {
+				"loose-envify": "^1.1.0",
+				"object-assign": "^4.1.1",
+				"scheduler": "^0.20.2"
+			}
+		},
 		"react-is": {
 			"version": "16.13.1",
 			"resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
@@ -3571,10 +3938,20 @@
 				"picomatch": "^2.2.1"
 			}
 		},
+		"reduce-flatten": {
+			"version": "2.0.0",
+			"resolved": "https://registry.npmjs.org/reduce-flatten/-/reduce-flatten-2.0.0.tgz",
+			"integrity": "sha512-EJ4UNY/U1t2P/2k6oqotuX2Cc3T6nxJwsM0N0asT7dhrtH1ltUxDn4NalSYmPE2rCkVpcf/X6R0wDwcFpzhd4w=="
+		},
 		"regenerator-runtime": {
 			"version": "0.13.7",
 			"resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.7.tgz",
 			"integrity": "sha512-a54FxoJDIr27pgf7IgeQGxmqUNYrcV338lf/6gH456HZ/PhX+5BcwHXG9ajESmwe6WRO0tAzRUrRmNONWgkrew=="
+		},
+		"repeat-string": {
+			"version": "1.6.1",
+			"resolved": "https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz",
+			"integrity": "sha1-jcrkcOHIirwtYA//Sndihtp15jc="
 		},
 		"resolve-protobuf-schema": {
 			"version": "2.1.0",
@@ -3616,6 +3993,16 @@
 			"dev": true,
 			"requires": {
 				"chokidar": ">=3.0.0 <4.0.0"
+			}
+		},
+		"scheduler": {
+			"version": "0.20.2",
+			"resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.20.2.tgz",
+			"integrity": "sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==",
+			"peer": true,
+			"requires": {
+				"loose-envify": "^1.1.0",
+				"object-assign": "^4.1.1"
 			}
 		},
 		"send": {
@@ -3686,6 +4073,42 @@
 				"kdbush": "^3.0.0"
 			}
 		},
+		"supports-color": {
+			"version": "5.5.0",
+			"resolved": "https://registry.npmjs.org/supports-color/-/supports-color-5.5.0.tgz",
+			"integrity": "sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==",
+			"requires": {
+				"has-flag": "^3.0.0"
+			}
+		},
+		"table-layout": {
+			"version": "1.0.2",
+			"resolved": "https://registry.npmjs.org/table-layout/-/table-layout-1.0.2.tgz",
+			"integrity": "sha512-qd/R7n5rQTRFi+Zf2sk5XVVd9UQl6ZkduPFC3S7WEGJAmetDTjY3qPN50eSKzwuzEyQKy5TN2TiZdkIjos2L6A==",
+			"requires": {
+				"array-back": "^4.0.1",
+				"deep-extend": "~0.6.0",
+				"typical": "^5.2.0",
+				"wordwrapjs": "^4.0.0"
+			},
+			"dependencies": {
+				"array-back": {
+					"version": "4.0.2",
+					"resolved": "https://registry.npmjs.org/array-back/-/array-back-4.0.2.tgz",
+					"integrity": "sha512-NbdMezxqf94cnNfWLL7V/im0Ub+Anbb0IoZhvzie8+4HJ4nMQuzHuy49FkGYCJK2yAloZ3meiB6AVMClbrI1vg=="
+				},
+				"typical": {
+					"version": "5.2.0",
+					"resolved": "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz",
+					"integrity": "sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg=="
+				}
+			}
+		},
+		"text-encoding-utf-8": {
+			"version": "1.0.2",
+			"resolved": "https://registry.npmjs.org/text-encoding-utf-8/-/text-encoding-utf-8-1.0.2.tgz",
+			"integrity": "sha512-8bw4MY9WjdsD2aMtO0OzOCY3pXGYNx2d2FfHRVUKkiCPDWjKuOlhLVASS+pD7VkLTVjW268LYJHwsnPFlBpbAg=="
+		},
 		"tinyqueue": {
 			"version": "2.0.3",
 			"resolved": "https://registry.npmjs.org/tinyqueue/-/tinyqueue-2.0.3.tgz",
@@ -3716,6 +4139,11 @@
 			"integrity": "sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==",
 			"dev": true
 		},
+		"tslib": {
+			"version": "2.3.0",
+			"resolved": "https://registry.npmjs.org/tslib/-/tslib-2.3.0.tgz",
+			"integrity": "sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg=="
+		},
 		"type-is": {
 			"version": "1.6.18",
 			"resolved": "https://registry.npmjs.org/type-is/-/type-is-1.6.18.tgz",
@@ -3731,6 +4159,11 @@
 			"resolved": "https://registry.npmjs.org/typescript/-/typescript-4.3.5.tgz",
 			"integrity": "sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==",
 			"dev": true
+		},
+		"typical": {
+			"version": "4.0.0",
+			"resolved": "https://registry.npmjs.org/typical/-/typical-4.0.0.tgz",
+			"integrity": "sha512-VAH4IvQ7BDFYglMd7BPRDfLgxZZX4O4TFcRDA6EN5X7erNJJq+McIEp8np9aVtxrCJ6qx4GTYVfOWNjcqwZgRw=="
 		},
 		"universalify": {
 			"version": "2.0.0",
@@ -3765,6 +4198,22 @@
 				"@mapbox/point-geometry": "0.1.0",
 				"@mapbox/vector-tile": "^1.3.1",
 				"pbf": "^3.2.1"
+			}
+		},
+		"wordwrapjs": {
+			"version": "4.0.1",
+			"resolved": "https://registry.npmjs.org/wordwrapjs/-/wordwrapjs-4.0.1.tgz",
+			"integrity": "sha512-kKlNACbvHrkpIw6oPeYDSmdCTu2hdMHoyXLTcUKala++lx5Y+wjJ/e474Jqv5abnVmwxw08DiTuHmw69lJGksA==",
+			"requires": {
+				"reduce-flatten": "^2.0.0",
+				"typical": "^5.2.0"
+			},
+			"dependencies": {
+				"typical": {
+					"version": "5.2.0",
+					"resolved": "https://registry.npmjs.org/typical/-/typical-5.2.0.tgz",
+					"integrity": "sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg=="
+				}
 			}
 		},
 		"wrappy": {

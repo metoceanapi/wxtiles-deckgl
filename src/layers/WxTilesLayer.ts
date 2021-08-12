@@ -14,29 +14,12 @@ import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
 import { getURIfromDatasetName as getURIFromDatasetName } from '../libs/libTools';
 
-// type WxTilesLayerData = string;
-
-// interface WxTilesLayerProps extends TileLayerProps<WxTilesLayerData> {
-// 	wxprops: {
-// 		meta: Meta;
-// 		variables: string | string[];
-// 		style: ColorStyleStrict;
-// 	};
-// 	data: WxTilesLayerData;
-// }
-
-interface Bbox {
-	west: number;
-	north: number;
-	east: number;
-	south: number;
-}
 interface Tile {
 	x: number;
 	y: number;
 	z: number;
 	signal: AbortSignal;
-	bbox: Bbox;
+	bbox: BoundaryMeta;
 }
 
 interface WxTileData {
@@ -148,17 +131,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 	async getTileData(tile: Tile): Promise<WxTileData | null> {
 		const { data: URL, wxprops } = this.props;
 		const { x, y, z, signal, bbox } = tile;
+
 		const { boundaries } = wxprops.meta;
-
-		const rectIntersect = (b: BoundaryMeta) => {
-			const res = !(bbox.west > b.east || b.west > bbox.east || bbox.south > b.north || b.south > bbox.north);
-			return res;
-		};
-
-		if (boundaries) {
-			if (boundaries && !boundaries.boundaries180.some(rectIntersect)) {
-				return null;
-			}
+		const rectIntersect = (b: BoundaryMeta) => !(bbox.west > b.east || b.west > bbox.east || bbox.south > b.north || b.south > bbox.north);
+		if (boundaries && !boundaries.boundaries180.some(rectIntersect)) {
+			return null;
 		}
 
 		const { fetch } = this.getCurrentLayer().props;

@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Write your changes below this section. `npm version [major|minor|patch]` will automatically update changelog
 
 ## [Unreleased]
+
+## [1.0.0] - 2021-08-24
+
 ### Added
 - All the existing functionality (no change log)
 

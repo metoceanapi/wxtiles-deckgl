@@ -14,14 +14,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/metocean/wxtiledeckgl.git"
+		"url": "git+https://github.com/metoceanapi/wxtiles-deckgl.git"
 	},
 	"author": "Sergei Melman",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/metocean/wxtiledeckgl/issues"
+		"url": "https://github.com/metoceanapi/wxtiles-deckgl/issues"
 	},
-	"homepage": "https://github.com/metocean/wxtiledeckgl#readme",
+	"homepage": "https://github.com/metoceanapi/wxtiles-deckgl#readme",
 	"devDependencies": {
 		"@danmarshall/deckgl-typings": "^4.9.2",
 		"@luma.gl/core": "^8.5.4",

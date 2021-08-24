@@ -11,7 +11,8 @@ const sharedConfig = {
 		'.fs': 'text',
 		'.vs': 'text',
 	},
-	// target: 'es6',
+	// https://www.stetic.com/market-share/browser/
+	target: ['es2020', 'chrome80', 'safari13', 'edge89', 'firefox70'],
 	minify: true,
 };
 

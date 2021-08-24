@@ -1,12 +1,12 @@
 {
 	"name": "@metoceanapi/wxtiles-gl",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"lockfileVersion": 2,
 	"requires": true,
 	"packages": {
 		"": {
 			"name": "@metoceanapi/wxtiles-gl",
-			"version": "0.0.1",
+			"version": "1.0.0",
 			"license": "ISC",
 			"dependencies": {
 				"@deck.gl/geo-layers": "8.5.2",

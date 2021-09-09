@@ -9,8 +9,16 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+### Added
+
+
+
+### Fixed
+
+- boundaries check
+
 ## [1.0.0] - 2021-08-24
 
 ### Added
-- All the existing functionality (no change log)
 
+- All the existing functionality (no change log)

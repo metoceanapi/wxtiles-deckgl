@@ -13,9 +13,9 @@ export interface BoundaryMeta {
 	south: number;
 }
 export interface AllBoundariesMeta {
-	boundariesnorm: BoundaryMeta;
-	boundaries180: BoundaryMeta[];
-	boundaries360: BoundaryMeta[];
+	boundariesnorm?: BoundaryMeta;
+	boundaries180?: BoundaryMeta[];
+	boundaries360?: BoundaryMeta[];
 }
 
 export interface Meta {

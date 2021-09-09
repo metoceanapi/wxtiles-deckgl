@@ -134,7 +134,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 
 		const { boundaries } = wxprops.meta;
 		const rectIntersect = (b: BoundaryMeta) => !(bbox.west > b.east || b.west > bbox.east || bbox.south > b.north || b.south > bbox.north);
-		if (boundaries && !boundaries.boundaries180.some(rectIntersect)) {
+		if (boundaries?.boundaries180 && !boundaries.boundaries180.some(rectIntersect)) {
 			return null;
 		}
 

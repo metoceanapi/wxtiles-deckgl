@@ -37,6 +37,7 @@ interface WxTilesLayerState {
 	imageTextureUniform: Texture2D;
 	min: number;
 	max: number;
+	emptyTilesCache: Set<string>;
 	[name: string]: any;
 }
 export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProps> {
@@ -140,6 +141,10 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 
 		const { fetch } = this.getCurrentLayer().props;
 
+		if (this.state.emptyTilesCache.has(x + ':' + y + ':' + z)) {
+			return null;
+		}
+
 		const makeURL = (v: string) =>
 			URL.replace('{variable}', v)
 				.replace('{x}', x + '')
@@ -168,13 +173,18 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		let vectorData: WxTileVectorData[] | undefined;
 		const fetchVariableImage = (varName: string): Promise<ImageData> => fetch(makeURL(varName), { layer: this, signal });
 
-		if (wxprops.variables instanceof Array) {
-			[imageU, imageV] = await Promise.all(wxprops.variables.map(fetchVariableImage));
-			image = this._createVelocitiesImage(imageU, imageV);
-			vectorData = this._createVectorData(image, imageU, imageV, tile);
-		} else {
-			image = await fetchVariableImage(wxprops.variables);
-			vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
+		try {
+			if (wxprops.variables instanceof Array) {
+				[imageU, imageV] = await Promise.all(wxprops.variables.map(fetchVariableImage));
+				image = this._createVelocitiesImage(imageU, imageV);
+				vectorData = this._createVectorData(image, imageU, imageV, tile);
+			} else {
+				image = await fetchVariableImage(wxprops.variables);
+				vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
+			}
+		} catch {
+			this.state.emptyTilesCache.add(x + ':' + y + ':' + z);
+			return null;
 		}
 
 		const isoData = this._createIsolines(image, tile);
@@ -215,7 +225,9 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 			mipmaps: false,
 		});
 
-		this.setState({ clutTextureUniform, min, max, CLUT });
+		const emptyTilesCache = new Set<string>();
+
+		this.setState({ emptyTilesCache, clutTextureUniform, min, max, CLUT });
 	}
 
 	_createIsolines(image: ImageData, { x, y, z }): WxTileIsolineTextData[] {

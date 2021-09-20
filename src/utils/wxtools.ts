@@ -255,56 +255,6 @@ export function makeConverter(from: string, to: string, customUnits?: Units): Co
 	return b ? (x: number) => a * x + b : (x: number) => a * x;
 }
 
-function unrollStylesParent1(stylesIn: ColorStylesWeakMixed): ColorStylesStrict {
-	// unroll arrays of styles => plain styles to apply ineritance
-	/*
-	{
-		"var":[
-			{style1},
-			{style2}
-		]
-	}
-	 unrolled into
-	{
-		"var":[
-			{style1},
-			{style2}
-		],
-		"var[0]":{*style1},
-		"var[1]":{*style2},
-	}
-	I use softycopy, so {*style1} === {style1}, etc.
-	So it's easier to apply inheritance.
-	*/
-	const deArrStyles = <ColorStylesWeakMixed>Object.assign({}, stylesIn, __colorStyles_default_preset); // deep copy, so could be (and is) changed
-	const deArrStyles2 = Object.assign({}, __colorStyles_default_preset);
-	for (const name in deArrStyles) {
-		const styleA = deArrStyles[name];
-		if (Array.isArray(styleA)) {
-			for (let i = 0; i < styleA.length; ++i) {
-				deArrStyles[name + '[' + i + ']'] = styleA[i];
-			}
-			delete deArrStyles[name];
-		}
-	}
-
-	const styles = <ColorStylesStrict>Object.assign({}, deArrStyles);
-
-	// function to apply inheritance
-	const inheritParent = (styleName: string): void => {
-		if (styleName === 'base') return; // nothing to inherit
-		const style = styles[styleName]; // there are no arrays by this point
-		if (!style.parent || !(style.parent in styles)) style.parent = 'base';
-		inheritParent(style.parent);
-		Object.assign(style, Object.assign({}, styles[style.parent], style)); // this ugly construction changes style 'in place' so it is a soft-copy. huray!
-		style.parent = undefined; // multiple inheritance of 'base' is possible. what ever...
-	};
-
-	// For every style inherit from its parent
-	Object.keys(styles).forEach(inheritParent);
-	return styles;
-}
-
 function unrollStylesParent(stylesArrInc: ColorStylesWeakMixed): ColorStylesStrict {
 	const stylesInc: ColorStylesIncomplete = Object.assign({}, __colorStyles_default_preset);
 	for (const name in stylesArrInc) {
@@ -336,19 +286,6 @@ function unrollStylesParent(stylesArrInc: ColorStylesWeakMixed): ColorStylesStri
 }
 
 type CacheableFunc = (url: string) => Promise<DataPicture>;
-
-// Caches
-function cacheIt(fn: CacheableFunc): CacheableFunc {
-	const cache = new Map<string, Promise<DataPicture>>();
-	return (url: string) => {
-		let res = cache.get(url);
-		if (res === undefined) {
-			res = fn(url);
-			cache.set(url, res);
-		}
-		return res;
-	};
-}
 
 interface IntegralPare {
 	integral: Uint32Array;
@@ -401,7 +338,7 @@ function integralImage(raw: Uint16Array): IntegralPare {
 }
 
 // BoxBlur based on integral images, whoop whoop
-export function blurData(im: DataPictureIntegral, radius: number): DataPictureIntegral {
+function blurData(im: DataPictureIntegral, radius: number): DataPictureIntegral {
 	if (radius < 0 || radius === im.radius) return im;
 	im.radius = radius;
 	const s = 258;

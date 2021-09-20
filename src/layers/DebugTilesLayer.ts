@@ -1,9 +1,8 @@
-import { CompositeLayer } from '@deck.gl/core';
+import { CompositeLayer, Position } from '@deck.gl/core';
+import { TextLayer, PathLayer } from '@deck.gl/layers';
 import { TileLayer } from '@deck.gl/geo-layers';
 import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
-import { TextLayer } from '@deck.gl/layers';
-import { PathLayer } from '@deck.gl/layers';
-import { Position } from 'deck.gl';
+
 import { RenderSubLayers } from './IRenderSubLayers';
 
 export interface DebugTilesLayerData {
@@ -39,6 +38,7 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 				getSize: 10,
 				getTextAnchor: 'start',
 			}),
+			
 			new PathLayer({
 				id: args.id + '-b',
 				visible: args.visible,
@@ -57,11 +57,6 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 			}),
 		];
 
-		// return new WxTileD({
-		// 	id: args.id + '-dd',
-		// 	visible: args.visible,
-		// 	data: subLayers,
-		// });
 		return subLayers;
 	}
 }
@@ -74,9 +69,3 @@ DebugTilesLayer.defaultProps = {
 	minZoom: 0,
 };
 
-class WxTileD extends CompositeLayer<any> {
-	renderLayers() {
-		return this.props.data;
-	}
-}
-WxTileD.layerName = 'WxTileD';

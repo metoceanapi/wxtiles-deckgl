@@ -1,7 +1,8 @@
-import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
-import { ColorStyleStrict, Meta } from '../utils/wxtools';
 import { TileLayer } from '@deck.gl/geo-layers';
+import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 import { RGBAColor, RGBColor } from '@deck.gl/core/utils/color';
+
+import { ColorStyleStrict, Meta } from '../utils/wxtools';
 
 export type IWxTilesLayerData = string;
 

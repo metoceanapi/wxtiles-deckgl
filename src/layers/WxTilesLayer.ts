@@ -12,7 +12,7 @@ import { IWxTilesLayerData, IWxTilesLayerProps } from './IWxTileLayer';
 import { BoundaryMeta, HEXtoRGBA, UIntToColor, WxGetColorStyles } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
-import { getURIfromDatasetName as getURIFromDatasetName } from '../libs/libTools';
+import { getURIfromDatasetName } from '../libs/libTools';
 
 interface Tile {
 	x: number;
@@ -397,9 +397,9 @@ WxTilesLayer.defaultProps = {
 
 export type WxServerVarsTimeType = [string, string | [string, string], string];
 
-export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType, requestInit?: RequestInit) {
+export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType, requestInit?: RequestInit): Promise<IWxTilesLayerProps> {
 	const [dataSet, variables, styleName] = params;
-	const { URITime, meta } = await getURIFromDatasetName(server, dataSet);
+	const { URITime, meta } = await getURIfromDatasetName(server, dataSet);
 	const wxTilesProps: IWxTilesLayerProps = {
 		id: `wxtiles/${dataSet}/${variables}/`,
 		// WxTiles settings

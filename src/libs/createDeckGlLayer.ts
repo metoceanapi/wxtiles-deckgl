@@ -1,17 +1,22 @@
+import { Deck, Layer } from '@deck.gl/core';
+
 import { IWxTilesLayerProps } from '../layers/IWxTileLayer';
 import { WxTilesLayer } from '../layers/WxTilesLayer';
 import { WxtilesGlLayer } from './WxtilesGlLayer';
-import { Deck, LayerManager, Layer } from '@deck.gl/core';
 
 export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): WxtilesGlLayer => {
-	const getDeckglLayers = (): Layer<any>[] => {
-		return ((deckgl as any).layerManager.getLayers() as Layer<any>[]).filter((layer) => layer.parent === null);
-	};
-
 	let currentIndex = 0;
 	let prevLayer: Layer<any> | null = null;
 
 	let cancelPrevRequest = () => {};
+
+	const getDeckglLayers = (): Layer<any>[] => {
+		return deckgl.props.layers.filter((layer) => layer.parent === null);
+		// changed becouse of this:
+		//    https://github.com/visgl/deck.gl/issues/4016#issuecomment-565545861
+		// return ((deckgl as any).layerManager.getLayers() as Layer<any>[]).filter((layer) => layer.parent === null);
+	};
+
 	const renderCurrentTimestep = async () => {
 		const { cancel, layerId, promise } = renderLayerByTimeIndex(currentIndex);
 		cancelPrevRequest();
@@ -38,6 +43,7 @@ export const createDeckGlLayer = (deckgl: Deck, props: IWxTilesLayerProps): Wxti
 					resolve(newWxtilesLayer);
 				},
 			});
+
 			const currentLayers = getDeckglLayers();
 			deckgl.setProps({ layers: [newWxtilesLayer, ...currentLayers] });
 		});

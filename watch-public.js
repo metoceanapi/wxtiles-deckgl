@@ -8,7 +8,8 @@ const disableHotReload = process.env.DISABLE_HOT_RELOAD === 'true';
 
 esbuild
 	.build({
-		entryPoints: ['src/dev-deckgl-index.ts', 'src/dev-mapbox-index.ts'],
+		entryPoints: ['src/dev-deckgl-index.ts'],
+		// entryPoints: ['src/dev-deckgl-index.ts', 'src/dev-mapbox-index.ts'],
 		bundle: true,
 		// plugins: [sassPlugin()],
 		loader: {
@@ -39,9 +40,9 @@ esbuild
 		app.use(express.static('public'));
 		const publicPath = path.join(__dirname, 'public');
 
-		app.get('/mapbox', function (req, res) {
-			res.sendFile(path.join(publicPath, 'mapbox-index.html'));
-		});
+		// app.get('/mapbox', function (req, res) {
+		// 	res.sendFile(path.join(publicPath, 'mapbox-index.html'));
+		// });
 		app.get('/deckgl', function (req, res) {
 			res.sendFile(path.join(publicPath, 'deckgl-index.html'));
 		});
@@ -58,7 +59,7 @@ esbuild
 
 		const url = `http://0.0.0.0:${PORT}`;
 		app.listen(PORT, () => {
-			console.log(`See examples: \n${url}/mapbox\n${url}/deckgl`)
+			console.log(`See examples: \n${url}/mapbox\n${url}/deckgl`);
 		});
 	})
 	.catch((e) => console.error(e.message));

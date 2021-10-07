@@ -1,7 +1,7 @@
 const esbuild = require('esbuild');
-// const sassPlugin = require('esbuild-plugin-sass');
 const express = require('express');
 const path = require('path');
+const { externalGlobalPlugin } = require('esbuild-plugin-external-global');
 
 let watchResponse;
 const disableHotReload = process.env.DISABLE_HOT_RELOAD === 'true';
@@ -9,19 +9,25 @@ const disableHotReload = process.env.DISABLE_HOT_RELOAD === 'true';
 esbuild
 	.build({
 		entryPoints: ['src/dev-deckgl-index.ts'],
-		// entryPoints: ['src/dev-deckgl-index.ts', 'src/dev-mapbox-index.ts'],
 		bundle: true,
-		// plugins: [sassPlugin()],
 		loader: {
-			'.ttf': 'base64',
 			'.woff': 'base64',
 			'.fs': 'text',
 			'.vs': 'text',
 		},
+		plugins: [
+			externalGlobalPlugin({
+				'@deck.gl/core': 'window.deck',
+				'@deck.gl/layers': 'window.deck',
+				'@deck.gl/geo-layers': 'window.deck',
+				'@luma.gl/core': 'window.luma',
+				'@luma.gl/webgl': 'window.luma',
+			}),
+		],
 		// target: 'es2017',
 		format: 'iife',
 		outdir: 'public/wxtiles-gl',
-		globalName: 'wxtilesGl',
+		globalName: 'wxtilesdeckglexample',
 		sourcemap: true,
 		// minify: false,
 		watch: {

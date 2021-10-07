@@ -1,4 +1,4 @@
-import './index.css';
+import './wxtilesdeckgl.css';
 import { Deck } from '@deck.gl/core';
 
 import { createWxTilesLayerProps, WxServerVarsTimeType, WxTilesLayer } from './layers/WxTilesLayer';
@@ -14,11 +14,12 @@ export async function start() {
 		layers: [
 			new DebugTilesLayer({
 				id: 'debugtiles',
-				data: { color: [255, 0, 0] },
+				data: { color: [255, 0, 0, 120] },
 				maxZoom: 24,
 				minZoom: 0,
 				pickable: false,
 				tileSize: 256,
+				visible: true,
 			}),
 		],
 	});
@@ -60,5 +61,6 @@ export async function start() {
 		isPlaying && play();
 		playButton.innerHTML = isPlaying ? 'Stop' : 'Play';
 	});
+
 	layer.nextTimestep();
 }

@@ -6,14 +6,16 @@ import { ColorStyleStrict, Meta } from '../utils/wxtools';
 
 export type IWxTilesLayerData = string;
 
+export interface WxProps {
+	meta: Meta;
+	variables: string | string[];
+	style: ColorStyleStrict;
+	URITime: string;
+}
+
 export interface IWxTilesLayerProps extends TileLayerProps<IWxTilesLayerData> {
 	id: string;
-	wxprops: {
-		meta: Meta;
-		variables: string | string[];
-		style: ColorStyleStrict;
-		URITime: string;
-	};
+	wxprops: WxProps;
 	data: IWxTilesLayerData;
 	desaturate?: number;
 	transparentColor?: RGBAColor;

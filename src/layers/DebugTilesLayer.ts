@@ -1,4 +1,4 @@
-import { CompositeLayer, Position } from '@deck.gl/core';
+import { CompositeLayer, Position, RGBAColor } from '@deck.gl/core';
 import { TextLayer, PathLayer } from '@deck.gl/layers';
 import { TileLayer } from '@deck.gl/geo-layers';
 import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
@@ -6,7 +6,7 @@ import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 import { RenderSubLayers } from './IRenderSubLayers';
 
 export interface DebugTilesLayerData {
-	color: [number, number, number, number?];
+	color: RGBAColor;
 }
 
 export interface DebugTilesLayerProps extends TileLayerProps<DebugTilesLayerData> {
@@ -16,6 +16,15 @@ export interface DebugTilesLayerProps extends TileLayerProps<DebugTilesLayerData
 export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLayerProps> {
 	constructor(props: DebugTilesLayerProps) {
 		super(props);
+	}
+
+	getTileData(tile: any) {
+		// /* this is to test async fetching the data */
+		// return new Promise((resolve) => {
+		// 	setTimeout(() => {
+		// 		resolve(true);
+		// 	}, ~~(Math.random() * 1000 + 1000));
+		// });
 	}
 
 	renderSubLayers(args: RenderSubLayers) {
@@ -33,12 +42,12 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 				data: [{}],
 				getPosition: () => [west + (east - west) * 0.05, north + (south - north) * 0.05], // if not ON TILE - visual issues occure
 				getText: () => x + '-' + y + '-' + z,
-				getColor: () => data.color,
+				getColor: data.color,
 				billboard: false,
 				getSize: 10,
 				getTextAnchor: 'start',
 			}),
-			
+
 			new PathLayer({
 				id: args.id + '-b',
 				visible: args.visible,
@@ -68,4 +77,3 @@ DebugTilesLayer.defaultProps = {
 	maxZoom: 24,
 	minZoom: 0,
 };
-

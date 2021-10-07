@@ -34,12 +34,12 @@ interface WxTileData {
 interface WxTilesLayerState {
 	CLUT: RawCLUT;
 	clutTextureUniform: Texture2D;
-	imageTextureUniform: Texture2D;
 	min: number;
 	max: number;
 	emptyTilesCache: Set<string>;
 	[name: string]: any;
 }
+
 export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProps> {
 	state!: WxTilesLayerState;
 
@@ -54,14 +54,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		}
 	}
 
-	onHover(info: any, pickingEvent: any) {
-		if (!info.picked) {
-			return; //console.log('!');
-		}
-		this.onClick(info, pickingEvent);
-	}
-
-	onClick(info: any, pickingEvent: any) {
+	onClickProcessor(info: any, pickingEvent: any) {
 		// console.log('WxTilesLayer onClick:', info, pickingEvent);
 		const { /* sourceLayer, bitmap,  */ coordinate, color } = info;
 		// const [x, y] = bitmap.pixel;
@@ -80,18 +73,14 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 
 		const varData = mul * raw + min;
 		const clutData = CLUT.DataToStyle(varData);
-		const text = 'lonLat:' + coordinate + '<br>clut:' + clutData + ' var: ' + varData + ' color:' + color;
-		const infoPanel = document.getElementById('infoPanel');
-		if (!infoPanel) {
-			console.log(text);
-			return;
-		}
-		infoPanel.innerHTML = text;
+
+		const clickInfo = { lonLat: coordinate, clut: clutData, var: varData, color };
+		return clickInfo;
 	}
 
 	renderSubLayers(args: RenderSubLayers<WxTileData>) {
 		const { tile, id, data } = args;
-		if (!data) return null;
+		if (!data) return null; // Useless ??
 		const { west, south, east, north } = tile.bbox;
 		const { wxprops, desaturate, transparentColor, tintColor, opacity } = this.props;
 		const { style } = wxprops;
@@ -130,9 +119,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 	}
 
 	async getTileData(tile: Tile): Promise<WxTileData | null> {
-		const { data: URL, wxprops } = this.props;
 		const { x, y, z, signal, bbox } = tile;
 
+		if (this.state.emptyTilesCache.has(x + ':' + y + ':' + z)) {
+		}
+
+		const { data: URL, wxprops } = this.props;
 		const { boundaries } = wxprops.meta;
 		const rectIntersect = (b: BoundaryMeta) => !(bbox.west > b.east || b.west > bbox.east || bbox.south > b.north || b.south > bbox.north);
 		if (boundaries?.boundaries180 && !boundaries.boundaries180.some(rectIntersect)) {
@@ -140,10 +132,6 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		}
 
 		const { fetch } = this.getCurrentLayer().props;
-
-		if (this.state.emptyTilesCache.has(x + ':' + y + ':' + z)) {
-			return null;
-		}
 
 		const makeURL = (v: string) =>
 			URL.replace('{variable}', v)
@@ -182,8 +170,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				image = await fetchVariableImage(wxprops.variables);
 				vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
 			}
-		} catch {
-			this.state.emptyTilesCache.add(x + ':' + y + ':' + z);
+		} catch (e) {
+			if (!signal.aborted) {
+				// if fetching was aborted DO NOT SET THE CACHE!!!!!!! days of debug...
+				this.state.emptyTilesCache.add(x + ':' + y + ':' + z);
+			}
+
 			return null;
 		}
 
@@ -194,10 +186,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 
 	_prepareStateAndCLUT() {
 		const { style, variables, meta } = this.props.wxprops;
-		let { min, max, units } = meta.variablesMeta[variables instanceof Array ? variables[0] : variables];
+		const { variablesMeta } = meta;
+		let { min, max, units } = variablesMeta[variables instanceof Array ? variables[0] : variables];
+
 		if (variables instanceof Array) {
-			const metaV = meta.variablesMeta[variables[1]];
-			max = 1.42 * Math.max(-min, max, -metaV.min, metaV.max);
+			const varMeta = variablesMeta[variables[1]];
+			max = 1.42 * Math.max(-min, max, -varMeta.min, varMeta.max);
 			min = 0;
 		}
 
@@ -211,6 +205,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 			data[x] = colorsI[si];
 			data[dataWidth + x] = levelIndex[si];
 		}
+
 		const clutTextureUniform = new Texture2D(this.context.gl, {
 			data: new Uint8Array(data.buffer),
 			width: dataWidth,
@@ -230,7 +225,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		this.setState({ emptyTilesCache, clutTextureUniform, min, max, CLUT });
 	}
 
-	_createIsolines(image: ImageData, { x, y, z }): WxTileIsolineTextData[] {
+	_createIsolines(image: ImageData, { x, y, z }: Tile): WxTileIsolineTextData[] {
 		const { style } = this.props.wxprops;
 		if (!style.isolineText || style.isolineColor === 'none' || !style.isolineText) return [];
 		const { state } = this;
@@ -275,39 +270,37 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		return res;
 	}
 
-	_createDegree(image: ImageData, { x, y, z }): WxTileVectorData[] | undefined {
-		const { meta, variables } = this.props.wxprops;
+	_createDegree(image: ImageData, { x, y, z }: Tile): WxTileVectorData[] | undefined {
+		const { meta, variables, style } = this.props.wxprops;
 		if (variables instanceof Array) return;
 
 		const { min, max, units } = meta.variablesMeta[variables];
-		if (units !== 'degree') return;
+		if (units !== 'degree' || style.vectorColor === 'none') return;
 
-		const { style } = this.props.wxprops;
-		if (style.vectorColor === 'none') return;
-
-		const CLUT = this.state.CLUT as RawCLUT;
-		const l = new Uint16Array(image.data.buffer);
+		const { CLUT } = this.state;
+		const rawData = new Uint16Array(image.data.buffer);
 		const ldmul = (max - min) / 65535;
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
-		const res: WxTileVectorData[] = [];
+		const res = new Array<WxTileVectorData>();
 		const gridStep = 16;
 		// go through the tile pixels
 		for (let py = gridStep / 2; py < 256; py += gridStep) {
 			for (let px = gridStep / 2; px < 256; px += gridStep) {
-				const i = (px + 1 + (py + 1) * 258) * 2; // index f a raw pixel data
-				const d = l[i];
-				if (!d) continue;
-				const angle = 180 - (min + ldmul * l[i] + style.addDegrees); // unpack data and add degree correction from style
-				const text = 'F';
+				const i = (px + 1 + (py + 1) * 258) * 2; // index of a raw pixel data
+				const data = rawData[i];
+				if (!data) continue;
+				const angle = 180 - (min + ldmul * rawData[i] + style.addDegrees); // unpack data and add degree correction from style
 				const position = PixelsToLonLat(ulx + px + 0.5, uly + py + 0.5, z); // [lon, lat] of the pixel
 				const color = UIntToColor(
-					style.vectorColor === 'inverted' ? ~CLUT.colorsI[d] : style.vectorColor === 'fill' ? CLUT.colorsI[d] : HEXtoRGBA(style.vectorColor)
+					style.vectorColor === 'inverted' ? ~CLUT.colorsI[data] : style.vectorColor === 'fill' ? CLUT.colorsI[data] : HEXtoRGBA(style.vectorColor)
 				);
+				const text = 'F'; // medium size arrow in arrow font
 
 				res.push({ position, text, angle, color });
 			}
 		}
+
 		return res;
 	}
 
@@ -336,13 +329,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		return image;
 	}
 
-	_createVectorData(image: ImageData, imageU: ImageData, imageV: ImageData, { x, y, z }): WxTileVectorData[] {
-		const { meta, variables } = this.props.wxprops;
-		const CLUT = this.state.CLUT;
-		const { style } = this.props.wxprops;
+	_createVectorData(image: ImageData, imageU: ImageData, imageV: ImageData, { x, y, z }: Tile): WxTileVectorData[] {
+		const { meta, variables, style } = this.props.wxprops;
+		const { min, max, CLUT } = this.state;
 
 		if (!(variables instanceof Array) || !CLUT.DataToKnots || style.vectorColor === 'none') return [];
-		const { min, max } = this.state;
 		const [uMeta, vMeta] = variables.map((v) => meta.variablesMeta[v]);
 		const l = new Uint16Array(image.data.buffer);
 		const u = new Uint16Array(imageU.data.buffer);
@@ -352,8 +343,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		const udmul = (uMeta.max - uMeta.min) / 65535;
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
-		const res: WxTileVectorData[] = [];
-		const gridStep = 32;
+		const { maxZoom } = this.props;
+
+		const m = maxZoom ? z - maxZoom : 0;
+
+		const gridStep = 16 << (m > 0 ? m : 0);
+		const res = new Array<WxTileVectorData>();
 		// go through the tile pixels
 		for (let py = gridStep / 2; py < 256; py += gridStep) {
 			for (let px = gridStep / 2; px < 256; px += gridStep) {
@@ -374,9 +369,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				res.push({ position, text, angle, color });
 			}
 		}
+
 		return res;
 	}
 }
+
 WxTilesLayer.layerName = 'WxTilesLayer';
 WxTilesLayer.defaultProps = {
 	minZoom: 0,

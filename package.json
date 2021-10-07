@@ -2,8 +2,8 @@
 	"name": "@metoceanapi/wxtiles-gl",
 	"version": "1.0.3-1",
 	"description": "WxTile deck.gl lib to render wxtiles datalayers",
-	"main": "dist/es/bundle.js",
-	"types": "dist/es/prod-index.d.ts",
+	"main": "dist/es/wxtilesdeckgl.js",
+	"types": "dist/es/wxtilesdeckgl.d.ts",
 	"files": [
 		"dist/"
 	],
@@ -23,12 +23,13 @@
 	},
 	"homepage": "https://github.com/metoceanapi/wxtiles-deckgl#readme",
 	"devDependencies": {
-		"esbuild": "^0.12.19",
+		"@danmarshall/deckgl-typings": "^4.9.7",
+		"esbuild": "^0.12.28",
+		"esbuild-plugin-external-global": "^1.0.1",
 		"express": "^4.17.1",
-		"typescript": "^4.3.5"
+		"typescript": "^4.4.3"
 	},
-	"dependencies": {
-		"@danmarshall/deckgl-typings": "^4.9.5",
-		"deck.gl": "^8.5.8"
+	"peerDependencies": {
+		"deck.gl": "^8.5.10"
 	}
 }

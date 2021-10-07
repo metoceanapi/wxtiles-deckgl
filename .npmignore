@@ -1,0 +1,10 @@
+examples/
+public/
+src/
+src/dev*.ts
+
+.*
+*.json
+
+build.js
+watch-public.js

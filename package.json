@@ -10,7 +10,9 @@
 	"scripts": {
 		"build": "rm -rf dist/ && node build.js && tsc --declaration",
 		"start": "DISABLE_HOT_RELOAD=true node watch-public.js",
-		"preversion": "npm run build"
+		"preversion": "npm run build",
+		"version": "auto-changelog -p && git add CHANGELOG.md",
+		"version----": "auto-changelog -p && git add CHANGELOG.md"
 	},
 	"repository": {
 		"type": "git",
@@ -24,6 +26,7 @@
 	"homepage": "https://github.com/metoceanapi/wxtiles-deckgl#readme",
 	"devDependencies": {
 		"@danmarshall/deckgl-typings": "^4.9.7",
+		"auto-changelog": "*",
 		"esbuild": "^0.12.28",
 		"esbuild-plugin-external-global": "^1.0.1",
 		"express": "^4.17.1",

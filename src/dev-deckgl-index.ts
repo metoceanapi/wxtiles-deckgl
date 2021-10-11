@@ -58,7 +58,6 @@ export async function start() {
 	let isPlaying = false;
 	const play = async () => {
 		do {
-			console.log('play');
 			await layerManager.nextTimestep();
 		} while (isPlaying);
 	};
@@ -68,11 +67,8 @@ export async function start() {
 	const playButton = document.getElementById('play');
 	const removeButton = document.getElementById('remove');
 	removeButton?.addEventListener('click', () => layerManager.remove());
-	nextButton?.addEventListener('click', () => {
-		console.log('next');
-		layerManager.nextTimestep();
-	});
-	prevButton?.addEventListener('click', async () => await layerManager.prevTimestep());
+	nextButton?.addEventListener('click', () => layerManager.nextTimestep());
+	prevButton?.addEventListener('click', () => layerManager.prevTimestep());
 	playButton?.addEventListener('click', () => {
 		layerManager.cancel();
 		isPlaying = !isPlaying;
@@ -80,11 +76,5 @@ export async function start() {
 		playButton.innerHTML = isPlaying ? 'Stop' : 'Play';
 	});
 
-	layerManager.goToTimestep(0);
-	layerManager.goToTimestep(1);
-	layerManager.goToTimestep(1);
-	layerManager.goToTimestep(1);
-	layerManager.goToTimestep(1);
-	// layerManager.goToTimestep(2);
-	// layerManager.cancel();
+	layerManager.renderCurrentTimestep();
 }

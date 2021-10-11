@@ -8,7 +8,7 @@ export class WxTilesLayerManager {
 	props: WxTilesLayerProps;
 	deckgl: Deck;
 	currentIndex: number;
-
+	newLayerPromise?: Promise<WxTilesLayer | undefined>;
 	layer?: WxTilesLayer;
 	protected resolveAndCancel?: () => void;
 
@@ -27,9 +27,8 @@ export class WxTilesLayerManager {
 	}
 
 	cancel() {
-		// should be async - ибо нехер!
+		// should be async? - ибо нахер!
 		if (this.resolveAndCancel) {
-			console.log("cancel")
 			this.resolveAndCancel();
 		} // otherwise promise will hang forever
 	}
@@ -45,16 +44,16 @@ export class WxTilesLayerManager {
 	}
 
 	async goToTimestep(index: number): Promise<number> {
-		console.log(index);
-		this.cancel();
-		// await (async () => {})();
 		index = this._checkIndex(index);
 
-		if (this.layer && index === this.currentIndex) {
-			return this.currentIndex;
-		}
-		const nlProm = this._newLayerByTimeIndexPromise(index);
-		const newInvisibleLayer = await nlProm;
+		if (this.newLayerPromise) await this.newLayerPromise; // wait if busy
+
+		if (this.layer && index === this.currentIndex) return this.currentIndex; // wait first then check index!!!
+
+		this.cancel(); // in case we got the result but do not need it any more :(
+
+		this.newLayerPromise = this._newLayerByTimeIndexPromise(index);
+		const newInvisibleLayer = await this.newLayerPromise;
 		this.resolveAndCancel = undefined;
 
 		if (!newInvisibleLayer) return this.currentIndex; // could be canceled during promise resolving

@@ -52,6 +52,8 @@ interface WxTilesLayerState {
 	[name: string]: any;
 }
 
+// TODO: animation https://github.com/kamzek/deck.gl-particle
+
 export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps> {
 	state!: WxTilesLayerState;
 

@@ -1,3 +1,5 @@
+import { LayerProps } from '@deck.gl/core/lib/layer';
+
 import { fetchJson, LibSetupObject, Meta, WxGetColorStyles, WxTileLibSetup } from '../utils/wxtools';
 import styles from '../styles/styles.json';
 import uconv from '../styles/uconv.json';
@@ -6,7 +8,7 @@ import { WxTilesLayerProps } from '../layers/WxTilesLayer';
 
 export { setWxTilesLogging } from '../utils/wxtools';
 
-export async function getURIandMetafromDatasetName(dataServer: string, dataSet: string) {
+async function getURIandMetafromDatasetName(dataServer: string, dataSet: string) {
 	// URI could be hardcoded, but tiles-DB is alive!
 	if (dataSet[dataSet.length - 1] != '/') dataSet += '/';
 	const instance = (await fetchJson(dataServer + dataSet + 'instances.json')).reverse()[0] + '/';
@@ -29,10 +31,21 @@ export async function setupWxTilesLib(setupObject: LibSetupObject = {}) {
 
 export type WxServerVarsStyleType = [string, string | [string, string], string];
 
-export async function createWxTilesLayerProps(server: string, params: WxServerVarsStyleType, requestInit?: RequestInit): Promise<WxTilesLayerProps> {
+export async function createWxTilesLayerProps({
+	server,
+	params,
+	extraParams,
+	requestInit,
+}: {
+	server: string;
+	params: WxServerVarsStyleType;
+	extraParams?: LayerProps<any>;
+	requestInit?: RequestInit;
+}): Promise<WxTilesLayerProps> {
 	const [dataSet, variables, styleName] = params;
 	const { URITime, meta } = await getURIandMetafromDatasetName(server, dataSet);
 	const wxTilesProps: WxTilesLayerProps = {
+		...extraParams,
 		id: `wxtiles/${dataSet}/${variables}/`,
 		// WxTiles settings
 		wxprops: {
@@ -46,7 +59,7 @@ export async function createWxTilesLayerProps(server: string, params: WxServerVa
 		// DECK.gl settings
 		maxZoom: meta.maxZoom,
 		loadOptions: {
-			fetch: requestInit,
+			fetch: requestInit, // https://deck.gl/docs/developer-guide/loading-data#example-fetch-data-with-credentials
 			image: {
 				decode: true,
 				type: 'data',

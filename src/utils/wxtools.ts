@@ -469,3 +469,8 @@ export function WXLOG(...str: any) {
 		console.log(...str);
 	}
 }
+
+export function getTimeClosestTo(times: string[], time: string) {
+	const dtime = new Date(time).getTime();
+	return times.find((t) => new Date(t).getTime() >= dtime) || times[times.length - 1];
+}

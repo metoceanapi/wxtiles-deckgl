@@ -1,25 +1,37 @@
 import { TileLayer } from '@deck.gl/geo-layers';
+import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
+import { RGBAColor } from '@deck.gl/core';
+import { RGBColor } from '@deck.gl/core/utils/color';
 import { UpdateStateInfo } from '@deck.gl/core/lib/layer';
 import GL from '@luma.gl/constants';
 import { Texture2D } from '@luma.gl/webgl';
 
-import { RenderSubLayers } from './IRenderSubLayers';
+import { RenderSubLayersProps, Tile } from './IRenderSubLayers';
 import { WxTileIsolineTextData, WxTileIsolineText } from './WxTileIsolineText';
 import { WxTileFill } from './WxTileFill';
 import { WxTileVector, WxTileVectorData } from './WxTileVector';
 
-import { IWxTilesLayerData, IWxTilesLayerProps } from './IWxTileLayer';
-import { BoundaryMeta, HEXtoRGBA, UIntToColor, WxGetColorStyles } from '../utils/wxtools';
+import { BoundaryMeta, ColorStyleStrict, HEXtoRGBA, Meta, UIntToColor } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
-import { getURIfromDatasetName } from '../libs/libTools';
 
-interface Tile {
-	x: number;
-	y: number;
-	z: number;
-	signal: AbortSignal;
-	bbox: BoundaryMeta;
+export interface WxProps {
+	meta: Meta;
+	variables: string | string[];
+	style: ColorStyleStrict;
+	URITime: string;
+}
+
+type IWxTilesLayerData = string;
+
+export interface WxTilesLayerProps extends TileLayerProps<IWxTilesLayerData> {
+	id: string;
+	wxprops: WxProps;
+	data: IWxTilesLayerData;
+	desaturate?: number;
+	transparentColor?: RGBAColor;
+	tintColor?: RGBColor;
+	visible?: boolean;
 }
 
 interface WxTileData {
@@ -40,14 +52,14 @@ interface WxTilesLayerState {
 	[name: string]: any;
 }
 
-export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProps> {
+export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps> {
 	state!: WxTilesLayerState;
 
-	constructor(props: IWxTilesLayerProps) {
+	constructor(props: WxTilesLayerProps) {
 		super(props);
 	}
 
-	updateState(st: UpdateStateInfo<IWxTilesLayerProps>) {
+	updateState(st: UpdateStateInfo<WxTilesLayerProps>) {
 		super.updateState(st);
 		if (st.changeFlags.propsChanged) {
 			this._prepareStateAndCLUT();
@@ -78,11 +90,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		return clickInfo;
 	}
 
-	renderSubLayers(args: RenderSubLayers<WxTileData>) {
-		const { tile, id, data } = args;
+	renderSubLayers(subProps: RenderSubLayersProps<WxTileData>) {
+		const { tile, id, data } = subProps;
 		if (!data) return null; // Useless ??
 		const { west, south, east, north } = tile.bbox;
-		const { wxprops, desaturate, transparentColor, tintColor, opacity } = this.props;
+		const { wxprops, desaturate, transparentColor, tintColor, opacity, pickable, visible } = this.props;
 		const { style } = wxprops;
 		const { clutTextureUniform } = this.state;
 		const { imageTextureUniform } = data;
@@ -96,32 +108,40 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				},
 				bounds: [west, south, east, north],
 				image: null,
-				pickable: true,
+				pickable,
 				opacity,
 				desaturate,
 				transparentColor,
 				tintColor,
+				visible,
 			}),
+
 			new WxTileIsolineText({
 				id: id + '-isotext',
 				data: data.isoData,
 				opacity,
+				pickable: false,
+				visible,
 			}),
+
 			data.vectorData &&
 				new WxTileVector({
 					id: id + '-vector',
 					data: data.vectorData,
 					fontFamily: style.vectorType,
 					opacity,
+					pickable: false,
+					visible,
 				}),
 			// new WxVectorAnimation(),
 		];
 	}
 
-	async getTileData(tile: Tile): Promise<WxTileData | null> {
+	async getTileData(tile: Tile & { signal: AbortSignal }): Promise<WxTileData | null> {
 		const { x, y, z, signal, bbox } = tile;
 
 		if (this.state.emptyTilesCache.has(x + ':' + y + ':' + z)) {
+			return null;
 		}
 
 		const { data: URL, wxprops } = this.props;
@@ -391,33 +411,3 @@ WxTilesLayer.defaultProps = {
 	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
 	tintColor: { type: 'color', value: [255, 255, 255] },
 };
-
-export type WxServerVarsTimeType = [string, string | [string, string], string];
-
-export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType, requestInit?: RequestInit): Promise<IWxTilesLayerProps> {
-	const [dataSet, variables, styleName] = params;
-	const { URITime, meta } = await getURIfromDatasetName(server, dataSet);
-	const wxTilesProps: IWxTilesLayerProps = {
-		id: `wxtiles/${dataSet}/${variables}/`,
-		// WxTiles settings
-		wxprops: {
-			meta,
-			variables, // 'temp2m' or ['eastward', 'northward'] for vector data
-			style: WxGetColorStyles()[styleName],
-			URITime,
-		},
-		// DATA
-		data: URITime.replace('{time}', meta.times[0]),
-		// DECK.gl settings
-		maxZoom: meta.maxZoom,
-		loadOptions: {
-			fetch: requestInit,
-			image: {
-				decode: true,
-				type: 'data',
-			},
-		},
-	};
-
-	return wxTilesProps;
-}

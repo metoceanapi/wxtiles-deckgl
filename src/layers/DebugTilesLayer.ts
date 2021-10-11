@@ -1,9 +1,9 @@
-import { CompositeLayer, Position, RGBAColor } from '@deck.gl/core';
+import { Position, RGBAColor } from '@deck.gl/core';
 import { TextLayer, PathLayer } from '@deck.gl/layers';
 import { TileLayer } from '@deck.gl/geo-layers';
 import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
 
-import { RenderSubLayers } from './IRenderSubLayers';
+import { RenderSubLayersProps } from './IRenderSubLayers';
 
 export interface DebugTilesLayerData {
 	color: RGBAColor;
@@ -18,39 +18,34 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 		super(props);
 	}
 
-	getTileData(tile: any) {
-		// /* this is to test async fetching the data */
-		// return new Promise((resolve) => {
-		// 	setTimeout(() => {
-		// 		resolve(true);
-		// 	}, ~~(Math.random() * 1000 + 1000));
-		// });
-	}
+	// getTileData(tile: any) {
+	// 	/* this is to test async fetching the data */
+	// 	return new Promise((resolve) => {
+	// 		setTimeout(() => {
+	// 			resolve(true);
+	// 		}, ~~(Math.random() * 1000 + 1000));
+	// 	});
+	// }
 
-	renderSubLayers(args: RenderSubLayers) {
-		const {
-			x,
-			y,
-			z,
-			bbox: { west, south, east, north },
-		} = args.tile;
-		const { data } = this.props;
+	renderSubLayers(subProps: RenderSubLayersProps) {
+		const { tile, id } = subProps;
+		const { x, y, z, bbox } = tile;
+		const { west, south, east, north } = bbox;
+		const { color } = this.props.data;
 		const subLayers = [
 			new TextLayer({
-				id: args.id + '-c',
-				visible: args.visible,
+				id: id + '-c',
 				data: [{}],
 				getPosition: () => [west + (east - west) * 0.05, north + (south - north) * 0.05], // if not ON TILE - visual issues occure
 				getText: () => x + '-' + y + '-' + z,
-				getColor: data.color,
+				getColor: color,
 				billboard: false,
 				getSize: 10,
 				getTextAnchor: 'start',
 			}),
 
 			new PathLayer({
-				id: args.id + '-b',
-				visible: args.visible,
+				id: id + '-b',
 				data: [
 					[
 						[west, north], // two (left and bottom) lines are enough to compose a square mesh
@@ -61,7 +56,7 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 					],
 				],
 				getPath: (d) => d as Position[],
-				getColor: data.color,
+				getColor: color,
 				widthMinPixels: 1,
 			}),
 		];
@@ -69,11 +64,12 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 		return subLayers;
 	}
 }
+
 DebugTilesLayer.layerName = 'DebugTilesLayer';
 DebugTilesLayer.defaultProps = {
-	tileSize: 256,
-	pickable: false,
 	data: { color: [255, 0, 0, 255] },
+	tileSize: 256,
 	maxZoom: 24,
 	minZoom: 0,
+	pickable: false,
 };

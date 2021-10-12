@@ -1,6 +1,6 @@
 import './wxtilesdeckgl.css';
 
-export { setupWxTilesLib, createWxTilesLayerProps, setWxTilesLogging, WxServerVarsStyleType } from './libs/libTools';
+export { setupWxTilesLib, setWxTilesLogging, createWxTilesLayerProps, CreateProps, WxServerVarsStyleType } from './libs/libTools';
 
 export { WxTilesLayerManager, createDeckGlLayer } from './libs/createDeckGlLayer';
 

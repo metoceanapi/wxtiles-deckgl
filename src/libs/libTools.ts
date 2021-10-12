@@ -31,17 +31,14 @@ export async function setupWxTilesLib(setupObject: LibSetupObject = {}) {
 
 export type WxServerVarsStyleType = [string, string | [string, string], string];
 
-export async function createWxTilesLayerProps({
-	server,
-	params,
-	extraParams,
-	requestInit,
-}: {
+export interface CreateProps {
 	server: string;
 	params: WxServerVarsStyleType;
 	extraParams?: LayerProps<any>;
 	requestInit?: RequestInit;
-}): Promise<WxTilesLayerProps> {
+}
+
+export async function createWxTilesLayerProps({ server, params, extraParams, requestInit }: CreateProps): Promise<WxTilesLayerProps> {
 	const [dataSet, variables, styleName] = params;
 	const { URITime, meta } = await getURIandMetafromDatasetName(server, dataSet);
 	const wxTilesProps: WxTilesLayerProps = {

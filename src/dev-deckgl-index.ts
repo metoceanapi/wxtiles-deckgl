@@ -8,6 +8,7 @@ import {
 	createDeckGlLayer,
 	WxServerVarsStyleType,
 	DebugTilesLayer,
+	CreateProps,
 	WxTilesLayerManager,
 	WxTilesLayer,
 } from './wxtilesdeckgl';
@@ -23,7 +24,7 @@ export async function start() {
 
 	// ESSENTIAL step to get lib ready.
 	await setupWxTilesLib(); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
-	setWxTilesLogging(true);
+	setWxTilesLogging(true); // logging on
 
 	const params: WxServerVarsStyleType =
 		//
@@ -44,21 +45,14 @@ export async function start() {
 		},
 	};
 
-	const wxProps = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params, extraParams });
+	const wxProps = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params, extraParams } as CreateProps);
 
 	const layerManager = createDeckGlLayer(deckgl, wxProps);
 	// or
 	// const layerManager = new WxTilesLayerManager({ deckgl, props: wxProps });
 
-	let isPlaying = false;
-	const play = async () => {
-		do {
-			await layerManager.nextTimestep();
-		} while (isPlaying);
-	};
-
 	await layerManager.renderCurrentTimestep();
-	
+
 	const debugLayerRed = new DebugTilesLayer({
 		id: 'debugtilesR',
 		data: { color: [255, 0, 0, 120] },
@@ -71,6 +65,7 @@ export async function start() {
 
 	deckgl.setProps({ layers: [...deckgl.props.layers, debugLayerRed, debugLayerBlue] });
 
+	// set up user interface
 	const nextButton = document.getElementById('next');
 	const prevButton = document.getElementById('prev');
 	const playButton = document.getElementById('play');
@@ -78,6 +73,12 @@ export async function start() {
 	removeButton?.addEventListener('click', () => layerManager.remove());
 	nextButton?.addEventListener('click', () => layerManager.nextTimestep());
 	prevButton?.addEventListener('click', () => layerManager.prevTimestep());
+	let isPlaying = false;
+	const play = async () => {
+		do {
+			await layerManager.nextTimestep();
+		} while (isPlaying);
+	};
 	playButton?.addEventListener('click', () => {
 		layerManager.cancel();
 		isPlaying = !isPlaying;

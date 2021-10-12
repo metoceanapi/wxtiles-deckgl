@@ -1,111 +1,111 @@
 import { Deck, Layer } from '@deck.gl/core';
 import { LayerProps } from '@deck.gl/core/lib/layer';
 import { WxTilesLayer, WxTilesLayerProps } from '../layers/WxTilesLayer';
+import { WXLOG } from '../utils/wxtools';
 
 type CLayer = Layer<any, LayerProps<any>>;
 
 export class WxTilesLayerManager {
 	props: WxTilesLayerProps;
 	deckgl: Deck;
-	currentIndex: number;
-	newLayerPromise?: Promise<WxTilesLayer | undefined>;
+	currentIndex: number = 0;
 	layer?: WxTilesLayer;
-	protected resolveAndCancel?: () => void;
 
-	constructor(deckgl: Deck, props: WxTilesLayerProps) {
+	protected cancelNewLayerPromise?: () => void;
+
+	constructor({ deckgl, props }: { deckgl: Deck; props: WxTilesLayerProps }) {
 		this.deckgl = deckgl;
 		this.props = props;
-		this.currentIndex = 0;
 	}
 
 	nextTimestep(): Promise<number> {
+		WXLOG('nextTimestep');
 		return this.goToTimestep(this.currentIndex + 1);
 	}
 
 	prevTimestep(): Promise<number> {
+		WXLOG('prevTimestep');
 		return this.goToTimestep(this.currentIndex - 1);
 	}
 
 	cancel() {
 		// should be async? - ибо нахер!
-		if (this.resolveAndCancel) {
-			this.resolveAndCancel();
-		} // otherwise promise will hang forever
+		if (this.cancelNewLayerPromise) {
+			WXLOG('cancel');
+			this.cancelNewLayerPromise();
+		}
 	}
 
 	remove(): void {
+		WXLOG('remove');
 		this.cancel();
-		if (this.layer) this._setFilteredLayers(this.layer);
-		this.layer = undefined;
+		if (this.layer) {
+			this._setFilteredLayers({ remove: this.layer });
+			this.layer = undefined;
+		}
 	}
 
 	renderCurrentTimestep(): Promise<number> {
+		WXLOG('renderCurrentTimestep');
 		return this.goToTimestep(this.currentIndex);
 	}
 
-	async goToTimestep(index: number): Promise<number> {
+	goToTimestep(index: number): Promise<number> {
+		WXLOG('goToTimestep:', index);
+		this.cancel(); // in case it was busy with the rotten result :( This will remove unwanted layer
+
 		index = this._checkIndex(index);
+		if (this.layer && index === this.currentIndex) return Promise.resolve(this.currentIndex); // wait first then check index!!!
 
-		if (this.newLayerPromise) await this.newLayerPromise; // wait if busy
-
-		if (this.layer && index === this.currentIndex) return this.currentIndex; // wait first then check index!!!
-
-		this.cancel(); // in case we got the result but do not need it any more :(
-
-		this.newLayerPromise = this._newLayerByTimeIndexPromise(index);
-		const newInvisibleLayer = await this.newLayerPromise;
-		this.resolveAndCancel = undefined;
-
-		if (!newInvisibleLayer) return this.currentIndex; // could be canceled during promise resolving
-
-		this.currentIndex = index;
-		const newVisibleLayer = new WxTilesLayer({ ...newInvisibleLayer.props, visible: true });
-		this._setFilteredLayers(newInvisibleLayer, this.layer, newVisibleLayer);
-		this.layer = newVisibleLayer;
-
-		return this.currentIndex;
-	}
-
-	protected _setFilteredLayers(remove: CLayer, replace?: CLayer, add?: CLayer): void {
-		const layers: Layer<any, LayerProps<any>>[] = [];
-		this._getDeckglLayers().forEach((l) => {
-			if (l !== remove && l !== replace) layers.push(l);
-			if (l === replace && add) layers.push(add);
-		});
-		if (!replace && add) layers.push(add);
-
-		this.deckgl.setProps({ layers });
-	}
-
-	protected _newLayerByTimeIndexPromise(index: number) {
 		const layerId = this.props.id + index;
 		const URI = this.props.wxprops.URITime.replace('{time}', this.props.wxprops.meta.times[index]);
 
-		const promise = new Promise<WxTilesLayer | undefined>((resolve, reject) => {
-			const newLayerProps: WxTilesLayerProps = {
+		const promise = new Promise<number>((resolve): void => {
+			WXLOG('promise:', index, 'started');
+			const newInvisibleLayer = new WxTilesLayer({
 				...this.props,
 				id: layerId,
 				data: URI,
 
 				visible: false,
 
-				onViewportLoad: (data) => {
-					this.props?.onViewportLoad?.(data);
-					resolve(newLayer);
+				onViewportLoad: (): void => {
+					WXLOG('promise:onViewportLoad:', index);
+					const newVisibleLayer = new WxTilesLayer({ ...this.props, id: layerId, data: URI });
+					this._setFilteredLayers({ remove: newInvisibleLayer, replace: this.layer, add: newVisibleLayer });
+					this.layer = newVisibleLayer;
+					this.currentIndex = index;
+					this.cancelNewLayerPromise = undefined;
+					resolve(this.currentIndex);
 				},
+			});
+
+			this.cancelNewLayerPromise = () => {
+				WXLOG('promise:cancelNewLayerPromise:', index);
+				this._setFilteredLayers({ remove: newInvisibleLayer });
+				this.cancelNewLayerPromise = undefined;
+				resolve(this.currentIndex);
 			};
 
-			newLayerProps.loadOptions;
-
-			const newLayer = new WxTilesLayer(newLayerProps);
-			this.resolveAndCancel = () => {
-				this._setFilteredLayers(newLayer);
-				resolve(undefined);
-			};
-			this.deckgl.setProps({ layers: [newLayer, ...this._getDeckglLayers()] });
+			this._setFilteredLayers({ add: newInvisibleLayer });
+			WXLOG('promise:', index, 'finished');
 		});
 
+		WXLOG('newLayerByTimeIndexPromise:', index, 'finished');
+
 		return promise;
+	}
+
+	protected _setFilteredLayers({ remove, replace, add }: { remove?: CLayer; replace?: CLayer; add?: CLayer }): void {
+		const layers: Layer<any, LayerProps<any>>[] = [];
+		this._getDeckglLayers().forEach((l) => {
+			if (l !== remove && l !== replace) layers.push(l);
+			if (l === replace && add) layers.push(add);
+		});
+
+		if (!replace && add) layers.push(add);
+
+		this.deckgl.setProps({ layers });
 	}
 
 	protected _checkIndex(index: number): number {
@@ -121,7 +121,7 @@ export class WxTilesLayerManager {
 }
 
 export function createDeckGlLayer(deckgl: Deck, props: WxTilesLayerProps): WxTilesLayerManager {
-	return new WxTilesLayerManager(deckgl, props);
+	return new WxTilesLayerManager({ deckgl, props });
 }
 
 /*

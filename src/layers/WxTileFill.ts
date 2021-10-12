@@ -27,7 +27,7 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		super.updateState(a);
 		const { style } = this.props.data;
 		const fill = style.fill !== 'none';
-		const isolineColorUI = HEXtoRGBA(style.isolineColor);
+		const isolineColor = UIntToColor(style.isolineColor[0] === '#' ? HEXtoRGBA(style.isolineColor) : 0);
 		const isoline =
 			{
 				none: 0,
@@ -41,7 +41,7 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 			bitmapTexture: this.props.data.imageTextureUniform,
 			fill,
 			isoline,
-			isolineColor: UIntToColor(isolineColorUI),
+			isolineColor,
 			desaturate,
 			transparentColor: transparentColor!.map((x) => x! / 255),
 			tintColor: tintColor!.slice(0, 3).map((x) => x / 255),

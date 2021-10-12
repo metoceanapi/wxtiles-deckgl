@@ -64,7 +64,15 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 	updateState(st: UpdateStateInfo<WxTilesLayerProps>) {
 		super.updateState(st);
 		if (st.changeFlags.propsChanged) {
-			this._prepareStateAndCLUT();
+			if (
+				st.oldProps.wxprops?.style !== st.props.wxprops.style ||
+				st.oldProps.wxprops?.variables !== st.props.wxprops.variables ||
+				st.oldProps.wxprops?.meta !== st.props.wxprops.meta
+			) {
+				this._prepareStateAndCLUT();
+			}
+
+			this.setState({ emptyTilesCache: new Set<string>() });
 		}
 	}
 

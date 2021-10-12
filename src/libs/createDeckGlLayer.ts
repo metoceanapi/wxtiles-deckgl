@@ -97,7 +97,7 @@ export class WxTilesLayerManager {
 	}
 
 	protected _setFilteredLayers({ remove, replace, add }: { remove?: CLayer; replace?: CLayer; add?: CLayer }): void {
-		const layers: Layer<any, LayerProps<any>>[] = [];
+		const layers: CLayer[] = [];
 		this._getDeckglLayers().forEach((l) => {
 			if (l !== remove && l !== replace) layers.push(l);
 			if (l === replace && add) layers.push(add);

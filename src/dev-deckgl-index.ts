@@ -3,6 +3,7 @@ import { Deck, MapView } from '@deck.gl/core';
 
 import {
 	setupWxTilesLib,
+	setWxTilesLogging,
 	createWxTilesLayerProps,
 	createDeckGlLayer,
 	WxServerVarsStyleType,
@@ -17,17 +18,12 @@ export async function start() {
 		controller: true,
 		parent: document.getElementById('map')!,
 		views: [new MapView({ repeat: true })],
-		layers: [
-			new DebugTilesLayer({
-				id: 'debugtiles',
-				data: { color: [255, 0, 0, 120] },
-				// visible: false,
-			}),
-		],
+		layers: [],
 	});
 
 	// ESSENTIAL step to get lib ready.
 	await setupWxTilesLib(); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
+	setWxTilesLogging(true);
 
 	const params: WxServerVarsStyleType =
 		//
@@ -42,7 +38,6 @@ export async function start() {
 	const extraParams = {
 		// DeckGl layer's common parameters
 		opacity: 0.5,
-		visible: false,
 		// event hook
 		onClick(info: any, pickingEvent: any): void {
 			console.log(info?.layer?.onClickProcessor?.(info, pickingEvent) || info);
@@ -51,9 +46,9 @@ export async function start() {
 
 	const wxProps = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params, extraParams });
 
-	// const layerManager = createDeckGlLayer(deckgl, wxProps);
+	const layerManager = createDeckGlLayer(deckgl, wxProps);
 	// or
-	const layerManager = new WxTilesLayerManager(deckgl, wxProps);
+	// const layerManager = new WxTilesLayerManager({ deckgl, props: wxProps });
 
 	let isPlaying = false;
 	const play = async () => {
@@ -61,6 +56,20 @@ export async function start() {
 			await layerManager.nextTimestep();
 		} while (isPlaying);
 	};
+
+	await layerManager.renderCurrentTimestep();
+	
+	const debugLayerRed = new DebugTilesLayer({
+		id: 'debugtilesR',
+		data: { color: [255, 0, 0, 120] },
+	});
+	const debugLayerBlue = new DebugTilesLayer({
+		id: 'debugtilesB',
+		data: { color: [0, 0, 255, 120] },
+		maxZoom: wxProps.maxZoom,
+	});
+
+	deckgl.setProps({ layers: [...deckgl.props.layers, debugLayerRed, debugLayerBlue] });
 
 	const nextButton = document.getElementById('next');
 	const prevButton = document.getElementById('prev');
@@ -75,6 +84,4 @@ export async function start() {
 		isPlaying && play();
 		playButton.innerHTML = isPlaying ? 'Stop' : 'Play';
 	});
-
-	layerManager.renderCurrentTimestep();
 }

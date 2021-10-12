@@ -12,7 +12,8 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 ## [0.0.1] - 2021-08-24
 
 ### Added
-
+- WxTiles for Deck.gl
+- WxTilesLayerManager
 - emty tiles cache
 - boundaries check
 - All the existing functionality (no change log)

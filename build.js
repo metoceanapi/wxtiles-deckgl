@@ -3,25 +3,29 @@ const express = require('express');
 const { externalGlobalPlugin } = require('esbuild-plugin-external-global');
 
 const sharedConfig = {
-	entryPoints: ['src/wxtilesdeckgl.ts'],
-	bundle: true,
 	loader: {
 		'.woff': 'base64',
 		'.fs': 'text',
 		'.vs': 'text',
 	},
-	
+	entryPoints: ['src/wxtilesdeckgl.ts'],
+	// outfile: 'dist/es/wxtilesdeckgl.js',
+	bundle: true,
+	sourcemap: false,
+	minify: true,
+	// splitting: true,
+	treeShaking: true,
 	// https://www.stetic.com/market-share/browser/
 	target: ['es2020', 'chrome80', 'safari13', 'edge89', 'firefox70'],
-	minify: true,
 };
 
 // BUILD as ESModules
 esbuild
 	.build({
 		...sharedConfig,
+		outdir: 'dist/es',
 		format: 'esm',
-		outfile: 'dist/es/wxtilesdeckgl.js',
+		external: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/geo-layers', '@luma.gl/core', '@luma.gl/webgl'],
 	})
 	.catch((e) => console.error(e.message));
 
@@ -38,7 +42,6 @@ esbuild
 				'@luma.gl/webgl': 'window.luma',
 			}),
 		],
-
 		format: 'iife',
 		outfile: 'dist/web/wxtilesdeckgl.js',
 		globalName: 'wxtilesdeckgl',

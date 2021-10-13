@@ -1,4 +1,3 @@
-import './wxtilesdeckgl.css';
 import { Deck, MapView } from '@deck.gl/core';
 
 import {
@@ -9,11 +8,17 @@ import {
 	WxServerVarsStyleType,
 	DebugTilesLayer,
 	CreateProps,
+	LibSetupObject,
 	WxTilesLayerManager,
 	WxTilesLayer,
-} from './wxtilesdeckgl';
+} from '@metoceanapi/wxtiles-deckgl';
+import '@metoceanapi/wxtiles-deckgl/dist/es/wxtilesdeckgl.css';
 
-export async function start() {
+import colorStyles from './styles/styles.json';
+import units from './styles/uconv.json';
+import colorSchemes from './styles/colorschemes.json';
+
+async function start() {
 	const deckgl = new Deck({
 		initialViewState: { latitude: -38, longitude: 176, zoom: 4 },
 		controller: true,
@@ -23,7 +28,12 @@ export async function start() {
 	});
 
 	// ESSENTIAL step to get lib ready.
-	await setupWxTilesLib(); // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
+	const wxlibCustomSettings: LibSetupObject = {
+		colorStyles: colorStyles as any,
+		units: units as any,
+		colorSchemes,
+	};
+	await setupWxTilesLib(wxlibCustomSettings); // !!! IMPORTANT: await to make sure fonts (barbs, arrows, etc) are loaded
 	setWxTilesLogging(true); // logging on
 
 	const params: WxServerVarsStyleType =

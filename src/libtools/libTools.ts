@@ -1,9 +1,6 @@
 import { LayerProps } from '@deck.gl/core/lib/layer';
 
 import { fetchJson, LibSetupObject, Meta, WxGetColorStyles, WxTileLibSetup } from '../utils/wxtools';
-import styles from '../styles/styles.json';
-import uconv from '../styles/uconv.json';
-import colorschemes from '../styles/colorschemes.json';
 import { WxTilesLayerProps } from '../layers/WxTilesLayer';
 
 export { setWxTilesLogging } from '../utils/wxtools';
@@ -17,16 +14,10 @@ async function getURIandMetafromDatasetName(dataServer: string, dataSet: string)
 	return { URITime, meta };
 }
 
-export async function setupWxTilesLib(setupObject: LibSetupObject = {}) {
-	const wxlibCustomSettings: LibSetupObject = {
-		colorStyles: styles as any,
-		units: uconv as any,
-		colorSchemes: colorschemes,
-		...setupObject,
-	};
+export function setupWxTilesLib(setupObject: LibSetupObject = {}): Promise<any> | undefined {
 	// ESSENTIAL step to get lib ready.
-	WxTileLibSetup(wxlibCustomSettings); // load fonts and styles, units, colorschemas - empty => defaults
-	return document.fonts.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
+	WxTileLibSetup(setupObject); // load fonts and styles, units, colorschemas - empty => defaults
+	return (document as any).fonts?.ready; // !!! IMPORTANT: make sure fonts (barbs, arrows, etc) are loaded
 }
 
 export type WxServerVarsStyleType = [string, string | [string, string], string];

@@ -213,8 +213,8 @@ export function WxTileLibSetup({ colorStyles = {}, units = {}, colorSchemes = {}
 	WXLOG('WxTile lib setup: styles unrolled');
 
 	// Make sure fonts are loaded & ready!
-	document.fonts.load('32px barbs');
-	document.fonts.load('32px arrows');
+	(document as any).fonts?.load?.('32px barbs');
+	(document as any).fonts?.load?.('32px arrows');
 
 	WXLOG('WxTile lib setup is done' + JSON.stringify({ colorStyles, units, colorSchemes }));
 }

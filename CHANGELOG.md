@@ -9,13 +9,20 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+### FIXED
+
+- externals dependencies
+
 ## [2.0.1] - 2021-10-12
 
 ### ADDED
+
 - deck.gl 8.6.0
+
 ## [2.0.0] - 2021-10-12
 
 ### Added
+
 - WxTiles for Deck.gl
 - WxTilesLayerManager
 - emty tiles cache

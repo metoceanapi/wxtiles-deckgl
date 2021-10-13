@@ -27,7 +27,7 @@ export class DebugTilesLayer extends TileLayer<DebugTilesLayerData, DebugTilesLa
 	// 	});
 	// }
 
-	renderSubLayers(subProps: RenderSubLayersProps) {
+	renderSubLayers(subProps: RenderSubLayersProps): any {
 		const { tile, id } = subProps;
 		const { x, y, z, bbox } = tile;
 		const { west, south, east, north } = bbox;

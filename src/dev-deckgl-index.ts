@@ -86,3 +86,5 @@ export async function start() {
 		playButton.innerHTML = isPlaying ? 'Stop' : 'Play';
 	});
 }
+
+start();

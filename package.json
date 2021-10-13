@@ -33,11 +33,7 @@
 	"dependencies": {
 		"@danmarshall/deckgl-typings": "^4.9.7",
 		"@metoceanapi/wxtiles-deckgl": "file:../wxtiles-deckgl",
-		"@deck.gl/core": "^8.6.0",
-		"@deck.gl/geo-layers": "^8.6.0",
-		"@deck.gl/layers": "^8.6.0",
-		"@luma.gl/core": "^8.5.10",
-		"@luma.gl/webgl": "^8.5.10"
+		"deck.gl": "^8.6.0"
 	},
 	"peerDependencies": {
 		"@deck.gl/core": "^8.6.0",

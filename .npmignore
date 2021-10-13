@@ -1,7 +1,7 @@
 examples/
 public/
 src/
-src/dev*.ts
+src_example/
 
 .*
 *.json

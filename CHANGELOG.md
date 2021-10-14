@@ -9,6 +9,8 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+## [2.0.3] - 2021-10-14
+
 ### FIXED
 
 - layers didn not appear onViewportLoad (setTimeout trick is used)

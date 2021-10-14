@@ -1,6 +1,6 @@
 {
 	"name": "@metoceanapi/wxtiles-deckgl",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"description": "WxTiles DeckGl lib to render binary data tiles",
 	"main": "dist/es/wxtilesdeckgl.js",
 	"types": "dist/es/wxtilesdeckgl.d.ts",
@@ -40,6 +40,5 @@
 		"@luma.gl/core": "^8.5.10",
 		"@luma.gl/webgl": "^8.5.10"
 	},
-	"peerDependencies": {
-	}
+	"peerDependencies": {}
 }

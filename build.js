@@ -25,7 +25,7 @@ esbuild
 		...sharedConfig,
 		outdir: 'dist/es',
 		format: 'esm',
-		external: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/geo-layers', '@luma.gl/core', '@luma.gl/webgl'],
+		external: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/geo-layers', '@luma.gl/core', '@luma.gl/webgl', '@luma.gl/constants'],
 	})
 	.catch((e) => console.error(e.message));
 
@@ -40,6 +40,7 @@ esbuild
 				'@deck.gl/geo-layers': 'window.deck',
 				'@luma.gl/core': 'window.luma',
 				'@luma.gl/webgl': 'window.luma',
+				'@luma.gl/constants': 'window.luma',
 			}),
 		],
 		format: 'iife',

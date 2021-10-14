@@ -12,8 +12,10 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 ### FIXED
 
 - layers didn not appear onViewportLoad (setTimeout trick is used)
+- deleted peerDependencies
 
 ### ADDED
+
 - more type exports
 - visible first time appearing
 

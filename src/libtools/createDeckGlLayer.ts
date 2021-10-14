@@ -67,16 +67,19 @@ export class WxTilesLayerManager {
 				id: layerId,
 				data: URI,
 
-				visible: false,
+				visible: this.layer ? false : true,
 
-				onViewportLoad: (): void => {
+				onViewportLoad: () => {
 					WXLOG('promise:onViewportLoad:', index);
-					const newVisibleLayer = new WxTilesLayer({ ...this.props, id: layerId, data: URI });
-					this._setFilteredLayers({ remove: newInvisibleLayer, replace: this.layer, add: newVisibleLayer });
-					this.layer = newVisibleLayer;
-					this.currentIndex = index;
-					this.cancelNewLayerPromise = undefined;
-					resolve(this.currentIndex);
+					// setTimeout trick lets DeckGl finish its render cycle and  renrender new visible layers
+					setTimeout(() => {
+						const newVisibleLayer = new WxTilesLayer({ ...this.props, id: layerId, data: URI });
+						this._setFilteredLayers({ remove: newInvisibleLayer, replace: this.layer, add: newVisibleLayer });
+						this.layer = newVisibleLayer;
+						this.currentIndex = index;
+						this.cancelNewLayerPromise = undefined;
+						resolve(this.currentIndex);
+					});
 				},
 			});
 

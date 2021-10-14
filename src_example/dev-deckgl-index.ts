@@ -11,6 +11,7 @@ import {
 	LibSetupObject,
 	WxTilesLayerManager,
 	WxTilesLayer,
+	// } from '../src/wxtilesdeckgl';
 } from '@metoceanapi/wxtiles-deckgl';
 import '@metoceanapi/wxtiles-deckgl/dist/es/wxtilesdeckgl.css';
 
@@ -29,9 +30,9 @@ async function start() {
 	setWxTilesLogging(true); // logging on
 
 	const params: WxServerVarsStyleType =
-		['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
 		// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
-		// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
+		['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 	const extraParams = {
 		// DeckGl layer's common parameters
 		opacity: 0.5,
@@ -55,8 +56,8 @@ async function start() {
 	// or
 	// const layerManager = new WxTilesLayerManager({ deckgl, props: wxProps });
 
-	await layerManager.renderCurrentTimestep();
-	
+	layerManager.renderCurrentTimestep();
+
 	UIhooks(layerManager);
 	debugLayers(deckgl, wxProps.maxZoom);
 }

@@ -11,7 +11,7 @@ export class WxTilesLayerManager {
 	currentIndex: number = 0;
 	layer?: WxTilesLayer;
 
-	protected cancelNewLayerPromise?: () => void;
+	private cancelNewLayerPromise?: () => void;
 
 	constructor({ deckgl, props }: { deckgl: Deck; props: WxTilesLayerProps }) {
 		this.deckgl = deckgl;
@@ -99,7 +99,7 @@ export class WxTilesLayerManager {
 		return promise;
 	}
 
-	protected _setFilteredLayers({ remove, replace, add }: { remove?: CLayer; replace?: CLayer; add?: CLayer }): void {
+	private _setFilteredLayers({ remove, replace, add }: { remove?: CLayer; replace?: CLayer; add?: CLayer }): void {
 		const layers: CLayer[] = [];
 		this._getDeckglLayers().forEach((l) => {
 			if (l !== remove && l !== replace) layers.push(l);
@@ -111,11 +111,11 @@ export class WxTilesLayerManager {
 		this.deckgl.setProps({ layers });
 	}
 
-	protected _checkIndex(index: number): number {
+	private _checkIndex(index: number): number {
 		return (index + this.props.wxprops.meta.times.length) % this.props.wxprops.meta.times.length;
 	}
 
-	protected _getDeckglLayers() {
+	private _getDeckglLayers() {
 		return this.deckgl.props.layers; //.filter((layer) => layer.parent === null);
 		// changed because of this:
 		//    https://github.com/visgl/deck.gl/issues/4016#issuecomment-565545861

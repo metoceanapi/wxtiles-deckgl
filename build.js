@@ -25,7 +25,10 @@ esbuild
 		...sharedConfig,
 		outdir: 'dist/es',
 		format: 'esm',
-		external: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/geo-layers', '@luma.gl/core', '@luma.gl/webgl', '@luma.gl/constants'],
+		external: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/geo-layers', '@luma.gl/webgl', '@luma.gl/constants'],
+	})
+	.then(() => {
+		require('fs').copyFileSync('dist/es/wxtilesdeckgl.css', './wxtilescss.css');
 	})
 	.catch((e) => console.error(e.message));
 

@@ -11,9 +11,9 @@ import {
 	LibSetupObject,
 	WxTilesLayerManager,
 	WxTilesLayer,
-	// } from '../src/wxtilesdeckgl';
-} from '@metoceanapi/wxtiles-deckgl';
-import '@metoceanapi/wxtiles-deckgl/dist/es/wxtilesdeckgl.css';
+} from '../src/wxtilesdeckgl';
+// } from '@metoceanapi/wxtiles-deckgl';
+import '../wxtilescss.css';
 
 import colorStyles from './styles/styles.json';
 import units from './styles/uconv.json';

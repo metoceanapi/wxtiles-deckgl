@@ -5,7 +5,8 @@
 	"main": "dist/es/wxtilesdeckgl.js",
 	"types": "dist/es/wxtilesdeckgl.d.ts",
 	"files": [
-		"dist/"
+		"dist/",
+		"wxtilescss.css"
 	],
 	"scripts": {
 		"build": "rm -rf dist/ && node build.js && tsc --declaration",

@@ -1,25 +1,37 @@
 import { TileLayer } from '@deck.gl/geo-layers';
+import { TileLayerProps } from '@deck.gl/geo-layers/tile-layer/tile-layer';
+import { RGBAColor } from '@deck.gl/core';
+import { RGBColor } from '@deck.gl/core/utils/color';
 import { UpdateStateInfo } from '@deck.gl/core/lib/layer';
 import GL from '@luma.gl/constants';
 import { Texture2D } from '@luma.gl/webgl';
 
-import { RenderSubLayers } from './IRenderSubLayers';
+import { RenderSubLayersProps, Tile } from './IRenderSubLayers';
 import { WxTileIsolineTextData, WxTileIsolineText } from './WxTileIsolineText';
 import { WxTileFill } from './WxTileFill';
 import { WxTileVector, WxTileVectorData } from './WxTileVector';
 
-import { IWxTilesLayerData, IWxTilesLayerProps } from './IWxTileLayer';
-import { BoundaryMeta, HEXtoRGBA, UIntToColor, WxGetColorStyles } from '../utils/wxtools';
+import { BoundaryMeta, ColorStyleStrict, HEXtoRGBA, Meta, UIntToColor } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
-import { getURIfromDatasetName as getURIFromDatasetName } from '../libs/libTools';
 
-interface Tile {
-	x: number;
-	y: number;
-	z: number;
-	signal: AbortSignal;
-	bbox: BoundaryMeta;
+export interface WxProps {
+	meta: Meta;
+	variables: string | string[];
+	style: ColorStyleStrict;
+	URITime: string;
+}
+
+type IWxTilesLayerData = string;
+
+export interface WxTilesLayerProps extends TileLayerProps<IWxTilesLayerData> {
+	id: string;
+	wxprops: WxProps;
+	data: IWxTilesLayerData;
+	desaturate?: number;
+	transparentColor?: RGBAColor;
+	tintColor?: RGBColor;
+	visible?: boolean;
 }
 
 interface WxTileData {
@@ -34,34 +46,37 @@ interface WxTileData {
 interface WxTilesLayerState {
 	CLUT: RawCLUT;
 	clutTextureUniform: Texture2D;
-	imageTextureUniform: Texture2D;
 	min: number;
 	max: number;
 	emptyTilesCache: Set<string>;
 	[name: string]: any;
 }
-export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProps> {
+
+// TODO: animation https://github.com/kamzek/deck.gl-particle
+
+export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps> {
 	state!: WxTilesLayerState;
 
-	constructor(props: IWxTilesLayerProps) {
+	constructor(props: WxTilesLayerProps) {
 		super(props);
 	}
 
-	updateState(st: UpdateStateInfo<IWxTilesLayerProps>) {
+	updateState(st: UpdateStateInfo<WxTilesLayerProps>) {
 		super.updateState(st);
 		if (st.changeFlags.propsChanged) {
-			this._prepareStateAndCLUT();
+			if (
+				st.oldProps.wxprops?.style !== st.props.wxprops.style ||
+				st.oldProps.wxprops?.variables !== st.props.wxprops.variables ||
+				st.oldProps.wxprops?.meta !== st.props.wxprops.meta
+			) {
+				this._prepareStateAndCLUT();
+			}
+
+			this.setState({ emptyTilesCache: new Set<string>() });
 		}
 	}
 
-	onHover(info: any, pickingEvent: any) {
-		if (!info.picked) {
-			return; //console.log('!');
-		}
-		this.onClick(info, pickingEvent);
-	}
-
-	onClick(info: any, pickingEvent: any) {
+	onClickProcessor(info: any, pickingEvent: any) {
 		// console.log('WxTilesLayer onClick:', info, pickingEvent);
 		const { /* sourceLayer, bitmap,  */ coordinate, color } = info;
 		// const [x, y] = bitmap.pixel;
@@ -80,20 +95,16 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 
 		const varData = mul * raw + min;
 		const clutData = CLUT.DataToStyle(varData);
-		const text = 'lonLat:' + coordinate + '<br>clut:' + clutData + ' var: ' + varData + ' color:' + color;
-		const infoPanel = document.getElementById('infoPanel');
-		if (!infoPanel) {
-			console.log(text);
-			return;
-		}
-		infoPanel.innerHTML = text;
+
+		const clickInfo = { lonLat: coordinate, clut: clutData, var: varData, color };
+		return clickInfo;
 	}
 
-	renderSubLayers(args: RenderSubLayers<WxTileData>) {
-		const { tile, id, data } = args;
-		if (!data) return null;
+	renderSubLayers(subProps: RenderSubLayersProps<WxTileData>) {
+		const { tile, id, data } = subProps;
+		if (!data) return null; // Useless ??
 		const { west, south, east, north } = tile.bbox;
-		const { wxprops, desaturate, transparentColor, tintColor, opacity } = this.props;
+		const { wxprops, desaturate, transparentColor, tintColor, opacity, pickable, visible } = this.props;
 		const { style } = wxprops;
 		const { clutTextureUniform } = this.state;
 		const { imageTextureUniform } = data;
@@ -107,32 +118,43 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				},
 				bounds: [west, south, east, north],
 				image: null,
-				pickable: true,
+				pickable,
 				opacity,
 				desaturate,
 				transparentColor,
 				tintColor,
+				visible,
 			}),
+
 			new WxTileIsolineText({
 				id: id + '-isotext',
 				data: data.isoData,
 				opacity,
+				pickable: false,
+				visible,
 			}),
+
 			data.vectorData &&
 				new WxTileVector({
 					id: id + '-vector',
 					data: data.vectorData,
 					fontFamily: style.vectorType,
 					opacity,
+					pickable: false,
+					visible,
 				}),
 			// new WxVectorAnimation(),
 		];
 	}
 
-	async getTileData(tile: Tile): Promise<WxTileData | null> {
-		const { data: URL, wxprops } = this.props;
+	async getTileData(tile: Tile & { signal: AbortSignal }): Promise<WxTileData | null> {
 		const { x, y, z, signal, bbox } = tile;
 
+		if (this.state.emptyTilesCache.has(x + ':' + y + ':' + z)) {
+			return null;
+		}
+
+		const { data: URL, wxprops } = this.props;
 		const { boundaries } = wxprops.meta;
 		const rectIntersect = (b: BoundaryMeta) => !(bbox.west > b.east || b.west > bbox.east || bbox.south > b.north || b.south > bbox.north);
 		if (boundaries?.boundaries180 && !boundaries.boundaries180.some(rectIntersect)) {
@@ -140,10 +162,6 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		}
 
 		const { fetch } = this.getCurrentLayer().props;
-
-		if (this.state.emptyTilesCache.has(x + ':' + y + ':' + z)) {
-			return null;
-		}
 
 		const makeURL = (v: string) =>
 			URL.replace('{variable}', v)
@@ -182,8 +200,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				image = await fetchVariableImage(wxprops.variables);
 				vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
 			}
-		} catch {
-			this.state.emptyTilesCache.add(x + ':' + y + ':' + z);
+		} catch (e) {
+			if (!signal.aborted) {
+				// if fetching was aborted DO NOT SET THE CACHE!!!!!!! days of debug...
+				this.state.emptyTilesCache.add(x + ':' + y + ':' + z);
+			}
+
 			return null;
 		}
 
@@ -194,10 +216,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 
 	_prepareStateAndCLUT() {
 		const { style, variables, meta } = this.props.wxprops;
-		let { min, max, units } = meta.variablesMeta[variables instanceof Array ? variables[0] : variables];
+		const { variablesMeta } = meta;
+		let { min, max, units } = variablesMeta[variables instanceof Array ? variables[0] : variables];
+
 		if (variables instanceof Array) {
-			const metaV = meta.variablesMeta[variables[1]];
-			max = 1.42 * Math.max(-min, max, -metaV.min, metaV.max);
+			const varMeta = variablesMeta[variables[1]];
+			max = 1.42 * Math.max(-min, max, -varMeta.min, varMeta.max);
 			min = 0;
 		}
 
@@ -211,6 +235,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 			data[x] = colorsI[si];
 			data[dataWidth + x] = levelIndex[si];
 		}
+
 		const clutTextureUniform = new Texture2D(this.context.gl, {
 			data: new Uint8Array(data.buffer),
 			width: dataWidth,
@@ -230,7 +255,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		this.setState({ emptyTilesCache, clutTextureUniform, min, max, CLUT });
 	}
 
-	_createIsolines(image: ImageData, { x, y, z }): WxTileIsolineTextData[] {
+	_createIsolines(image: ImageData, { x, y, z }: Tile): WxTileIsolineTextData[] {
 		const { style } = this.props.wxprops;
 		if (!style.isolineText || style.isolineColor === 'none' || !style.isolineText) return [];
 		const { state } = this;
@@ -275,39 +300,37 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		return res;
 	}
 
-	_createDegree(image: ImageData, { x, y, z }): WxTileVectorData[] | undefined {
-		const { meta, variables } = this.props.wxprops;
+	_createDegree(image: ImageData, { x, y, z }: Tile): WxTileVectorData[] | undefined {
+		const { meta, variables, style } = this.props.wxprops;
 		if (variables instanceof Array) return;
 
 		const { min, max, units } = meta.variablesMeta[variables];
-		if (units !== 'degree') return;
+		if (units !== 'degree' || style.vectorColor === 'none') return;
 
-		const { style } = this.props.wxprops;
-		if (style.vectorColor === 'none') return;
-
-		const CLUT = this.state.CLUT as RawCLUT;
-		const l = new Uint16Array(image.data.buffer);
+		const { CLUT } = this.state;
+		const rawData = new Uint16Array(image.data.buffer);
 		const ldmul = (max - min) / 65535;
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
-		const res: WxTileVectorData[] = [];
+		const res = new Array<WxTileVectorData>();
 		const gridStep = 16;
 		// go through the tile pixels
 		for (let py = gridStep / 2; py < 256; py += gridStep) {
 			for (let px = gridStep / 2; px < 256; px += gridStep) {
-				const i = (px + 1 + (py + 1) * 258) * 2; // index f a raw pixel data
-				const d = l[i];
-				if (!d) continue;
-				const angle = 180 - (min + ldmul * l[i] + style.addDegrees); // unpack data and add degree correction from style
-				const text = 'F';
+				const i = (px + 1 + (py + 1) * 258) * 2; // index of a raw pixel data
+				const data = rawData[i];
+				if (!data) continue;
+				const angle = 180 - (min + ldmul * rawData[i] + style.addDegrees); // unpack data and add degree correction from style
 				const position = PixelsToLonLat(ulx + px + 0.5, uly + py + 0.5, z); // [lon, lat] of the pixel
 				const color = UIntToColor(
-					style.vectorColor === 'inverted' ? ~CLUT.colorsI[d] : style.vectorColor === 'fill' ? CLUT.colorsI[d] : HEXtoRGBA(style.vectorColor)
+					style.vectorColor === 'inverted' ? ~CLUT.colorsI[data] : style.vectorColor === 'fill' ? CLUT.colorsI[data] : HEXtoRGBA(style.vectorColor)
 				);
+				const text = 'F'; // medium size arrow in arrow font
 
 				res.push({ position, text, angle, color });
 			}
 		}
+
 		return res;
 	}
 
@@ -336,13 +359,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		return image;
 	}
 
-	_createVectorData(image: ImageData, imageU: ImageData, imageV: ImageData, { x, y, z }): WxTileVectorData[] {
-		const { meta, variables } = this.props.wxprops;
-		const CLUT = this.state.CLUT;
-		const { style } = this.props.wxprops;
+	_createVectorData(image: ImageData, imageU: ImageData, imageV: ImageData, { x, y, z }: Tile): WxTileVectorData[] {
+		const { meta, variables, style } = this.props.wxprops;
+		const { min, max, CLUT } = this.state;
 
 		if (!(variables instanceof Array) || !CLUT.DataToKnots || style.vectorColor === 'none') return [];
-		const { min, max } = this.state;
 		const [uMeta, vMeta] = variables.map((v) => meta.variablesMeta[v]);
 		const l = new Uint16Array(image.data.buffer);
 		const u = new Uint16Array(imageU.data.buffer);
@@ -352,8 +373,12 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 		const udmul = (uMeta.max - uMeta.min) / 65535;
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
-		const res: WxTileVectorData[] = [];
-		const gridStep = 32;
+		const { maxZoom } = this.props;
+
+		const m = maxZoom ? z - maxZoom : 0;
+
+		const gridStep = 16 << (m > 0 ? m : 0);
+		const res = new Array<WxTileVectorData>();
 		// go through the tile pixels
 		for (let py = gridStep / 2; py < 256; py += gridStep) {
 			for (let px = gridStep / 2; px < 256; px += gridStep) {
@@ -374,9 +399,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, IWxTilesLayerProp
 				res.push({ position, text, angle, color });
 			}
 		}
+
 		return res;
 	}
 }
+
 WxTilesLayer.layerName = 'WxTilesLayer';
 WxTilesLayer.defaultProps = {
 	minZoom: 0,
@@ -394,33 +421,3 @@ WxTilesLayer.defaultProps = {
 	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
 	tintColor: { type: 'color', value: [255, 255, 255] },
 };
-
-export type WxServerVarsTimeType = [string, string | [string, string], string];
-
-export async function createWxTilesLayerProps(server: string, params: WxServerVarsTimeType, requestInit?: RequestInit) {
-	const [dataSet, variables, styleName] = params;
-	const { URITime, meta } = await getURIFromDatasetName(server, dataSet);
-	const wxTilesProps: IWxTilesLayerProps = {
-		id: `wxtiles/${dataSet}/${variables}/`,
-		// WxTiles settings
-		wxprops: {
-			meta,
-			variables, // 'temp2m' or ['eastward', 'northward'] for vector data
-			style: WxGetColorStyles()[styleName],
-			URITime,
-		},
-		// DATA
-		data: URITime.replace('{time}', meta.times[0]),
-		// DECK.gl settings
-		maxZoom: meta.maxZoom,
-		loadOptions: {
-			fetch: requestInit,
-			image: {
-				decode: true,
-				type: 'data',
-			},
-		},
-	};
-
-	return wxTilesProps;
-}

@@ -184,14 +184,14 @@ const __colorStyles_default_preset: ColorStylesStrict = {
 	},
 };
 
-declare global {
-	interface Window {
-		wxlogging: boolean;
-	}
-	interface Document {
-		fonts: { load: (n: string) => any; ready: Promise<any> };
-	}
-}
+// declare global {
+// 	interface Window {
+// 		wxlogging: boolean;
+// 	}
+// 	interface Document {
+// 		fonts: { load: (n: string) => any; ready: Promise<any> };
+// 	}
+// }
 
 let _units: Units;
 let _colorSchemes: ColorSchemes;
@@ -205,24 +205,18 @@ export interface LibSetupObject {
 
 /// some random usefull stuff
 export function WxTileLibSetup({ colorStyles = {}, units = {}, colorSchemes = {} }: LibSetupObject = {}): void {
-	if (window.wxlogging) {
-		console.log('WxTile lib setup: start');
-	}
+	WXLOG('WxTile lib setup: start');
 	_units = Object.assign({}, __units_default_preset, units);
 	_colorSchemes = Object.assign({}, colorSchemes, __colorSchemes_default_preset);
 	// const toUnroll = Object.assign({}, colorStyles, __colorStyles_default_preset);
 	_colorStylesUnrolled = unrollStylesParent(colorStyles);
-	if (window.wxlogging) {
-		console.log('WxTile lib setup: styles unrolled');
-	}
+	WXLOG('WxTile lib setup: styles unrolled');
 
 	// Make sure fonts are loaded & ready!
-	document.fonts.load('32px barbs');
-	document.fonts.load('32px arrows');
+	(document as any).fonts?.load?.('32px barbs');
+	(document as any).fonts?.load?.('32px arrows');
 
-	if (window.wxlogging) {
-		console.log('WxTile lib setup is done' + JSON.stringify({ colorStyles, units, colorSchemes }));
-	}
+	WXLOG('WxTile lib setup is done' + JSON.stringify({ colorStyles, units, colorSchemes }));
 }
 
 export function WxGetColorStyles(): ColorStylesStrict {
@@ -241,68 +235,16 @@ export interface Converter {
 export function makeConverter(from: string, to: string, customUnits?: Units): Converter {
 	const localUnitsCopy = customUnits ? Object.assign({}, _units, customUnits) : _units;
 	if (!localUnitsCopy || !from || !to || from === to || !localUnitsCopy[from] || !localUnitsCopy[to] || localUnitsCopy[from][0] !== localUnitsCopy[to][0]) {
-		if (window.wxlogging) {
-			console.log(from === to ? 'Trivial converter:' : 'Inconvertible units. Default converter is used:', from, ' -> ', to);
-		}
+		WXLOG(from === to ? 'Trivial converter:' : 'Inconvertible units. Default converter is used:', from, ' -> ', to);
 		const c = (x: number) => x;
 		c.trivial = true;
 		return c; // Inconvertible or trivial
 	}
 
-	if (window.wxlogging) console.log('Converter: From:', from, ' To:', to);
+	WXLOG('Converter: From:', from, ' To:', to);
 	const a = localUnitsCopy[from][1] / localUnitsCopy[to][1];
 	const b = (localUnitsCopy[from][2] || 0) / localUnitsCopy[to][1] - (localUnitsCopy[to][2] || 0) / localUnitsCopy[to][1];
 	return b ? (x: number) => a * x + b : (x: number) => a * x;
-}
-
-function unrollStylesParent1(stylesIn: ColorStylesWeakMixed): ColorStylesStrict {
-	// unroll arrays of styles => plain styles to apply ineritance
-	/*
-	{
-		"var":[
-			{style1},
-			{style2}
-		]
-	}
-	 unrolled into
-	{
-		"var":[
-			{style1},
-			{style2}
-		],
-		"var[0]":{*style1},
-		"var[1]":{*style2},
-	}
-	I use softycopy, so {*style1} === {style1}, etc.
-	So it's easier to apply inheritance.
-	*/
-	const deArrStyles = <ColorStylesWeakMixed>Object.assign({}, stylesIn, __colorStyles_default_preset); // deep copy, so could be (and is) changed
-	const deArrStyles2 = Object.assign({}, __colorStyles_default_preset);
-	for (const name in deArrStyles) {
-		const styleA = deArrStyles[name];
-		if (Array.isArray(styleA)) {
-			for (let i = 0; i < styleA.length; ++i) {
-				deArrStyles[name + '[' + i + ']'] = styleA[i];
-			}
-			delete deArrStyles[name];
-		}
-	}
-
-	const styles = <ColorStylesStrict>Object.assign({}, deArrStyles);
-
-	// function to apply inheritance
-	const inheritParent = (styleName: string): void => {
-		if (styleName === 'base') return; // nothing to inherit
-		const style = styles[styleName]; // there are no arrays by this point
-		if (!style.parent || !(style.parent in styles)) style.parent = 'base';
-		inheritParent(style.parent);
-		Object.assign(style, Object.assign({}, styles[style.parent], style)); // this ugly construction changes style 'in place' so it is a soft-copy. huray!
-		style.parent = undefined; // multiple inheritance of 'base' is possible. what ever...
-	};
-
-	// For every style inherit from its parent
-	Object.keys(styles).forEach(inheritParent);
-	return styles;
 }
 
 function unrollStylesParent(stylesArrInc: ColorStylesWeakMixed): ColorStylesStrict {
@@ -336,19 +278,6 @@ function unrollStylesParent(stylesArrInc: ColorStylesWeakMixed): ColorStylesStri
 }
 
 type CacheableFunc = (url: string) => Promise<DataPicture>;
-
-// Caches
-function cacheIt(fn: CacheableFunc): CacheableFunc {
-	const cache = new Map<string, Promise<DataPicture>>();
-	return (url: string) => {
-		let res = cache.get(url);
-		if (res === undefined) {
-			res = fn(url);
-			cache.set(url, res);
-		}
-		return res;
-	};
-}
 
 interface IntegralPare {
 	integral: Uint32Array;
@@ -401,7 +330,7 @@ function integralImage(raw: Uint16Array): IntegralPare {
 }
 
 // BoxBlur based on integral images, whoop whoop
-export function blurData(im: DataPictureIntegral, radius: number): DataPictureIntegral {
+function blurData(im: DataPictureIntegral, radius: number): DataPictureIntegral {
 	if (radius < 0 || radius === im.radius) return im;
 	im.radius = radius;
 	const s = 258;
@@ -472,9 +401,7 @@ export function HEXtoRGBA(c: string): number {
 		if (c.length === 9) return +('0x' + c[7] + c[8] + c[5] + c[6] + c[3] + c[4] + c[1] + c[2]);
 	}
 
-	if (window.wxlogging) {
-		console.log('wrong color format', c);
-	}
+	WXLOG('wrong color format', c);
 	return 0;
 }
 
@@ -523,4 +450,27 @@ export function UIntToColor(c: number): [number, number, number] {
 	const b = (c >> 16) & 255;
 
 	return [r, g, b];
+}
+
+var wxlogging: boolean = false;
+
+export function setWxTilesLogging(on: boolean = true) {
+	if (on) {
+		console.log('Logging on');
+	} else {
+		console.log('Logging off');
+	}
+
+	wxlogging = on;
+}
+
+export function WXLOG(...str: any) {
+	if (wxlogging) {
+		console.log(...str);
+	}
+}
+
+export function getTimeClosestTo(times: string[], time: string) {
+	const dtime = new Date(time).getTime();
+	return times.find((t) => new Date(t).getTime() >= dtime) || times[times.length - 1];
 }

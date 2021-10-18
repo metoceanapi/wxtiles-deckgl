@@ -58,4 +58,5 @@ jspm_packages/
 
 # Dist file
 /dist
-public/wxtiles-gl
+public/wxtiles
+package-lock.json

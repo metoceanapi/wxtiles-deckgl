@@ -1,17 +1,13 @@
-export interface RenderSubLayers<Data = any> {
+import { BoundaryMeta } from '../utils/wxtools';
+
+export interface Tile {
+	x: number;
+	y: number;
+	z: number;
+	bbox: BoundaryMeta;
+}
+export interface RenderSubLayersProps<Data = any> {
 	id: string;
-	tile: {
-		x: number;
-		y: number;
-		z: number;
-		bbox: {
-			west: number;
-			south: number;
-			east: number;
-			north: number;
-		};
-		data: Data;
-	};
+	tile: Tile;
 	data: Data;
-	visible: boolean;
 }

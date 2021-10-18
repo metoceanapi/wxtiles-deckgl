@@ -1,5 +1,6 @@
 {
 	"include": ["src"],
+	"exclude": ["src_example"],
 	"compilerOptions": {
 		"outDir": "dist/es",
 		"allowSyntheticDefaultImports": true,
@@ -16,6 +17,6 @@
 		"sourceMap": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
-		"esModuleInterop": true,
+		"esModuleInterop": true
 	}
 }

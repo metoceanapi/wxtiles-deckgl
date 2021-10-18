@@ -1,16 +1,18 @@
 {
-	"name": "@metoceanapi/wxtiles-gl",
-	"version": "1.0.1",
-	"description": "WxTile deck.gl lib to render wxtiles datalayers",
-	"main": "dist/es/bundle.js",
-	"types": "dist/es/prod-index.d.ts",
+	"name": "@metoceanapi/wxtiles-deckgl",
+	"version": "2.0.5",
+	"description": "WxTiles DeckGl lib to render binary data tiles",
+	"main": "dist/es/wxtilesdeckgl.js",
+	"types": "dist/es/wxtilesdeckgl.d.ts",
 	"files": [
-		"dist/"
+		"dist/",
+		"wxtilescss.css"
 	],
 	"scripts": {
 		"build": "rm -rf dist/ && node build.js && tsc --declaration",
 		"start": "DISABLE_HOT_RELOAD=true node watch-public.js",
-		"preversion": "npm run build"
+		"preversion": "npm run build",
+		"version": "changelogkeeper && git add CHANGELOG.md"
 	},
 	"repository": {
 		"type": "git",
@@ -22,28 +24,20 @@
 		"url": "https://github.com/metoceanapi/wxtiles-deckgl/issues"
 	},
 	"homepage": "https://github.com/metoceanapi/wxtiles-deckgl#readme",
+	"dev": true,
 	"devDependencies": {
-		"@danmarshall/deckgl-typings": "^4.9.2",
-		"@luma.gl/core": "^8.5.4",
-		"@types/mapbox-gl": "^2.3.3",
-		"esbuild": "^0.12.19",
-		"esbuild-plugin-sass": "^0.6.0",
+		"@metoceanapi/wxtiles-deckgl": "file:../wxtiles-deckgl",
+		"changelogkeeper": "^1.2.0",
+		"esbuild": "^0.12.28",
+		"esbuild-plugin-external-global": "^1.0.1",
 		"express": "^4.17.1",
-		"mapbox-gl": "^2.3.1",
-		"typescript": "^4.3.5"
+		"typescript": "^4.4.3"
 	},
 	"dependencies": {
-		"@deck.gl/geo-layers": "8.5.2",
-		"@deck.gl/layers": "8.5.2",
-		"@deck.gl/mapbox": "8.5.2",
-		"deck.gl": "8.5.2"
+		"@danmarshall/deckgl-typings": "^4.9.7",
+		"@deck.gl/core": "^8.6.0",
+		"@deck.gl/geo-layers": "^8.6.0",
+		"@deck.gl/layers": "^8.6.0"
 	},
-	"peerDependencies": {
-		"mapbox-gl": "^2.3.3"
-	},
-	"peerDependenciesMeta": {
-		"mapbox-gl": {
-			"optional": true
-		}
-	}
+	"peerDependencies": {}
 }

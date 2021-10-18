@@ -1,6 +1,6 @@
+import { TextLayer, TextLayerProps } from '@deck.gl/layers';
 import { DataSet } from '@deck.gl/core/lib/layer';
 import { RGBAColor } from '@deck.gl/core/utils/color';
-import { TextLayer, TextLayerProps } from '@deck.gl/layers';
 
 export interface WxTileIsolineTextData {
 	position: [number, number];

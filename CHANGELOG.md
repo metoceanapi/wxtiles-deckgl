@@ -9,6 +9,8 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+## [2.0.4] - 2021-10-18
+
 ### FIXED
 
 - copy css to root (@metoceanapi/wxtiles-deckgl/wxtilescss.css)

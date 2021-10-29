@@ -9,6 +9,10 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+### ADD
+
+- export Legend, createLegend
+
 ## [2.0.5] - 2021-10-18
 
 ### FIXED

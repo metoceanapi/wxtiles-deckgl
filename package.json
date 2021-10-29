@@ -12,7 +12,8 @@
 		"build": "rm -rf dist/ && node build.js && tsc --declaration",
 		"start": "DISABLE_HOT_RELOAD=true node watch-public.js",
 		"preversion": "npm run build",
-		"version": "changelogkeeper && git add CHANGELOG.md"
+		"version": "changelogkeeper && git add CHANGELOG.md",
+		"npm_reinstall": "rm -rf node_modules package-lock.json && npm i"
 	},
 	"repository": {
 		"type": "git",

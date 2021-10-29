@@ -9,6 +9,11 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+### ADD
+
+- export WxGetColorStyles
+- Freezed: units, colorSchemes, colorStylesUnrolled
+
 ## [2.0.6] - 2021-10-29
 
 ### ADD

@@ -212,6 +212,10 @@ export function WxTileLibSetup({ colorStyles = {}, units = {}, colorSchemes = {}
 	_colorStylesUnrolled = unrollStylesParent(colorStyles);
 	WXLOG('WxTile lib setup: styles unrolled');
 
+	Object.freeze(_units);
+	Object.freeze(_colorSchemes);
+	Object.freeze(_colorStylesUnrolled);
+
 	// Make sure fonts are loaded & ready!
 	(document as any).fonts?.load?.('32px barbs');
 	(document as any).fonts?.load?.('32px arrows');

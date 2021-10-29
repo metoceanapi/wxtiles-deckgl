@@ -4,7 +4,7 @@ export { setupWxTilesLib, setWxTilesLogging, createWxTilesLayerProps } from './l
 export type { CreateProps, WxServerVarsStyleType } from './libtools/libTools';
 export { WxTilesLayerManager, createDeckGlLayer } from './libtools/createDeckGlLayer';
 export type { LibSetupObject } from './utils/wxtools';
-export { WXLOG } from './utils/wxtools';
+export { WXLOG, WxGetColorStyles } from './utils/wxtools';
 export { WxTilesLayer } from './layers/WxTilesLayer';
 export type { WxTilesLayerProps } from './layers/WxTilesLayer';
 export { DebugTilesLayer } from './layers/DebugTilesLayer';

@@ -1,9 +1,11 @@
 import { LayerProps } from '@deck.gl/core/lib/layer';
 
 import { fetchJson, LibSetupObject, Meta, WxGetColorStyles, WxTileLibSetup } from '../utils/wxtools';
-import { WxTilesLayerProps } from '../layers/WxTilesLayer';
+import { IWxTilesLayerData, WxTilesLayerProps } from '../layers/WxTilesLayer';
 
 export { setWxTilesLogging } from '../utils/wxtools';
+
+export { LoadQTree } from '../utils/qtree';
 
 async function getURIandMetafromDatasetName(dataServer: string, dataSet: string) {
 	// URI could be hardcoded, but tiles-DB is alive!
@@ -25,11 +27,12 @@ export type WxServerVarsStyleType = [string, string | [string, string], string];
 export interface CreateProps {
 	server: string;
 	params: WxServerVarsStyleType;
-	extraParams?: LayerProps<any>;
+	maskServerURI?: string;
+	extraParams?: LayerProps<IWxTilesLayerData>;
 	requestInit?: RequestInit;
 }
 
-export async function createWxTilesLayerProps({ server, params, extraParams, requestInit }: CreateProps): Promise<WxTilesLayerProps> {
+export async function createWxTilesLayerProps({ server, maskServerURI, params, extraParams, requestInit }: CreateProps): Promise<WxTilesLayerProps> {
 	const [dataSet, variables, styleName] = params;
 	const { URITime, meta } = await getURIandMetafromDatasetName(server, dataSet);
 	const wxTilesProps: WxTilesLayerProps = {
@@ -37,6 +40,7 @@ export async function createWxTilesLayerProps({ server, params, extraParams, req
 		id: `wxtiles/${dataSet}/${variables}/`,
 		// WxTiles settings
 		wxprops: {
+			maskServerURI: maskServerURI || server.replace(/\/data\/?/i, '/mask/{z}/{x}/{y}'),
 			meta,
 			variables, // 'temp2m' or ['eastward', 'northward'] for vector data
 			style: WxGetColorStyles()[styleName],
@@ -54,6 +58,8 @@ export async function createWxTilesLayerProps({ server, params, extraParams, req
 			},
 		},
 	};
+
+	let r: WxTilesLayerProps['data'];
 
 	return wxTilesProps;
 }

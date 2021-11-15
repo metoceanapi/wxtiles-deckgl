@@ -11,18 +11,20 @@ import { WxTileIsolineTextData, WxTileIsolineText } from './WxTileIsolineText';
 import { WxTileFill } from './WxTileFill';
 import { WxTileVector, WxTileVectorData } from './WxTileVector';
 
-import { BoundaryMeta, ColorStyleStrict, HEXtoRGBA, Meta, UIntToColor } from '../utils/wxtools';
+import { BoundaryMeta, ColorStyleStrict, HEXtoRGBA, Meta, UIntToColor, WXLOG } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
+import { QTreeCheckCoord, TileType } from '../utils/qtree';
 
 export interface WxProps {
 	meta: Meta;
 	variables: string | string[];
 	style: ColorStyleStrict;
 	URITime: string;
+	maskServerURI: string;
 }
 
-type IWxTilesLayerData = string;
+export type IWxTilesLayerData = string;
 
 export interface WxTilesLayerProps extends TileLayerProps<IWxTilesLayerData> {
 	id: string;
@@ -53,6 +55,22 @@ interface WxTilesLayerState {
 }
 
 // TODO: animation https://github.com/kamzek/deck.gl-particle
+
+function applyMask(image: ImageData, mask: ImageData, maskType: string): ImageData {
+	const t = maskType === 'land' ? 1 : 0;
+	const raw = new Uint32Array(image.data.buffer);
+
+	for (let maskIndex = 3, y = 0; y < 256; y++) {
+		for (let x = 0; x < 256; x++, maskIndex += 4) {
+			const m = mask.data[maskIndex] ? 1 : 0; // 0 - land
+			if (t ^ m) {
+				raw[(y + 1) * 258 + (x + 1)] = 0;
+			}
+		}
+	}
+
+	return image;
+}
 
 export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps> {
 	state!: WxTilesLayerState;
@@ -161,6 +179,17 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 			return null;
 		}
 
+		const maskType = wxprops.style.mask;
+		// should the mask be applied according to the current style?
+		var tileType: TileType | undefined;
+		if (maskType === 'land' || maskType === 'sea') {
+			tileType = QTreeCheckCoord({ x, y, z }); // check 'type' of a tile
+			if (maskType === tileType) {
+				// whole this tile is cut by the mask -> nothing to load and process
+				return null;
+			}
+		}
+
 		const { fetch } = this.getCurrentLayer().props;
 
 		const makeURL = (v: string) =>
@@ -207,6 +236,19 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 			}
 
 			return null;
+		}
+
+		if (maskType && tileType === TileType.Mixed) {
+			// const url = 'http://localhost:8080/' + coords.z + '/' + coords.x + '/' + coords.y;
+			const url = wxprops.maskServerURI.replace('{z}', String(z)).replace('{x}', String(x)).replace('{y}', String(y));
+			try {
+				const mask = await fetch(url, { layer: this, signal });
+				// const mask = await loadImageData(url, layer.loadData.controller.signal);
+				applyMask(image, mask, maskType);
+			} catch (e) {
+				//wxprops.style.mask = undefined;
+				//WXLOG("Can't load Mask. Turned off");
+			}
 		}
 
 		const isoData = this._createIsolines(image, tile);

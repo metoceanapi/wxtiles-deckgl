@@ -131,6 +131,7 @@ export interface ColorStyleStrict {
 	addDegrees: number;
 	units: string;
 	extraUnits?: Units; //{ [name: string]: [string, number, ?number] };
+	mask?: string;
 }
 
 export interface ColorStylesStrict {
@@ -159,6 +160,7 @@ const __colorStyles_default_preset: ColorStylesStrict = {
 		addDegrees: 0,
 		units: '',
 		extraUnits: undefined,
+		mask: 'none',
 	},
 	custom: {
 		parent: undefined,
@@ -181,6 +183,7 @@ const __colorStyles_default_preset: ColorStylesStrict = {
 		addDegrees: 0,
 		units: '',
 		extraUnits: undefined,
+		mask: 'none',
 	},
 };
 

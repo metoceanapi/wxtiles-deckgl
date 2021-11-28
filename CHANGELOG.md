@@ -9,6 +9,8 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+## [2.0.8] - 2021-11-28
+
 ### Fixed
 
 - install all required peer dependencies of `@deck.gl/core`

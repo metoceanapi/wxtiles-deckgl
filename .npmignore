@@ -4,7 +4,6 @@ src/
 src_example/
 
 .*
-*.json
 
 build.js
 watch-public.js

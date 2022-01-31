@@ -410,8 +410,8 @@ export function HEXtoRGBA(c: string): number {
 }
 
 // json loader helper
-export async function fetchJson(url: RequestInfo) {
-	return (await fetch(url)).json();
+export async function fetchJson(url: RequestInfo, requestInit?: RequestInit) {
+	return (await fetch(url, requestInit)).json();
 }
 
 export function createEl(tagName: string, className = '', container?: HTMLElement) {

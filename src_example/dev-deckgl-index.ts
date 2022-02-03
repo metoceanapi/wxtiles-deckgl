@@ -32,12 +32,13 @@ async function start() {
 	setWxTilesLogging(true); // logging on
 
 	const params: WxServerVarsStyleType =
-		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
-		// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
-		['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
+		// --- datas ---
+		['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+	// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
+	// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 	const extraParams = {
 		// DeckGl layer's common parameters
-		opacity: 0.5,
+		opacity: 1.0,
 		// event hook
 		onClick(info: any, pickingEvent: any): void {
 			console.log(info?.layer?.onClickProcessor?.(info, pickingEvent) || info);
@@ -59,10 +60,10 @@ async function start() {
 	// const layerManager = new WxTilesLayerManager({ deckgl, props: wxProps });
 
 	// layerManager.renderCurrentTimestep();
-	const params2: WxServerVarsStyleType = ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
-	const wxProps2 = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params: params2 });
-	const layerManager2 = createDeckGlLayer(deckgl, wxProps2);
-	await layerManager2.renderCurrentTimestep();
+	// const params2: WxServerVarsStyleType = ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
+	// const wxProps2 = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params: params2 });
+	// const layerManager2 = createDeckGlLayer(deckgl, wxProps2);
+	// await layerManager2.renderCurrentTimestep();
 	await layerManager.renderCurrentTimestep();
 
 	UIhooks(layerManager);

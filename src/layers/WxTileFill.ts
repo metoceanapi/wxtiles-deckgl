@@ -80,6 +80,6 @@ WxTileFill.defaultProps = {
 	// alpha is not effective when blending the bitmap layers with the base map.
 	// Instead we need to manually dim/blend rgb values with a background color.
 	transparentColor: { type: 'color', value: [0, 0, 0, 0] },
-	tintColor: { type: 'color', value: [255, 255, 255] },
+	tintColor: { type: 'color', value: [1, 1, 1] },
 	opacity: { type: 'number', min: 0, max: 1, value: 1 },
 };

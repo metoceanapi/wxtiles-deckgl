@@ -266,9 +266,10 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 		const mul = (state.max - state.min) / 65535;
 
-		// go through the tile pixels
-		for (let py = 0, t = 0; py < 256; py += 5) {
-			for (let px = 0; px < 256; px += 5) {
+		// go through the tile pixels		
+		const gridStep = 8;
+		for (let py = 0, t = 0; py < 256; py += gridStep) {
+			for (let px = 0; px < 256; px += gridStep) {
 				const i = ((py + 1) * 258 + (px + 1)) * 2; // index of a raw pixel data
 				const dc = raw[i]; // central pixel data
 				const dr = raw[i + 2]; // right pixel data
@@ -373,11 +374,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const udmul = (uMeta.max - uMeta.min) / 65535;
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
-		const { maxZoom } = this.props;
-
-		const m = maxZoom ? z - maxZoom : 0;
-
-		const gridStep = 16 << (m > 0 ? m : 0);
+		const gridStep = 16;
 		const res = new Array<WxTileVectorData>();
 		// go through the tile pixels
 		for (let py = gridStep / 2; py < 256; py += gridStep) {
@@ -419,5 +416,5 @@ WxTilesLayer.defaultProps = {
 	transparentColor: { type: 'color', value: [0, 0, 0, 0] },
 	opacity: { type: 'number', min: 0, max: 1, value: 1 },
 	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
-	tintColor: { type: 'color', value: [255, 255, 255] },
+	tintColor: { type: 'color', value: [1, 1, 1] },
 };

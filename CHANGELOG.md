@@ -12,6 +12,8 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 ### Fixed
 
 - pass RequestInit down to `fetchJson` allowing for the auth headers
+- fix #4(in MapBox)
+- DeckGL v8.6.8
 
 ## [2.0.8] - 2021-11-28
 

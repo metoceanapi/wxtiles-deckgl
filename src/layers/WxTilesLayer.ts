@@ -266,8 +266,9 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 		const mul = (state.max - state.min) / 65535;
 
-		// go through the tile pixels		
-		const gridStep = 8;
+		// go through the tile pixels
+		const { maxZoom } = this.props;
+		const gridStep = maxZoom && maxZoom >= z ? 8 : 16;
 		for (let py = 0, t = 0; py < 256; py += gridStep) {
 			for (let px = 0; px < 256; px += gridStep) {
 				const i = ((py + 1) * 258 + (px + 1)) * 2; // index of a raw pixel data

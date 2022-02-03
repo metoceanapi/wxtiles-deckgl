@@ -9,6 +9,17 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+### Fixed
+
+- pass RequestInit down to `fetchJson` allowing for the auth headers
+
+## [2.0.8] - 2021-11-28
+
+### Fixed
+
+- install all required peer dependencies of `@deck.gl/core`
+- version package-lock.json
+
 ## [2.0.7] - 2021-10-29
 
 ### ADD

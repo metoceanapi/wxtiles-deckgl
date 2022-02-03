@@ -1,6 +1,6 @@
 {
 	"name": "@metoceanapi/wxtiles-deckgl",
-	"version": "2.0.7",
+	"version": "2.0.8",
 	"description": "WxTiles DeckGl lib to render binary data tiles",
 	"main": "dist/es/wxtilesdeckgl.js",
 	"types": "dist/es/wxtilesdeckgl.d.ts",
@@ -37,8 +37,9 @@
 	"dependencies": {
 		"@danmarshall/deckgl-typings": "^4.9.7",
 		"@deck.gl/core": "^8.6.0",
+		"@deck.gl/extensions": "^8.6.0",
 		"@deck.gl/geo-layers": "^8.6.0",
-		"@deck.gl/layers": "^8.6.0"
-	},
-	"peerDependencies": {}
+		"@deck.gl/layers": "^8.6.0",
+		"@deck.gl/mesh-layers": "^8.6.0"
+	}
 }

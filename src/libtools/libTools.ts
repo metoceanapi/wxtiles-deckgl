@@ -5,11 +5,11 @@ import { WxTilesLayerProps } from '../layers/WxTilesLayer';
 
 export { setWxTilesLogging } from '../utils/wxtools';
 
-async function getURIandMetafromDatasetName(dataServer: string, dataSet: string) {
+async function getURIandMetafromDatasetName(dataServer: string, dataSet: string, requestInit?: RequestInit) {
 	// URI could be hardcoded, but tiles-DB is alive!
 	if (dataSet[dataSet.length - 1] != '/') dataSet += '/';
-	const instance = (await fetchJson(dataServer + dataSet + 'instances.json')).reverse()[0] + '/';
-	const meta: Meta = await fetchJson(dataServer + dataSet + instance + 'meta.json');
+	const instance = (await fetchJson(dataServer + dataSet + 'instances.json', requestInit)).reverse()[0] + '/';
+	const meta: Meta = await fetchJson(dataServer + dataSet + instance + 'meta.json', requestInit);
 	const URITime = dataServer + dataSet + instance + '{variable}/{time}/{z}/{x}/{y}.png';
 	return { URITime, meta };
 }
@@ -31,7 +31,7 @@ export interface CreateProps {
 
 export async function createWxTilesLayerProps({ server, params, extraParams, requestInit }: CreateProps): Promise<WxTilesLayerProps> {
 	const [dataSet, variables, styleName] = params;
-	const { URITime, meta } = await getURIandMetafromDatasetName(server, dataSet);
+	const { URITime, meta } = await getURIandMetafromDatasetName(server, dataSet, requestInit);
 	const wxTilesProps: WxTilesLayerProps = {
 		...extraParams,
 		id: `wxtiles/${dataSet}/${variables}/`,

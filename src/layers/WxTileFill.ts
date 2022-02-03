@@ -28,22 +28,22 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		if (st.changeFlags.propsChanged) {
 			const { data, desaturate, transparentColor, tintColor, bounds } = this.props;
 			const { style, clutTextureUniform, imageTextureUniform } = data;
-		const fill = style.fill !== 'none';
-		const isolineColor = UIntToColor(style.isolineColor[0] === '#' ? HEXtoRGBA(style.isolineColor) : 0);
+			const fill = style.fill !== 'none';
+			const isolineColor = UIntToColor(style.isolineColor[0] === '#' ? HEXtoRGBA(style.isolineColor) : 0);
 			const isoline = { none: 0, inverted: 1, fill: 2 }[style.isolineColor] || 3;
 
-		this.state.model.setUniforms({
+			this.state.model.setUniforms({
 				clutTextureUniform,
 				imageTextureUniform,
-			fill,
-			isoline,
-			isolineColor,
-			desaturate,
+				fill,
+				isoline,
+				isolineColor,
+				desaturate,
 				transparentColor,
 				tintColor,
-			bounds,
-		});
-	}
+				bounds,
+			});
+		}
 	}
 
 	getShaders() {
@@ -53,23 +53,28 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 	draw(opts: any) {
 		const { uniforms, moduleParameters } = opts;
 		const { model, coordinateConversion, disablePicking } = this.state;
-		// const { context } = this;
 
 		if ((moduleParameters.pickingActive && disablePicking) || !model) {
 			return;
 		}
 
-		// const viewport = context.viewport as Viewport & { center: number[] };
-		// const camPos = viewport.getCameraPosition();
-		// const camCent = viewport.center;
-		// const sub = Math.sqrt((camPos[0] - camCent[0]) ** 2 + (camPos[1] - camCent[1]) ** 2 + (camPos[2] - camCent[2]) ** 2);
+		const { context, props } = this;
+		const { bounds } = props;
+		const viewport = context.viewport as Viewport & { center: number[] };
+		const pix1 = viewport.project([bounds[0], bounds[1]]);
+		const pix2 = viewport.project([bounds[2], bounds[3]]);
+		const dx = (pix2[0] - pix1[0]) / 256;
+		const dy = (pix1[1] - pix2[1]) / 256;
+		const len = Math.sqrt(dx * dx + dy * dy);
+		const shift = 2 / (255 * len);
+
 		model.setUniforms({
 			...uniforms,
-			shift: 1 / 255,
-			// shift: sub / 50000,
+			shift,
 			coordinateConversion,
 		});
-		this.state.model.draw(opts);
+
+		model.draw(opts);
 	}
 }
 

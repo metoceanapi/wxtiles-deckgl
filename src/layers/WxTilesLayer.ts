@@ -198,7 +198,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 				vectorData = this._createVectorData(image, imageU, imageV, tile);
 			} else {
 				image = await fetchVariableImage(wxprops.variables);
-				vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
+				vectorData = this._createDegreeData(image, tile); // if not 'directions', it gives 'undefined' - OK
 			}
 		} catch (e) {
 			if (!signal.aborted) {
@@ -209,7 +209,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 			return null;
 		}
 
-		const isoData = this._createIsolines(image, tile);
+		const isoData = this._createIsolinesText(image, tile);
 		const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
 		return { image, imageU, imageV, isoData, vectorData, imageTextureUniform };
 	}
@@ -255,7 +255,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		this.setState({ emptyTilesCache, clutTextureUniform, min, max, CLUT });
 	}
 
-	_createIsolines(image: ImageData, { x, y, z }: Tile): WxTileIsolineTextData[] {
+	_createIsolinesText(image: ImageData, { x, y, z }: Tile): WxTileIsolineTextData[] {
 		const { style } = this.props.wxprops;
 		if (!style.isolineText || style.isolineColor === 'none' || !style.isolineText) return [];
 		const { state } = this;
@@ -300,7 +300,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		return res;
 	}
 
-	_createDegree(image: ImageData, { x, y, z }: Tile): WxTileVectorData[] | undefined {
+	_createDegreeData(image: ImageData, { x, y, z }: Tile): WxTileVectorData[] | undefined {
 		const { meta, variables, style } = this.props.wxprops;
 		if (variables instanceof Array) return;
 

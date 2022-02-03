@@ -23,30 +23,27 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 		super(props);
 	}
 
-	updateState(a: UpdateStateInfo<WxTileFillProps>) {
-		super.updateState(a);
-		const { style } = this.props.data;
+	updateState(st: UpdateStateInfo<WxTileFillProps>) {
+		super.updateState(st);
+		if (st.changeFlags.propsChanged) {
+			const { data, desaturate, transparentColor, tintColor, bounds } = this.props;
+			const { style, clutTextureUniform, imageTextureUniform } = data;
 		const fill = style.fill !== 'none';
 		const isolineColor = UIntToColor(style.isolineColor[0] === '#' ? HEXtoRGBA(style.isolineColor) : 0);
-		const isoline =
-			{
-				none: 0,
-				inverted: 1,
-				fill: 2,
-			}[style.isolineColor] || 3;
+			const isoline = { none: 0, inverted: 1, fill: 2 }[style.isolineColor] || 3;
 
-		const { desaturate, transparentColor, tintColor, bounds } = this.props;
 		this.state.model.setUniforms({
-			clutTextureUniform: this.props.data.clutTextureUniform,
-			bitmapTexture: this.props.data.imageTextureUniform,
+				clutTextureUniform,
+				imageTextureUniform,
 			fill,
 			isoline,
 			isolineColor,
 			desaturate,
-			transparentColor: transparentColor!.map((x) => x! / 255),
-			tintColor: tintColor!.slice(0, 3).map((x) => x / 255),
+				transparentColor,
+				tintColor,
 			bounds,
 		});
+	}
 	}
 
 	getShaders() {

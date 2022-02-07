@@ -18,6 +18,7 @@ export class WxTileVector extends TextLayer<WxTileVectorData, WxTileVectorProp> 
 		super(props);
 	}
 }
+
 WxTileVector.layerName = 'WxTileVector';
 WxTileVector.defaultProps = {
 	pickable: false,

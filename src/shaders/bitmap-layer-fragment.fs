@@ -13,7 +13,7 @@
 
 precision highp float;
 
-uniform sampler2D bitmapTexture;
+uniform sampler2D imageTextureUniform;
 
 varying vec2 vTexCoord;
 varying vec2 vTexPos;
@@ -91,7 +91,7 @@ uniform vec3 isolineColor;
 uniform bool fill;
 
 float GetPackedData(vec2 texCoord) {
-  vec4 tex = texture2D(bitmapTexture, texCoord);
+  vec4 tex = texture2D(imageTextureUniform, texCoord);
   return (tex.r * 255.0 + tex.g * 255.0 * 256.0) / 65535.0;
 }
 
@@ -120,7 +120,7 @@ void main(void) {
   uv = uv * tileM + one; // 256 -> 258 shifted
 
   if(picking_uActive) {
-    gl_FragColor = texture2D(bitmapTexture, uv);
+    gl_FragColor = texture2D(imageTextureUniform, uv);
     return;
   }
 
@@ -128,8 +128,8 @@ void main(void) {
 
   // check for NODATA
   vec2 ucCfloor = floor(uvC * 258.0) / 258.0;
-  vec4 dataCheck1 = texture2D(bitmapTexture, ucCfloor);
-  vec4 dataCheck2 = texture2D(bitmapTexture, ucCfloor + vec2(1.0, 1.0) / 258.0);
+  vec4 dataCheck1 = texture2D(imageTextureUniform, ucCfloor);
+  vec4 dataCheck2 = texture2D(imageTextureUniform, ucCfloor + vec2(1.0, 1.0) / 258.0);
   if((dataCheck1.r == 0.0 && dataCheck1.g == 0.0) || (dataCheck2.r == 0.0 && dataCheck2.g == 0.0))
     discard;
 

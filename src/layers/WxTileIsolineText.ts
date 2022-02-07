@@ -18,6 +18,7 @@ export class WxTileIsolineText extends TextLayer<WxTileIsolineTextData, WxTileIs
 		super(props);
 	}
 }
+
 WxTileIsolineText.layerName = 'WxTileIsolineText';
 WxTileIsolineText.defaultProps = {
 	pickable: false,
@@ -26,6 +27,7 @@ WxTileIsolineText.defaultProps = {
 		depthTest: false,
 	},
 	fontFamily: 'Sans-serif',
+	fontWeight: 'bold',
 	getSize: 12,
 	fontSettings: { sdf: true },
 	outlineWidth: 0.5, // appeared in ver 8.5

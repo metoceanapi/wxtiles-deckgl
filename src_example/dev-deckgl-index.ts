@@ -33,7 +33,8 @@ async function start() {
 
 	const params: WxServerVarsStyleType =
 		// --- datas ---
-		['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		//['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		['opendrift-jttwf0', ['eastward_wind_at_10m_above_ground_level', 'northward_wind_at_10m_above_ground_level'], 'Wind Speed2'];
 	// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
 	// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 	const extraParams = {
@@ -45,7 +46,16 @@ async function start() {
 		},
 	};
 
-	const wxProps = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params, extraParams });
+	const wxProps = await createWxTilesLayerProps({
+		requestInit: {
+			headers: {
+				apikey: 'ArTvLrab6rQnYMfv7oAgJm4HX9htbFaj',
+			},
+		},
+		server: `https://tiles-metoceantrack-gcp-test.metoceanapi.com/data/`,
+		params,
+		extraParams,
+	});
 
 	const deckgl = new Deck({
 		initialViewState: { latitude: -38, longitude: 176, zoom: 4 },

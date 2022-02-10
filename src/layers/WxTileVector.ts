@@ -7,6 +7,9 @@ export interface WxTileVectorData {
 	text: string;
 	angle: number;
 	color: RGBAColor;
+	x: number,
+	y: number;
+	z: number;
 }
 
 export interface WxTileVectorProp extends TextLayerProps<WxTileVectorData> {

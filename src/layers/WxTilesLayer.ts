@@ -14,6 +14,7 @@ import { WxTileVector, WxTileVectorData } from './WxTileVector';
 import { BoundaryMeta, ColorStyleStrict, HEXtoRGBA, Meta, UIntToColor } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
+import { WxTileVector2 } from './WxTileVector2';
 
 export interface WxProps {
 	meta: Meta;
@@ -135,7 +136,15 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 			}),
 
 			data.vectorData &&
-				new WxTileVector({
+				/* 				new WxTileVector({
+					id: id + '-vector',
+					data: data.vectorData,
+					fontFamily: style.vectorType,
+					opacity,
+					pickable: false,
+					visible,
+				}), */
+				new WxTileVector2({
 					id: id + '-vector',
 					data: data.vectorData,
 					fontFamily: style.vectorType,
@@ -315,10 +324,9 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
 		const res = new Array<WxTileVectorData>();
-		const gridStep = 16;
 		// go through the tile pixels
-		for (let py = gridStep / 2; py < 256; py += gridStep) {
-			for (let px = gridStep / 2; px < 256; px += gridStep) {
+		for (let py = 0 / 2; py < 256; py++) {
+			for (let px = 0 / 2; px < 256; px++) {
 				const i = (px + 1 + (py + 1) * 258) * 2; // index of a raw pixel data
 				const data = rawData[i];
 				if (!data) continue;
@@ -329,7 +337,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 				);
 				const text = 'F'; // medium size arrow in arrow font
 
-				res.push({ position, text, angle, color });
+				res.push({ position, text, angle, color, x, y, z });
 			}
 		}
 
@@ -375,11 +383,10 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const udmul = (uMeta.max - uMeta.min) / 65535;
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
-		const gridStep = 16;
 		const res = new Array<WxTileVectorData>();
 		// go through the tile pixels
-		for (let py = gridStep / 2; py < 256; py += gridStep) {
-			for (let px = gridStep / 2; px < 256; px += gridStep) {
+		for (let py = 0 / 2; py < 256; py++) {
+			for (let px = 0 / 2; px < 256; px++) {
 				const i = (px + 1 + (py + 1) * 258) * 2; // index of a raw pixel data
 				if (!l[i]) continue; // do not process NODATA
 				const _u = uMeta.min + udmul * u[i]; // unpack U data
@@ -394,7 +401,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 					style.vectorColor === 'inverted' ? ~CLUT.colorsI[l[i]] : style.vectorColor === 'fill' ? CLUT.colorsI[l[i]] : HEXtoRGBA(style.vectorColor)
 				);
 
-				res.push({ position, text, angle, color });
+				res.push({ position, text, angle, color, x, y, z });
 			}
 		}
 

@@ -13,7 +13,7 @@ esbuild
 
 		outfile: 'public/wxtiles/wxtiles.js',
 		sourcemap: true,
-		minify: true,
+		minify: false,
 
 		watch: {
 			onRebuild(error, result) {

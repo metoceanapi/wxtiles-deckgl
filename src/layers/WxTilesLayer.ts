@@ -227,7 +227,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 				vectorData = this._createVectorData(image, imageU, imageV, tile);
 			} else {
 				image = await fetchVariableImage(wxprops.variables);
-				vectorData = this._createDegree(image, tile); // if not 'directions', it gives 'undefined' - OK
+				vectorData = this._createDegreeData(image, tile); // if not 'directions', it gives 'undefined' - OK
 			}
 		} catch (e) {
 			if (!signal.aborted) {
@@ -251,7 +251,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 			}
 		}
 
-		const isoData = this._createIsolines(image, tile);
+		const isoData = this._createIsolinesText(image, tile);
 		const imageTextureUniform = new Texture2D(this.context.gl, { ...texParams, data: new Uint8Array(image.data.buffer) });
 		return { image, imageU, imageV, isoData, vectorData, imageTextureUniform };
 	}
@@ -297,7 +297,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		this.setState({ emptyTilesCache, clutTextureUniform, min, max, CLUT });
 	}
 
-	_createIsolines(image: ImageData, { x, y, z }: Tile): WxTileIsolineTextData[] {
+	_createIsolinesText(image: ImageData, { x, y, z }: Tile): WxTileIsolineTextData[] {
 		const { style } = this.props.wxprops;
 		if (!style.isolineText || style.isolineColor === 'none' || !style.isolineText) return [];
 		const { state } = this;
@@ -309,8 +309,10 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const mul = (state.max - state.min) / 65535;
 
 		// go through the tile pixels
-		for (let py = 0, t = 0; py < 256; py += 5) {
-			for (let px = 0; px < 256; px += 5) {
+		const { maxZoom } = this.props;
+		const gridStep = maxZoom && maxZoom >= z ? 8 : 16;
+		for (let py = 0, t = 0; py < 256; py += gridStep) {
+			for (let px = 0; px < 256; px += gridStep) {
 				const i = ((py + 1) * 258 + (px + 1)) * 2; // index of a raw pixel data
 				const dc = raw[i]; // central pixel data
 				const dr = raw[i + 2]; // right pixel data
@@ -342,7 +344,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		return res;
 	}
 
-	_createDegree(image: ImageData, { x, y, z }: Tile): WxTileVectorData[] | undefined {
+	_createDegreeData(image: ImageData, { x, y, z }: Tile): WxTileVectorData[] | undefined {
 		const { meta, variables, style } = this.props.wxprops;
 		if (variables instanceof Array) return;
 
@@ -415,11 +417,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const udmul = (uMeta.max - uMeta.min) / 65535;
 		const [ulx, uly] = coordToPixel(x, y); // upper left pixel coord in the world picture
 
-		const { maxZoom } = this.props;
-
-		const m = maxZoom ? z - maxZoom : 0;
-
-		const gridStep = 16 << (m > 0 ? m : 0);
+		const gridStep = 16;
 		const res = new Array<WxTileVectorData>();
 		// go through the tile pixels
 		for (let py = gridStep / 2; py < 256; py += gridStep) {
@@ -461,5 +459,5 @@ WxTilesLayer.defaultProps = {
 	transparentColor: { type: 'color', value: [0, 0, 0, 0] },
 	opacity: { type: 'number', min: 0, max: 1, value: 1 },
 	desaturate: { type: 'number', min: 0, max: 1, value: 0 },
-	tintColor: { type: 'color', value: [255, 255, 255] },
+	tintColor: { type: 'color', value: [1, 1, 1] },
 };

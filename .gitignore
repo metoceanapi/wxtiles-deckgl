@@ -59,4 +59,3 @@ jspm_packages/
 # Dist file
 /dist
 public/wxtiles
-package-lock.json

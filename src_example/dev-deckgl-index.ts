@@ -33,7 +33,8 @@ async function start() {
 
 	const params: WxServerVarsStyleType =
 		// --- datas ---
-		['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		//['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		['moana3D', ['u', 'v'], 'direction'];
 	// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
 	// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 	const extraParams = {
@@ -45,7 +46,11 @@ async function start() {
 		},
 	};
 
-	const wxProps = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params, extraParams });
+	const wxProps = await createWxTilesLayerProps({
+		server: 'http://localhost:3005/',
+		params,
+		extraParams,
+	});
 
 	const deckgl = new Deck({
 		initialViewState: { latitude: -38, longitude: 176, zoom: 4 },

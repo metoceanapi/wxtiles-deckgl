@@ -9,6 +9,10 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+### Fixed
+
+- fantom masking
+
 ## [2.0.9] - 2022-02-09
 
 ### Fixed

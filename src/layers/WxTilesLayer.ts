@@ -243,11 +243,14 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 			const url = wxprops.maskServerURI.replace('{z}', String(z)).replace('{x}', String(x)).replace('{y}', String(y));
 			try {
 				const mask = await fetch(url, { layer: this, signal });
-				// const mask = await loadImageData(url, layer.loadData.controller.signal);
 				applyMask(image, mask, maskType);
 			} catch (e) {
-				//wxprops.style.mask = undefined;
-				//WXLOG("Can't load Mask. Turned off");
+				if (signal.aborted) {
+					return null;
+				}
+
+				wxprops.style.mask = undefined;
+				WXLOG("Can't load Mask. Turned off");
 			}
 		}
 

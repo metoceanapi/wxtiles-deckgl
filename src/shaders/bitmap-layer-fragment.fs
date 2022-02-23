@@ -85,7 +85,7 @@ const float tileM = 256.0 / 258.0;
 const vec2 one = vec2(tileSzExInv, tileSzExInv);
 
 uniform sampler2D clutTextureUniform;
-uniform float shift; // the wize of isoline
+uniform float shift; // the width of isoline
 uniform int isoline;
 uniform vec3 isolineColor;
 uniform bool fill;
@@ -127,10 +127,7 @@ void main(void) {
   vec2 uvC = uv; // central pixel
 
   // check for NODATA
-  vec2 ucCfloor = floor(uvC * 258.0) / 258.0;
-  vec4 dataCheck1 = texture2D(imageTextureUniform, ucCfloor);
-  vec4 dataCheck2 = texture2D(imageTextureUniform, ucCfloor + vec2(1.0, 1.0) / 258.0);
-  if((dataCheck1.r == 0.0 && dataCheck1.g == 0.0) || (dataCheck2.r == 0.0 && dataCheck2.g == 0.0))
+  if(texture2D(imageTextureUniform, uvC).a != 1.0)
     discard;
 
   // calc Right pixel coord 

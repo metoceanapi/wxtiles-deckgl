@@ -72,6 +72,19 @@ function applyMask(image: ImageData, mask: ImageData, maskType: string): ImageDa
 	return image;
 }
 
+// Apply NODATA to Alpha channel
+function setAlpha(image: ImageData): ImageData {
+	const raw = new Uint32Array(image.data.buffer);
+	for (let i = 0, l = raw.length; i < l; i++) {
+		// if Reg & Green channels === 0 it means NODATA
+		if ((raw[i] & 0x0000ffff) === 0) {
+			// if NODATA set this pixel A=0, preserve B channel (it is used for min,max)
+			raw[i] &= 0x00ff0000;
+		}
+	}
+	return image;
+}
+
 export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps> {
 	state!: WxTilesLayerState;
 
@@ -222,11 +235,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 
 		try {
 			if (wxprops.variables instanceof Array) {
-				[imageU, imageV] = await Promise.all(wxprops.variables.map(fetchVariableImage));
+				[imageU, imageV] = (await Promise.all(wxprops.variables.map(fetchVariableImage))).map(setAlpha);
 				image = this._createVelocitiesImage(imageU, imageV);
 				vectorData = this._createVectorData(image, imageU, imageV, tile);
 			} else {
-				image = await fetchVariableImage(wxprops.variables);
+				image = setAlpha(await fetchVariableImage(wxprops.variables));
 				vectorData = this._createDegreeData(image, tile); // if not 'directions', it gives 'undefined' - OK
 			}
 		} catch (e) {

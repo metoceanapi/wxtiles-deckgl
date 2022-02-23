@@ -47,7 +47,8 @@
 		"streamLineStatic": false,
 		"units": "C",
 		"vectorColor": "none",
-		"vectorType": "none"
+		"vectorType": "none",
+		"mask": "sea"
 	},
 	"Sea Surface Temperature pcolour": {},
 	"Significant wave height": {

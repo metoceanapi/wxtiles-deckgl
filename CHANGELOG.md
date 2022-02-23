@@ -11,6 +11,7 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ### FIXED
 
+- #23 Lower values near the boundaries
 - fantom masking
 
 ### ADD

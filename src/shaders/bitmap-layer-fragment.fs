@@ -118,9 +118,12 @@ void main(void) {
   }
 
   uv = uv * tileM + one; // 256 -> 258 shifted
+  geometry.uv = uv; // portion of the default code
 
-  if(picking_uActive) {
-    gl_FragColor = texture2D(imageTextureUniform, uv);
+  if(picking_uActive) {// portion of the default code
+    DECKGL_FILTER_COLOR(gl_FragColor, geometry); // NOTE! If skip this line 'picking' won't work
+    // Since instance information is not used, we can use picking color for pixel index
+    gl_FragColor.rgb = packUVsIntoRGB(uv);
     return;
   }
 
@@ -165,6 +168,5 @@ void main(void) {
 
   gl_FragColor = apply_opacity(color_tint(color_desaturate(bitmapColor.rgb)), bitmapColor.a * opacity);
 
-  geometry.uv = uvC;
-  DECKGL_FILTER_COLOR(gl_FragColor, geometry);
+  DECKGL_FILTER_COLOR(gl_FragColor, geometry); // portion of the default code
 }

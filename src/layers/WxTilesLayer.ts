@@ -109,7 +109,8 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 
 	onClickProcessor(info: any, pickingEvent: any) {
 		// console.log('WxTilesLayer onClick:', info, pickingEvent);
-		const { /* sourceLayer, bitmap,  */ coordinate, color } = info;
+		const { sourceLayer, bitmap, coordinate, color } = info;
+		console.log('onClick pixel', bitmap.pixel);
 		// const [x, y] = bitmap.pixel;
 		// const { props } = sourceLayer;
 		// const { image } = props.data;
@@ -123,11 +124,22 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		// const raw1 = data[index * 2 + 3];
 
 		const raw = color[0] + color[1] * 256;
+		const raw2 = color[0] | (color[1] << 8);
 
 		const varData = mul * raw + min;
 		const clutData = CLUT.DataToStyle(varData);
-
-		const clickInfo = { lonLat: coordinate, clut: clutData, var: varData, color };
+		// const colorI = CLUT.colorsI[raw];
+		// const R = colorI & 0xff;
+		// const G = (colorI >> 8) & 0xff;
+		// const B = (colorI >> 16) & 0xff;
+		// const A = (colorI >> 24) & 0xff;
+		// console.log('onClick RGBA:', R, G, B, A);
+		const clickInfo = {
+			lonLat: coordinate,
+			clut: clutData,
+			var: varData,
+			//color: [R, G, B, A],
+		};
 		return clickInfo;
 	}
 
@@ -144,12 +156,11 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 				id: id + '-fill',
 				data: {
 					clutTextureUniform,
-					imageTextureUniform,
 					style,
 				},
 				bounds: [west, south, east, north],
-				image: null,
-				pickable,
+				image: imageTextureUniform,
+				pickable: true,
 				opacity,
 				desaturate,
 				transparentColor,

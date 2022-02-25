@@ -87,7 +87,7 @@ const vec2 one = vec2(tileSzExInv, tileSzExInv);
 uniform sampler2D clutTextureUniform;
 uniform float shift; // the width of isoline
 uniform int isoline;
-uniform vec3 isolineColor;
+uniform vec4 isolineColor;
 uniform bool fill;
 
 float GetPackedData(vec2 texCoord) {
@@ -157,12 +157,12 @@ void main(void) {
     int isoD = isolineIndex(packedD);
 
     if(isoC != isoD || isoC != isoR) {
-      bitmapColor = vec4(isolineColor, 1.0); // isoline != 1 or 2
-
       if(isoline == 1)
         bitmapColor = vec4(1.0 - colorC.r, 1.0 - colorC.g, 1.0 - colorC.b, colorC.a);
-      if(isoline == 2)
+      else if(isoline == 2)
         bitmapColor = vec4(colorC.r, colorC.g, colorC.b, colorC.a);
+      else
+        bitmapColor = isolineColor; // isoline != 1 or 2
     }
   }
 

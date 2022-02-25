@@ -39,13 +39,13 @@ async function start() {
 		layers: [],
 	});
 
-	const params: WxServerVarsStyleType =
+	const wxParams: WxServerVarsStyleType =
 		// --- datas ---
-		['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
-	// ['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
-	// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
+		// ['obs-radar.rain.nzl.national', 'reflectivity', 'rain.EWIS'];
+		['ecwmf.global', ['wind.speed.eastward.at-10m', 'wind.speed.northward.at-10m'], 'Wind Speed2'];
+		// ['ecwmf.global', 'air.temperature.at-2m', 'Sea Surface Temperature'];
 
-	const extraParams = {
+	const deckCommonLayersParams = {
 		// DeckGl layer's common parameters
 		opacity: 1.0,
 		// event hook
@@ -54,7 +54,7 @@ async function start() {
 		},
 	};
 
-	const wxProps = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params, extraParams });
+	const wxProps = await createWxTilesLayerProps({ server: 'https://tiles.metoceanapi.com/data/', params: wxParams, extraParams: deckCommonLayersParams });
 
 	const layerManager = createDeckGlLayer(deckgl, wxProps);
 	// or
@@ -79,10 +79,10 @@ async function start() {
 	const legendCanvasEl = document.getElementById('legend') as HTMLCanvasElement;
 	if (!legendCanvasEl) return;
 
-	const style = WxGetColorStyles()[params[2]];
+	const style = WxGetColorStyles()[wxParams[2]];
 	const legend = createLegend(legendCanvasEl.width - 50, style);
 
-	const txt = params[2] + ' (' + legend.units + ')';
+	const txt = wxParams[2] + ' (' + legend.units + ')';
 	drawLegend({ legend, txt, canvas: legendCanvasEl });
 }
 

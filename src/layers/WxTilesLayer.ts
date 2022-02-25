@@ -11,7 +11,7 @@ import { WxTileIsolineTextData, WxTileIsolineText } from './WxTileIsolineText';
 import { WxTileFill } from './WxTileFill';
 import { WxTileVector, WxTileVectorData } from './WxTileVector';
 
-import { BoundaryMeta, ColorStyleStrict, HEXtoRGBA, Meta, UIntToColor, WXLOG } from '../utils/wxtools';
+import { BoundaryMeta, ColorStyleStrict, HEXtoRGBA, Meta, RGBAtoHEX, UIntToColor, WXLOG } from '../utils/wxtools';
 import { RawCLUT } from '../utils/RawCLUT';
 import { PixelsToLonLat, coordToPixel } from '../utils/mercator';
 import { QTreeCheckCoord, TileType } from '../utils/qtree';
@@ -50,8 +50,32 @@ interface WxTilesLayerState {
 	clutTextureUniform: Texture2D;
 	min: number;
 	max: number;
+	minU?: number;
+	maxU?: number;
+	minV?: number;
+	maxV?: number;
+	units: string;
 	emptyTilesCache: Set<string>;
 	[name: string]: any;
+}
+
+export interface clickInfo {
+	coordinate: [number, number];
+	colorU32: number;
+	color: [number, number, number, number];
+	colorHex: string;
+
+	units: string;
+	styleUnits: string;
+
+	varData: number;
+	styleData: number;
+	varUData?: number;
+	styleUData?: number;
+	varVData?: number;
+	styleVData?: number;
+
+	angle?: number;
 }
 
 // TODO: animation https://github.com/kamzek/deck.gl-particle
@@ -107,39 +131,66 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		}
 	}
 
-	onClickProcessor(info: any, pickingEvent: any) {
-		// console.log('WxTilesLayer onClick:', info, pickingEvent);
-		const { sourceLayer, bitmap, coordinate, color } = info;
-		console.log('onClick pixel', bitmap.pixel);
-		// const [x, y] = bitmap.pixel;
-		// const { props } = sourceLayer;
-		// const { image } = props.data;
-		// const { data } = image;
-		const { min, max, CLUT } = this.state;
+	onClickProcessor(info: any, pickingEvent: any): clickInfo {
+		const { tile, bitmap, coordinate } = info;
+		const [x, y] = bitmap.pixel;
+		const content: WxTileData = tile.content;
+		const { image, imageU, imageV } = content;
+		const { props } = this;
+		const { wxprops } = props;
+
+		const { CLUT, units, min, max, minU, maxU, minV, maxV } = this.state;
 		const mul = (max - min) / 65535;
 
-		// const index = ((y + 1) * 258 + (x + 1)) * 2;
-		// const rawData = new Uint16Array(data.buffer);
-		// const raw = rawData[index];
-		// const raw1 = data[index * 2 + 3];
-
-		const raw = color[0] + color[1] * 256;
-		const raw2 = color[0] | (color[1] << 8);
-
-		const varData = mul * raw + min;
+		const index = ((y + 1) * 258 + (x + 1)) * 2;
+		const varRawData = new Uint16Array(image.data.buffer);
+		const varRaw = varRawData[index];
+		const varData = mul * varRaw + min;
 		const clutData = CLUT.DataToStyle(varData);
-		// const colorI = CLUT.colorsI[raw];
-		// const R = colorI & 0xff;
-		// const G = (colorI >> 8) & 0xff;
-		// const B = (colorI >> 16) & 0xff;
-		// const A = (colorI >> 24) & 0xff;
-		// console.log('onClick RGBA:', R, G, B, A);
-		const clickInfo = {
-			lonLat: coordinate,
-			clut: clutData,
-			var: varData,
-			//color: [R, G, B, A],
+
+		let varUData: number | undefined = undefined;
+		let clutUData: number | undefined = undefined;
+		let varVData: number | undefined = undefined;
+		let clutVData: number | undefined = undefined;
+		let angle: number | undefined = undefined;
+
+		if (minU && maxU && minV && maxV && imageU && imageV) {
+			const mulU = (maxU - minU) / 65535;
+			const varURawData = new Uint16Array(imageU.data.buffer);
+			const varURaw = varURawData[index];
+			varUData = mulU * varURaw + minU;
+			clutUData = CLUT.DataToStyle(varUData);
+
+			const mulV = (maxV - minV) / 65535;
+			const varVRawData = new Uint16Array(imageV.data.buffer);
+			const varVRaw = varVRawData[index];
+			varVData = mulV * varVRaw + minV;
+
+			angle = (Math.atan2(-varURaw, varVData) * 180) / 3.14759 + wxprops.style.addDegrees;
+		}
+
+		const colorU32 = CLUT.colorsI[varRaw];
+
+		const clickInfo: clickInfo = {
+			coordinate,
+
+			colorU32: colorU32,
+			color: UIntToColor(colorU32),
+			colorHex: RGBAtoHEX(colorU32),
+
+			units,
+			styleUnits: wxprops.style.units,
+
+			varData,
+			styleData: clutData,
+			varUData,
+			styleUData: clutUData,
+			varVData,
+			styleVData: clutVData,
+
+			angle,
 		};
+
 		return clickInfo;
 	}
 
@@ -288,9 +339,18 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		const { variablesMeta } = meta;
 		let { min, max, units } = variablesMeta[variables instanceof Array ? variables[0] : variables];
 
+		let minU: number | undefined = undefined;
+		let maxU: number | undefined = undefined;
+		let minV: number | undefined = undefined;
+		let maxV: number | undefined = undefined;
+
 		if (variables instanceof Array) {
 			const varMeta = variablesMeta[variables[1]];
-			max = 1.42 * Math.max(-min, max, -varMeta.min, varMeta.max);
+			minU = min;
+			maxU = max;
+			minV = varMeta.min;
+			maxV = varMeta.max;
+			max = 1.42 * Math.max(-minU, maxU, -minV, maxV);
 			min = 0;
 		}
 
@@ -321,7 +381,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 
 		const emptyTilesCache = new Set<string>();
 
-		this.setState({ emptyTilesCache, clutTextureUniform, min, max, CLUT });
+		this.setState({ emptyTilesCache, clutTextureUniform, CLUT, min, max, units, minU, maxU, minV, maxV });
 	}
 
 	_createIsolinesText(image: ImageData, { x, y, z }: Tile): WxTileIsolineTextData[] {

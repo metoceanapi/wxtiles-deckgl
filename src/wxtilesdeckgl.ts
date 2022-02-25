@@ -6,7 +6,7 @@ export { WxTilesLayerManager, createDeckGlLayer } from './libtools/createDeckGlL
 export type { LibSetupObject } from './utils/wxtools';
 export { WXLOG, WxGetColorStyles } from './utils/wxtools';
 export { WxTilesLayer } from './layers/WxTilesLayer';
-export type { WxTilesLayerProps } from './layers/WxTilesLayer';
+export type { WxTilesLayerProps, clickInfo } from './layers/WxTilesLayer';
 export { DebugTilesLayer } from './layers/DebugTilesLayer';
 export type { Legend } from './utils/RawCLUT';
 export { createLegend } from './utils/RawCLUT';

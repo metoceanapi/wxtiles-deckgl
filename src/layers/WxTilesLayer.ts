@@ -498,7 +498,7 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 				const _v = vMeta.min + vdmul * v[i]; // unpack V data
 				const angle = Math.atan2(-_u, _v) * 57.3 + style.addDegrees;
 				const vecLen = min + ldmul * l[i];
-				const sm = variables[0].includes('current') ? 5 : 0.2; // arrows are longer for currents than wind
+				const sm = style.vectorType !== 'barbs' ? style.vectorFactor * 0.2 : 0.2; /*0.2 to fit font*/
 				const vecCode = Math.min(CLUT.DataToKnots(vecLen) * sm, 25 /* to fit .ttf */) + 65; /* A */
 				const text = String.fromCharCode(vecCode);
 				const position = PixelsToLonLat(ulx + px, uly + py, z); // [lon, lat] of the pixel

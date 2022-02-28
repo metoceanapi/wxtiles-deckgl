@@ -192,7 +192,8 @@
 		"name": "Wind Speed2",
 		"parent": "Wind Speed",
 		"vectorColor": "inverted",
-		"vectorType": "arrows"
+		"vectorType": "arrows",
+		"vectorFactor": 1
 	},
 	"direction": {
 		"addDegrees": 0,

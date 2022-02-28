@@ -9,6 +9,10 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+### Added
+
+- style.vectorFactor
+
 ## [2.1.0] - 2022-02-24
 
 ### FIXED

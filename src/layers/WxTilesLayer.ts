@@ -59,7 +59,7 @@ interface WxTilesLayerState {
 	[name: string]: any;
 }
 
-export interface clickInfo {
+export interface ClickInfo {
 	coordinate: [number, number];
 	colorU32: number;
 	color: [number, number, number, number];
@@ -131,67 +131,50 @@ export class WxTilesLayer extends TileLayer<IWxTilesLayerData, WxTilesLayerProps
 		}
 	}
 
-	onClickProcessor(info: any, pickingEvent: any): clickInfo {
+	onClickProcessor(info: any): ClickInfo | undefined {
 		const { tile, bitmap, coordinate } = info;
-		const [x, y] = bitmap.pixel;
-		const content: WxTileData = tile.content;
-		const { image, imageU, imageV } = content;
-		const { props } = this;
-		const { wxprops } = props;
+		if (!bitmap || !coordinate || !tile) {
+			return;
+		}
 
-		const { CLUT, units, min, max, minU, maxU, minV, maxV } = this.state;
-		const mul = (max - min) / 65535;
+		const [x, y] = bitmap.pixel as [number, number];
+		const { image, imageU, imageV } = tile.content as WxTileData;
 
 		const index = ((y + 1) * 258 + (x + 1)) * 2;
 		const varRawData = new Uint16Array(image.data.buffer);
 		const varRaw = varRawData[index];
-		const varData = mul * varRaw + min;
-		const clutData = CLUT.DataToStyle(varData);
-
-		let varUData: number | undefined = undefined;
-		let clutUData: number | undefined = undefined;
-		let varVData: number | undefined = undefined;
-		let clutVData: number | undefined = undefined;
-		let angle: number | undefined = undefined;
-
-		if (minU && maxU && minV && maxV && imageU && imageV) {
-			const mulU = (maxU - minU) / 65535;
-			const varURawData = new Uint16Array(imageU.data.buffer);
-			const varURaw = varURawData[index];
-			varUData = mulU * varURaw + minU;
-			clutUData = CLUT.DataToStyle(varUData);
-
-			const mulV = (maxV - minV) / 65535;
-			const varVRawData = new Uint16Array(imageV.data.buffer);
-			const varVRaw = varVRawData[index];
-			varVData = mulV * varVRaw + minV;
-
-			angle = (Math.atan2(-varURaw, varVData) * 180) / 3.14759 + wxprops.style.addDegrees;
+		if (varRaw === 0) {
+			return;
 		}
 
+		const { wxprops } = this.props;
+		const { CLUT, units, min, max, minU, maxU, minV, maxV } = this.state;
+		const varData = ((max - min) / 65535) * varRaw + min;
+		const styleData = CLUT.DataToStyle(varData);
 		const colorU32 = CLUT.colorsI[varRaw];
 
-		const clickInfo: clickInfo = {
+		const res: ClickInfo = {
 			coordinate,
-
-			colorU32: colorU32,
-			color: UIntToColor(colorU32),
-			colorHex: RGBAtoHEX(colorU32),
-
 			units,
 			styleUnits: wxprops.style.units,
-
+			colorU32,
+			color: UIntToColor(colorU32),
+			colorHex: RGBAtoHEX(colorU32),
 			varData,
-			styleData: clutData,
-			varUData,
-			styleUData: clutUData,
-			varVData,
-			styleVData: clutVData,
-
-			angle,
+			styleData,
 		};
 
-		return clickInfo;
+		if (minU && maxU && minV && maxV && imageU && imageV) {
+			const varURawData = new Uint16Array(imageU.data.buffer);
+			res.varUData = ((maxU - minU) / 65535) * varURawData[index] + minU;
+			res.styleUData = CLUT.DataToStyle(res.varUData);
+			const varVRawData = new Uint16Array(imageV.data.buffer);
+			res.varVData = ((maxV - minV) / 65535) * varVRawData[index] + minV;
+			res.styleVData = CLUT.DataToStyle(res.varVData);
+			res.angle = Math.atan2(res.varUData, res.varVData) * (180 / 3.14759) + wxprops.style.addDegrees;
+		}
+
+		return res;
 	}
 
 	renderSubLayers(subProps: RenderSubLayersProps<WxTileData>) {

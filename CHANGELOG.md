@@ -9,6 +9,8 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ## [Unreleased]
 
+## [2.1.0] - 2022-02-24
+
 ### FIXED
 
 - #26 more info in _onClickProcessor_

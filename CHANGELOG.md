@@ -13,6 +13,7 @@ Write your changes below this section. `npm version [major|minor|patch]` will au
 
 ### FIXED
 
+- #26 more info in _onClickProcessor_
 - #23 Lower values near the boundaries
 - fantom masking
 

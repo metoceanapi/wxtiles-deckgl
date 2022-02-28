@@ -451,12 +451,13 @@ export function createLevels(min: number, max: number, n: number): number[] {
 	return levels;
 }
 
-export function UIntToColor(c: number): [number, number, number] {
+export function UIntToColor(c: number): [number, number, number, number] {
 	const r = (c >> 0) & 255;
 	const g = (c >> 8) & 255;
 	const b = (c >> 16) & 255;
+	const a = (c >> 24) & 255;
 
-	return [r, g, b];
+	return [r, g, b, a];
 }
 
 var wxlogging: boolean = false;

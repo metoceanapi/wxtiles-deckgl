@@ -11,7 +11,6 @@ import fs from '../shaders/bitmap-layer-fragment.fs';
 
 export interface WxTileFillData {
 	clutTextureUniform: Texture2D;
-	imageTextureUniform: Texture2D;
 	style: ColorStyleStrict;
 }
 export interface WxTileFillProps extends BitmapLayerProps<WxTileFillData> {
@@ -26,15 +25,15 @@ export class WxTileFill extends BitmapLayer<WxTileFillData, WxTileFillProps> {
 	updateState(st: UpdateStateInfo<WxTileFillProps>) {
 		super.updateState(st);
 		if (st.changeFlags.propsChanged) {
-			const { data, desaturate, transparentColor, tintColor, bounds } = this.props;
-			const { style, clutTextureUniform, imageTextureUniform } = data;
+			const { image, data, desaturate, transparentColor, tintColor, bounds } = this.props;
+			const { style, clutTextureUniform } = data;
 			const fill = style.fill !== 'none';
 			const isolineColor = UIntToColor(style.isolineColor[0] === '#' ? HEXtoRGBA(style.isolineColor) : 0);
 			const isoline = { none: 0, inverted: 1, fill: 2 }[style.isolineColor] || 3;
 
 			this.state.model.setUniforms({
 				clutTextureUniform,
-				imageTextureUniform,
+				imageTextureUniform: image,
 				fill,
 				isoline,
 				isolineColor,
